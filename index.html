@@ -4371,10 +4371,12 @@
         // --- Mobile Swipe Navigation (Android/iOS) ---
         let touchStartX = 0;
         let touchEndX = 0;
-        const SWIPE_THRESHOLD = 75; // minimum horizontal distance for a swipe
+        let touchStartTarget = null;
+        const SWIPE_THRESHOLD = 90; // minimum horizontal distance for a swipe
 
         document.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
+            touchStartTarget = e.target;
         }, { passive: true });
 
         document.addEventListener('touchend', e => {
@@ -4383,6 +4385,13 @@
         }, { passive: true });
 
         function handleSwipe() {
+            // Ignore swipe if the user is trying to interact with a table, chart, button, or scrollable area
+            if (touchStartTarget && touchStartTarget.closest) {
+                if (touchStartTarget.closest('.chart-container, iframe, table, .positions-table, .order-book, button, input')) {
+                    return; // Abort swipe to allow native interaction
+                }
+            }
+
             // Only swipe if landing page is hidden (user is in terminal)
             const landingPage = document.getElementById('landing-page');
             if (landingPage && landingPage.style.display !== 'none') return;
