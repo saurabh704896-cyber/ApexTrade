@@ -2467,10 +2467,28 @@
                 transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
             }
 
-            /* --- Critical Layout Fix for Missing Chart & Panels --- */
-            .app-layout, .main-content, .pages-wrapper, .page.active {
-                height: auto !important;
-                min-height: 100dvh !important;
+            /* --- Critical Layout Scroll Fix for Android/iOS --- */
+            body, html {
+                height: 100vh !important;
+                height: 100dvh !important; /* Dynamic viewport height */
+                overflow: hidden !important; /* Lock body */
+            }
+            .app-layout {
+                height: 100dvh !important;
+                overflow: hidden !important;
+                flex-direction: column !important;
+            }
+            .main-content {
+                flex: 1 !important;
+                height: 100% !important;
+                overflow-y: auto !important; /* Enable native scroll on main container */
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important; /* Smooth scroll on mobile */
+                padding-bottom: 120px !important; /* Space for fixed bottom nav bar */
+            }
+            .pages-wrapper, .page.active {
+                height: max-content !important;
+                min-height: 100% !important;
                 overflow: visible !important;
             }
             #page-trade {
