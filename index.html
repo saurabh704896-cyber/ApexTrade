@@ -4368,6 +4368,47 @@
             }
         };
 
+        // --- Mobile Swipe Navigation (Android/iOS) ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const SWIPE_THRESHOLD = 75; // minimum horizontal distance for a swipe
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            // Only swipe if landing page is hidden (user is in terminal)
+            const landingPage = document.getElementById('landing-page');
+            if (landingPage && landingPage.style.display !== 'none') return;
+            
+            const activeBtn = document.querySelector('.nav-btn.active');
+            if (!activeBtn) return;
+            
+            const currentPage = activeBtn.getAttribute('data-page');
+            if (!currentPage) return;
+            
+            const idx = pageSequence.indexOf(currentPage);
+            
+            if (touchEndX < touchStartX - SWIPE_THRESHOLD) {
+                // Swipe Left -> Go to Next Page
+                if (idx < pageSequence.length - 1) {
+                    navigateToPage(pageSequence[idx + 1]);
+                }
+            }
+            if (touchEndX > touchStartX + SWIPE_THRESHOLD) {
+                // Swipe Right -> Go to Previous Page
+                if (idx > 0) {
+                    navigateToPage(pageSequence[idx - 1]);
+                }
+            }
+        }
+
         // Service Worker Registration for PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
