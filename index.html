@@ -2273,11 +2273,19 @@
             .main-content {
                 padding-bottom: 110px !important; 
                 padding-top: 10px !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
             }
             .glass-panel {
                 background: rgba(255, 255, 255, 0.02) !important;
-                border: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+                border-left: none !important;
+                border-right: none !important;
+                border-radius: 0 !important;
                 box-shadow: none !important;
+                margin-bottom: 8px !important;
+                padding: 20px 15px !important;
             }
             
             /* --- TradingView Mobile Fix --- */
@@ -2351,7 +2359,7 @@
             /* --- Critical Layout Fix for Missing Chart & Panels --- */
             .app-layout, .main-content, .pages-wrapper, .page.active {
                 height: auto !important;
-                min-height: 100vh !important;
+                min-height: 100dvh !important;
                 overflow: visible !important;
             }
             #page-trade {
