@@ -2113,6 +2113,27 @@
             .g-stat h3 { font-size: 1rem; }
             .g-stat p { font-size: 0.7rem; }
         }
+        /* --- Additional Mobile Overrides --- */
+        @media (max-width: 900px) {
+            body, html {
+                height: auto !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+            .main-content, .app-layout {
+                height: auto !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+            .glass-panel, .chart-container, .order-book, .trade-history, .portfolio-grid, .trade-grid {
+                width: 100% !important;
+                min-width: 0 !important;
+                overflow-x: auto !important;
+            }
+            .tradingview-widget-container {
+                height: 400px !important;
+            }
+        }
     </style>
 </head>
 
