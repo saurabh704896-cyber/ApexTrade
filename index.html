@@ -2142,51 +2142,97 @@
                 height: 400px !important;
             }
         }
-        /* --- Premium Mobile Design for Trade Page --- */
+        /* --- TradingView Mobile App Design for Trade Page --- */
         @media (max-width: 900px) {
-            #page-trade .trade-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                padding: 10px;
-                background: transparent;
+            #page-trade {
+                background: #131722 !important; /* TradingView Dark Theme Background */
+                padding: 0 !important;
+            }
+            .chart-col {
+                background: #131722 !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 10px 0 !important;
+                margin-bottom: 0 !important;
             }
             .order-book-container, .glass-panel {
-                background: rgba(17, 24, 39, 0.65) !important;
-                backdrop-filter: blur(16px) !important;
-                -webkit-backdrop-filter: blur(16px) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-                border-radius: 16px !important;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+                background: #1e222d !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                border: none !important;
+                border-top: 1px solid #2a2e39 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
                 padding: 15px !important;
-                margin-bottom: 5px;
+                margin-bottom: 0 !important;
             }
             .btn.buy-btn, .btn.sell-btn {
-                border-radius: 12px;
+                border-radius: 8px !important;
                 font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: 1px;
-                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+                letter-spacing: 0.5px !important;
+                height: 48px;
+                font-size: 1.1rem;
+                transition: transform 0.1s ease;
             }
             .btn.buy-btn {
-                background: linear-gradient(135deg, #00ff88, #00b35f) !important;
-                color: #000 !important;
-                box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4) !important;
+                background: #2962ff !important; /* TV Blue */
+                color: #fff !important;
+                box-shadow: none !important;
                 border: none !important;
             }
             .btn.buy-btn:active {
-                transform: scale(0.95);
-                box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3) !important;
+                transform: scale(0.97);
             }
             .btn.sell-btn {
-                background: linear-gradient(135deg, #ff0055, #cc0044) !important;
+                background: #f23645 !important; /* TV Red */
                 color: #fff !important;
-                box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4) !important;
+                box-shadow: none !important;
                 border: none !important;
             }
             .btn.sell-btn:active {
-                transform: scale(0.95);
-                box-shadow: 0 2px 8px rgba(255, 0, 85, 0.3) !important;
+                transform: scale(0.97);
+            }
+            .action-buttons {
+                display: flex;
+                gap: 12px;
+                margin-top: 15px;
+            }
+            .action-buttons button {
+                flex: 1;
+            }
+            .chart-header {
+                padding: 0 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+            #active-coin-name {
+                font-size: 1.4rem !important;
+                color: #d1d4dc !important;
+                font-weight: 700 !important;
+                margin-bottom: 4px;
+            }
+            .current-price {
+                font-size: 1.2rem !important;
+            }
+            #asset-tabs {
+                border-bottom: 1px solid #2a2e39 !important;
+                padding: 0 5px;
+                margin-bottom: 12px;
+                background: transparent !important;
+            }
+            #asset-tabs .tab {
+                color: #787b86 !important;
+                padding: 10px 15px !important;
+                border-radius: 0 !important;
+                background: transparent !important;
+            }
+            #asset-tabs .tab.active {
+                color: #2962ff !important;
+                border-bottom: 2px solid #2962ff !important;
+                box-shadow: none !important;
             }
             /* Make order book texts slightly larger for readability on mobile */
             .ob-row {
@@ -2194,7 +2240,7 @@
                 padding: 6px 0 !important;
             }
             .chart-container {
-                border-radius: 16px !important;
+                border-radius: 0 !important;
                 overflow: hidden;
             }
         }
