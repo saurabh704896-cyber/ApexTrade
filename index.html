@@ -2345,6 +2345,59 @@
                 border-radius: 0 !important;
                 margin-bottom: 15px !important;
             }
+
+            /* --- Academy Theory Mobile Premium UI --- */
+            .mc-theory-article {
+                background: rgba(17, 24, 39, 0.75) !important;
+                backdrop-filter: blur(16px) !important;
+                -webkit-backdrop-filter: blur(16px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                border-radius: 16px !important;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+                padding: 20px 15px !important;
+                margin-bottom: 20px !important;
+                margin-top: 15px !important;
+            }
+            .mc-theory-article h4 {
+                font-size: 1.25rem !important;
+                margin-bottom: 10px !important;
+                padding-bottom: 8px !important;
+                flex-wrap: wrap; /* Ensure icon and text wrap if too long */
+            }
+            .mc-theory-article p, .mc-theory-article ul {
+                font-size: 0.95rem !important;
+                line-height: 1.6 !important;
+            }
+            .mc-theory-article ul {
+                padding-left: 5px !important;
+            }
+            .mc-level-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+                padding: 15px 15px !important;
+                border-radius: 12px !important;
+                background: rgba(255,255,255,0.05) !important;
+                margin-bottom: 10px !important;
+                margin-top: 25px !important;
+                position: relative;
+            }
+            .mc-level-header::after {
+                /* Custom dropdown indicator for mobile */
+                content: '\f078';
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--accent);
+                font-size: 1.2rem;
+            }
+            .mc-level-title {
+                font-size: 1.2rem !important;
+                width: 85%; /* Leave room for the chevron */
+            }
             
             /* --- TradingView Mobile Fix --- */
             .chart-container, #tv_chart_container {
