@@ -900,9 +900,14 @@
         .trade-grid {
             display: grid;
             grid-template-columns: 260px 1fr 320px;
+            grid-template-rows: auto 1fr;
             gap: 20px;
             height: 100%;
         }
+        .ob-col { grid-column: 1; grid-row: 1 / span 2; }
+        .chart-col { grid-column: 2; grid-row: 1; }
+        .positions-col { grid-column: 2; grid-row: 2; }
+        .panel-col { grid-column: 3; grid-row: 1 / span 2; }
 
         /* --- PRO TRADING WIDGETS --- */
         .order-book-container {
@@ -2354,20 +2359,38 @@
                 height: auto !important;
             }
             #page-trade .trade-grid {
-                display: flex !important;
-                flex-direction: column !important;
+                display: grid !important;
+                grid-template-columns: 50% 50% !important;
+                grid-template-rows: auto auto auto !important;
+                gap: 12px !important;
                 height: auto !important;
                 overflow: visible !important;
             }
             #page-trade .trade-grid > div {
-                flex: none !important; /* Disable inline flex scaling that causes collapse */
                 height: auto !important;
-                min-height: 400px !important;
                 width: 100% !important;
                 max-width: 100vw !important;
-                margin-bottom: 20px !important;
+                margin-bottom: 0 !important;
                 display: block !important;
                 overflow: visible !important;
+            }
+            #page-trade .trade-grid .chart-col {
+                grid-column: 1 / span 2;
+                grid-row: 1;
+            }
+            #page-trade .trade-grid .ob-col {
+                grid-column: 1;
+                grid-row: 2;
+                min-height: 350px !important;
+            }
+            #page-trade .trade-grid .panel-col {
+                grid-column: 2;
+                grid-row: 2;
+                min-height: 350px !important;
+            }
+            #page-trade .trade-grid .positions-col {
+                grid-column: 1 / span 2;
+                grid-row: 3;
             }
             #tv_chart_container {
                 height: 450px !important;
@@ -2572,7 +2595,7 @@
                     <div class="trade-grid">
                         
                         <!-- Column 1: Order Book -->
-                        <div class="order-book-container">
+                        <div class="order-book-container ob-col">
                             <h3 style="margin-bottom:15px; font-size:1.1rem;">Order Book</h3>
                             <div class="ob-header">
                                 <span>Price</span>
@@ -2590,9 +2613,8 @@
                             </div>
                         </div>
 
-                        <!-- Column 2: Chart & Positions -->
-                        <div style="display:flex; flex-direction:column; gap:20px; overflow:hidden;">
-                            <div class="glass-panel" style="margin-bottom:0;">
+                        <!-- Column 2: Chart -->
+                            <div class="glass-panel chart-col" style="margin-bottom:0;">
                                 <div class="tabs" id="asset-tabs">
                                     <div class="tab active" data-coin="BTC"><i class="fab fa-bitcoin" style="color:#f59e0b"></i> BTC</div>
                                     <div class="tab" data-coin="ETH"><i class="fab fa-ethereum" style="color:#6366f1"></i> ETH</div>
@@ -2612,7 +2634,7 @@
                             </div>
                             
                             <!-- Active Positions Panel -->
-                            <div class="glass-panel" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+                            <div class="glass-panel positions-col" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
                                 <h3 class="section-title">Active Positions</h3>
                                 <div style="overflow-x:auto; flex:1;">
                                     <table class="positions-table" id="positions-table">
@@ -2634,10 +2656,9 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
 
                         <!-- Column 3: Advanced Trade Panel -->
-                        <div class="glass-panel" style="height: fit-content; display:flex; flex-direction:column;">
+                        <div class="glass-panel panel-col" style="height: fit-content; display:flex; flex-direction:column;">
                             <h3 class="section-title">Order Execution</h3>
                             
                             <div class="challenge-timer" id="challenge-timer-container">
