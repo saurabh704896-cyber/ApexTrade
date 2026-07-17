@@ -2372,36 +2372,32 @@
                 height: auto !important;
             }
             #page-trade .trade-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                grid-template-rows: auto auto auto !important;
-                gap: 12px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 16px !important;
                 height: auto !important;
                 overflow: visible !important;
             }
             #page-trade .trade-grid > div {
                 height: auto !important;
+                width: 100% !important;
                 margin-bottom: 0 !important;
                 display: block !important;
                 overflow: visible !important;
             }
             #page-trade .trade-grid .chart-col {
-                grid-column: 1 / span 2;
-                grid-row: 1;
-            }
-            #page-trade .trade-grid .ob-col {
-                grid-column: 1;
-                grid-row: 2;
-                min-height: 350px !important;
+                order: 1;
             }
             #page-trade .trade-grid .panel-col {
-                grid-column: 2;
-                grid-row: 2;
+                order: 2;
+                min-height: 300px !important;
+            }
+            #page-trade .trade-grid .ob-col {
+                order: 3;
                 min-height: 350px !important;
             }
             #page-trade .trade-grid .positions-col {
-                grid-column: 1 / span 2;
-                grid-row: 3;
+                order: 4;
             }
             #tv_chart_container {
                 height: 450px !important;
