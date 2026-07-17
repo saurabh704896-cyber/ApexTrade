@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ApexTrade Pro - Trading Terminal</title>
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -2298,7 +2301,7 @@
                 -webkit-font-smoothing: antialiased;
             }
             body, html {
-                overscroll-behavior-y: none; /* Prevents "bounce" effect on Android Chrome */
+                overscroll-behavior-y: auto; /* Restored for pull-to-refresh on Android Chrome */
             }
             
             /* 2. Hide scrollbars for a true app feel */
