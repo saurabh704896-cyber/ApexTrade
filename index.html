@@ -2290,6 +2290,61 @@
                 border-radius: 16px !important;
             }
         }
+        /* --- Ultimate Premium Android App Enhancements --- */
+        @media (max-width: 900px) {
+            /* 1. Universal App Polish */
+            * {
+                -webkit-tap-highlight-color: transparent !important; /* Removes ugly Android tap highlight */
+                -webkit-font-smoothing: antialiased;
+            }
+            body, html {
+                overscroll-behavior-y: none; /* Prevents "bounce" effect on Android Chrome */
+            }
+            
+            /* 2. Hide scrollbars for a true app feel */
+            ::-webkit-scrollbar {
+                display: none !important;
+            }
+            
+            /* 3. Landing Page Premium Mobile Glow-up */
+            .lp-hero h2 {
+                font-size: 2.4rem !important;
+                letter-spacing: -1px;
+                line-height: 1.1;
+                margin-top: 20px;
+            }
+            .lp-hero p {
+                font-size: 1.05rem !important;
+                color: #cbd5e1 !important;
+                opacity: 0.9;
+            }
+            .lp-cta-btn {
+                width: 80% !important;
+                justify-content: center;
+                border-radius: 50px !important;
+                box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4) !important;
+                animation: pulse-glow 2s infinite alternate;
+            }
+            
+            /* 4. Portfolio & Leaderboard Premium Cards */
+            .portfolio-grid .glass-panel, .challenge-card, .leaderboard-table {
+                background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8)) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                border-radius: 20px !important;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+                margin-bottom: 12px !important;
+            }
+            
+            /* 5. Smooth Tab Transitions */
+            .page {
+                transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            }
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 5px 20px rgba(0, 210, 255, 0.3); }
+            100% { box-shadow: 0 15px 40px rgba(0, 210, 255, 0.6); }
+        }
     </style>
 </head>
 
