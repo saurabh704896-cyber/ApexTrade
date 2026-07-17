@@ -2339,6 +2339,22 @@
             .page {
                 transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
             }
+
+            /* --- Critical Layout Fix for Missing Chart & Panels --- */
+            #page-trade .trade-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                height: auto !important;
+                overflow-y: visible !important;
+            }
+            #page-trade .trade-grid > div {
+                flex: none !important; /* Disable inline flex scaling that causes collapse */
+                height: auto !important;
+                min-height: 400px !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                margin-bottom: 20px !important;
+            }
         }
         
         @keyframes pulse-glow {
