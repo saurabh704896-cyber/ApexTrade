@@ -2479,26 +2479,27 @@
 
             /* --- Critical Layout Scroll Fix for Android/iOS --- */
             body, html {
-                height: 100vh !important;
-                height: 100dvh !important; /* Dynamic viewport height */
-                overflow: hidden !important; /* Lock body */
+                height: auto !important;
+                min-height: 100% !important;
+                overflow-y: auto !important; /* Let the body scroll naturally */
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important; /* Smooth scroll on mobile */
             }
             .app-layout {
-                height: 100dvh !important;
-                overflow: hidden !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                overflow: visible !important;
                 flex-direction: column !important;
             }
             .main-content {
                 flex: 1 !important;
-                height: 100% !important;
-                overflow-y: auto !important; /* Enable native scroll on main container */
-                overflow-x: hidden !important;
-                -webkit-overflow-scrolling: touch !important; /* Smooth scroll on mobile */
+                height: auto !important;
+                overflow: visible !important; /* Remove inner scroll locks */
                 padding-bottom: 120px !important; /* Space for fixed bottom nav bar */
             }
             .pages-wrapper, .page.active {
-                height: max-content !important;
-                min-height: 100% !important;
+                height: auto !important;
+                min-height: max-content !important;
                 overflow: visible !important;
             }
             #page-trade {
