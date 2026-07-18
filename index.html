@@ -2549,6 +2549,52 @@
             0% { box-shadow: 0 5px 20px rgba(0, 210, 255, 0.3); }
             100% { box-shadow: 0 15px 40px rgba(0, 210, 255, 0.6); }
         }
+        /* --- Extra Premium UI Enhancements --- */
+        .lp-feature-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .lp-feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,210,255,0.1) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .lp-feature-card:hover::before {
+            opacity: 1;
+            animation: rotate-glow 5s linear infinite;
+        }
+        @keyframes rotate-glow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .login-box {
+            position: relative;
+        }
+        .login-box::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff0055, #00d2ff, #00ff88, #ff0055);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0.5;
+            border-radius: 22px;
+            animation: glowing-border 20s linear infinite;
+        }
+        @keyframes glowing-border {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
     </style>
 </head>
 
