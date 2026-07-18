@@ -4423,9 +4423,9 @@
         };
 
         window.addFreeCash = function () {
-            state.cash += 1000000;
+            state.cash += 1000000000;
             updateUI();
-            showToast("Added $1,000,000 Free Cash!", "success");
+            showToast("Added $1,000,000,000 Free Cash!", "success");
         };
 
         // --- Page Navigation ---
@@ -4483,7 +4483,7 @@
         };
 
         // --- Core State ---
-        const INITIAL_CASH = 10000000; // 10 Million Starting Cash
+        const INITIAL_CASH = 1000000000; // 1 Billion Starting Cash
         let state = {
             cash: INITIAL_CASH, netWorth: INITIAL_CASH, activeCoin: 'BTC', history: [], openOrders: [],
             coins: {
@@ -4788,13 +4788,15 @@
         window.quickFill = function (action, percentage) {
             const coin = state.coins[state.activeCoin];
             let amount = 0;
+            const purchasingPower = state.cash * (state.leverage || 1);
             if (action === 'BUY') {
-                amount = (state.cash * percentage) / coin.price;
+                amount = (purchasingPower * percentage) / coin.price;
             } else {
                 amount = coin.holdings * percentage;
             }
             if (amount < 0.000001) amount = 0;
-            els.qty.value = coin.price < 1 ? amount.toFixed(0) : amount.toFixed(4);
+            document.getElementById('trade-qty').value = coin.price < 1 ? amount.toFixed(0) : amount.toFixed(4);
+            if (typeof calculateMargin === 'function') calculateMargin();
         };
 
         let challengeTimeLeft = 0;
