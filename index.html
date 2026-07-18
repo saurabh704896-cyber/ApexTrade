@@ -14,6 +14,8 @@
     <meta name="theme-color" content="#020617">
     <!-- TradingView -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <!-- Mermaid.js for Diagrams -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
@@ -431,31 +433,42 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             gap: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
         .nav-btn i {
             font-size: 1.2rem;
             width: 24px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            color: #00d2ff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(0, 210, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-btn:hover i {
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
         }
 
         .nav-btn.active {
             background: linear-gradient(90deg, rgba(0, 210, 255, 0.2), transparent);
-            color: var(--accent);
-            border-left: 4px solid var(--accent);
-            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.1);
+            color: #fff;
+            border-left: 4px solid #00d2ff;
+            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.1);
             border-radius: 0 12px 12px 0;
             padding-left: 12px;
-            /* adjust for border */
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
         }
 
         .pulse-btn {
@@ -3720,31 +3733,31 @@
 
     <!-- Trade Result Modal (PnL) -->
     <div class="modal" id="trade-result-modal">
-        <div class="modal-content" style="max-width: 400px; text-align: center; border: 1px solid var(--border-color); background: rgba(10,14,23,0.95); box-shadow: 0 0 30px rgba(0,0,0,0.8);">
-            <div id="pnl-icon-container" style="font-size: 3rem; margin-bottom: 10px;"></div>
-            <h2 id="pnl-title" style="margin-bottom: 5px;">Trade Closed</h2>
-            <div id="pnl-amount" style="font-size: 2rem; font-weight: 800; margin-bottom: 20px;"></div>
+        <div class="modal-content" style="max-width: 420px; text-align: center; background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(11,15,25,0.98)); border: 1px solid rgba(255,255,255,0.1); border-top: 1px solid rgba(0,210,255,0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,210,255,0.1); backdrop-filter: blur(20px); border-radius: 24px; padding: 40px 30px;">
+            <div id="pnl-icon-container" style="font-size: 4rem; margin-bottom: 15px; text-shadow: 0 0 20px currentColor;"></div>
+            <h2 id="pnl-title" style="margin-bottom: 5px; font-weight: 800; font-size: 2rem;">Trade Closed</h2>
+            <div id="pnl-amount" style="font-size: 2.5rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -1px;"></div>
             
-            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="color: var(--text-muted);">Asset:</span>
-                    <strong id="pnl-asset">BTC</strong>
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; margin-bottom: 25px; text-align: left; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Asset</span>
+                    <strong id="pnl-asset" style="color: #fff; font-size: 1.1rem;">BTC</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="color: var(--text-muted);">Quantity:</span>
-                    <strong id="pnl-qty">1.5</strong>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Quantity</span>
+                    <strong id="pnl-qty" style="color: #fff; font-size: 1.1rem;">1.5</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="color: var(--text-muted);">Entry Price:</span>
-                    <strong id="pnl-entry">--</strong>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Entry Price</span>
+                    <strong id="pnl-entry" style="color: #fff; font-size: 1.1rem;">--</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--text-muted);">Exit Price:</span>
-                    <strong id="pnl-exit">--</strong>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Exit Price</span>
+                    <strong id="pnl-exit" style="color: #fff; font-size: 1.1rem;">--</strong>
                 </div>
             </div>
             
-            <button class="btn buy-btn" style="width: 100%;" onclick="closeTradeResultModal()">Awesome!</button>
+            <button class="btn buy-btn" style="width: 100%; border-radius: 12px; padding: 16px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,255,136,0.2);" onclick="closeTradeResultModal()">Awesome!</button>
         </div>
     </div>
 
@@ -4459,11 +4472,21 @@
                 pnlEl.style.color = 'var(--color-up)';
                 iconEl.innerHTML = '<i class="fas fa-check-circle" style="color: var(--color-up); text-shadow: 0 0 20px var(--color-up);"></i>';
                 titleEl.innerText = 'Profit Realized!';
+                if(window.playSound) playSound('success');
+                if(typeof confetti !== 'undefined') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 100,
+                        origin: { y: 0.5 },
+                        colors: ['#00ff88', '#00d2ff', '#fbbf24']
+                    });
+                }
             } else {
                 pnlEl.innerText = `-${formatMoney(Math.abs(pnl))}`;
                 pnlEl.style.color = 'var(--color-down)';
                 iconEl.innerHTML = '<i class="fas fa-times-circle" style="color: var(--color-down); text-shadow: 0 0 20px var(--color-down);"></i>';
                 titleEl.innerText = 'Loss Realized';
+                if(window.playSound) playSound('error');
             }
 
             modal.style.display = 'flex';
@@ -4674,6 +4697,74 @@
     </script>
     <!-- PRO TRADING LOGIC -->
     <script>
+        // --- Web Audio API Synthesizer (Premium Sound FX) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        window.playSound = function(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+            
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.setValueAtTime(600, now + 0.1);
+                osc.frequency.setValueAtTime(800, now + 0.2);
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(0.1, now + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'kaching') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(1200, now);
+                osc.frequency.exponentialRampToValueAtTime(2000, now + 0.1);
+                gainNode.gain.setValueAtTime(0.03, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
+        };
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('.nav-btn')) {
+                if (e.target.closest('.buy-btn') || e.target.closest('.sell-btn') || e.target.closest('.q-btn')) {
+                    if(window.playSound) playSound('kaching');
+                } else {
+                    if(window.playSound) playSound('click');
+                }
+            }
+        });
+
+        const flashStyle = document.createElement('style');
+        flashStyle.innerHTML = `
+            @keyframes flash-ask { 0% { background: rgba(239, 68, 68, 0.4); } 100% { background: transparent; } }
+            @keyframes flash-bid { 0% { background: rgba(16, 185, 129, 0.4); } 100% { background: transparent; } }
+            .flash-ask-anim { animation: flash-ask 0.5s ease-out; }
+            .flash-bid-anim { animation: flash-bid 0.5s ease-out; }
+        `;
+        document.head.appendChild(flashStyle);
+
         // Initialize new state properties safely
         if(typeof state !== 'undefined') {
             state.positions = [];
@@ -4694,13 +4785,15 @@
                 let askPrice = price + spread + (i * (price * 0.0005));
                 let size = (Math.random() * 2 + 0.1).toFixed(3);
                 let total = (askPrice * size).toLocaleString(undefined, {maximumFractionDigits:0});
-                asksHtml += `<div class="ob-row ask"><span class="price">${askPrice.toFixed(2)}</span><span class="size">${size}</span><span class="total">${total}</span><div class="ob-bg" style="width:${Math.random()*100}%"></div></div>`;
+                let flashClass = Math.random() > 0.5 ? 'flash-ask-anim' : '';
+                asksHtml += `<div class="ob-row ask ${flashClass}"><span class="price">${askPrice.toFixed(2)}</span><span class="size">${size}</span><span class="total">${total}</span><div class="ob-bg" style="width:${Math.random()*100}%"></div></div>`;
             }
             for(let i=1; i<=8; i++) {
                 let bidPrice = price - spread - (i * (price * 0.0005));
                 let size = (Math.random() * 2 + 0.1).toFixed(3);
                 let total = (bidPrice * size).toLocaleString(undefined, {maximumFractionDigits:0});
-                bidsHtml += `<div class="ob-row bid"><span class="price">${bidPrice.toFixed(2)}</span><span class="size">${size}</span><span class="total">${total}</span><div class="ob-bg" style="width:${Math.random()*100}%"></div></div>`;
+                let flashClass = Math.random() > 0.5 ? 'flash-bid-anim' : '';
+                bidsHtml += `<div class="ob-row bid ${flashClass}"><span class="price">${bidPrice.toFixed(2)}</span><span class="size">${size}</span><span class="total">${total}</span><div class="ob-bg" style="width:${Math.random()*100}%"></div></div>`;
             }
             
             const askEl = document.getElementById('ob-asks');
