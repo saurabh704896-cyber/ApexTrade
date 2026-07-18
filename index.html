@@ -2760,6 +2760,28 @@
             50% { background-position: 400% 0; }
             100% { background-position: 0 0; }
         }
+        /* Custom Context Menu */
+        .ctx-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ctx-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+        .ctx-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+        }
     </style>
     <style>
         /* --- Apple / Safari / iOS Specific Fixes --- */
@@ -2793,6 +2815,15 @@
         <div class="aurora a1"></div>
         <div class="aurora a2"></div>
         <div class="aurora a3"></div>
+    </div>
+
+    <!-- Custom Context Menu -->
+    <div id="custom-context-menu" class="glass-panel" style="display: none; position: fixed; z-index: 9999; width: 220px; padding: 10px; flex-direction: column; gap: 5px;">
+        <div class="ctx-item" onclick="document.querySelector('.buy-btn').click()"><i class="fas fa-arrow-down" style="color: #00ff88;"></i> Quick Buy</div>
+        <div class="ctx-item" onclick="document.querySelector('.sell-btn').click()"><i class="fas fa-arrow-up" style="color: #ff0055;"></i> Quick Sell</div>
+        <div class="ctx-divider"></div>
+        <div class="ctx-item" onclick="document.querySelector('[data-page=portfolio]').click()"><i class="fas fa-wallet" style="color: var(--accent);"></i> View Portfolio</div>
+        <div class="ctx-item" onclick="document.querySelector('[data-page=academy]').click()"><i class="fas fa-graduation-cap" style="color: #f59e0b;"></i> Academy</div>
     </div>
 
     <!-- Landing Page -->
@@ -4451,6 +4482,8 @@
         };
 
         window.executeTrade = function (action) {
+            if (navigator.vibrate) navigator.vibrate(50);
+            
             if (challengeTimeLeft <= 0) {
                 showToast('Start the trading challenge to place orders!', 'error');
                 return;
@@ -4789,6 +4822,48 @@
 
         // Init
         updateUI();
+
+        // --- Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log('Service Worker registered');
+            }).catch(err => console.log('SW Error', err));
+        }
+
+        // --- Custom Context Menu ---
+        const ctxMenu = document.getElementById('custom-context-menu');
+        document.addEventListener('contextmenu', (e) => {
+            if (document.getElementById('landing-page').style.display !== 'none') return;
+            e.preventDefault();
+            ctxMenu.style.display = 'flex';
+            let x = e.clientX;
+            let y = e.clientY;
+            if (x + 220 > window.innerWidth) x = window.innerWidth - 220;
+            if (y + 200 > window.innerHeight) y = window.innerHeight - 200;
+            ctxMenu.style.left = x + 'px';
+            ctxMenu.style.top = y + 'px';
+        });
+        document.addEventListener('click', (e) => {
+            if (ctxMenu && !ctxMenu.contains(e.target)) ctxMenu.style.display = 'none';
+        });
+        document.addEventListener('scroll', () => { if(ctxMenu) ctxMenu.style.display = 'none'; });
+
+        // --- Keyboard Shortcuts ---
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('landing-page').style.display !== 'none') return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            if (e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                document.querySelector('.buy-btn').click();
+            } else if (e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                document.querySelector('.sell-btn').click();
+            } else if (e.key === 'Escape') {
+                if(ctxMenu) ctxMenu.style.display = 'none';
+                document.getElementById('trade-result-modal').classList.remove('active');
+            }
+        });
 
     </script>
     <!-- PRO TRADING LOGIC -->
