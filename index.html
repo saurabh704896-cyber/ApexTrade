@@ -2792,6 +2792,43 @@
             background: rgba(255, 255, 255, 0.1);
             margin: 5px 0;
         }
+
+        /* Custom Cursor */
+        @media (pointer: fine) {
+            * {
+                cursor: none !important;
+            }
+            .cursor-dot {
+                width: 8px;
+                height: 8px;
+                background-color: var(--accent);
+                position: fixed;
+                top: 0; left: 0;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                z-index: 10000;
+                pointer-events: none;
+                box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+            }
+            .cursor-outline {
+                width: 30px;
+                height: 30px;
+                border: 2px solid rgba(0, 210, 255, 0.5);
+                position: fixed;
+                top: 0; left: 0;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                z-index: 10000;
+                pointer-events: none;
+                transition: width 0.2s, height 0.2s, border-color 0.2s, background 0.2s;
+            }
+            .cursor-outline.hover {
+                width: 50px;
+                height: 50px;
+                border-color: var(--color-up);
+                background: rgba(0, 255, 136, 0.1);
+            }
+        }
     </style>
     <style>
         /* --- Apple / Safari / iOS Specific Fixes --- */
@@ -2819,6 +2856,10 @@
 </head>
 
 <body>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
 
     <!-- Ambient Background -->
     <div class="ambient-bg">
@@ -4864,6 +4905,83 @@
 
         // Init
         updateUI();
+
+        // --- Web Audio API Synthesizer ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration, vol=0.1) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        window.playSound = function(type) {
+            if (!audioCtx) return;
+            if (type === 'hover') {
+                playTone(800, 'sine', 0.05, 0.01);
+            } else if (type === 'click') {
+                playTone(1200, 'sine', 0.1, 0.03);
+            } else if (type === 'success') {
+                playTone(440, 'sine', 0.1, 0.05);
+                setTimeout(() => playTone(554, 'sine', 0.1, 0.05), 100);
+                setTimeout(() => playTone(659, 'sine', 0.3, 0.05), 200);
+            } else if (type === 'error') {
+                playTone(200, 'sawtooth', 0.3, 0.03);
+                setTimeout(() => playTone(150, 'sawtooth', 0.4, 0.03), 150);
+            }
+        };
+
+        // --- Custom Cursor Logic & Global Sounds ---
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorOutline = document.getElementById('cursor-outline');
+            
+            let mouseX = 0; let mouseY = 0;
+            let outlineX = 0; let outlineY = 0;
+            
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+            });
+            
+            function animateCursor() {
+                outlineX += (mouseX - outlineX) * 0.2;
+                outlineY += (mouseY - outlineY) * 0.2;
+                cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hook up hover states to interactive elements
+            document.querySelectorAll('button, .tab, .ctx-item, .port-card, input').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorOutline.classList.add('hover');
+                    playSound('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorOutline.classList.remove('hover');
+                });
+            });
+            
+            // Add click sound globally
+            document.addEventListener('click', (e) => {
+                if(e.target.closest('button, .tab, .ctx-item, .nav-btn, .login-tab')) {
+                    playSound('click');
+                }
+            });
+        }
 
         // --- Service Worker Registration ---
         if ('serviceWorker' in navigator) {
