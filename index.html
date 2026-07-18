@@ -4116,7 +4116,6 @@
             landingPage.style.display = 'none';
             loginScreen.classList.remove('active');
             appLayout.style.display = 'flex';
-            updateNavArrows();
             if (typeof chart !== 'undefined' && chart) {
                 setTimeout(() => chart.resize(), 100);
             }
@@ -4175,52 +4174,50 @@
         };
 
         window.doLogin = function () {
-            const loginBtn = document.getElementById('btn-login');
+            const loginBtn = document.querySelector('.login-btn');
             
-            loginBtn.addEventListener('click', () => {
-                const name = document.getElementById('login-name').value.trim();
-                const email = document.getElementById('login-id').value.trim();
-                
-                if (!name || !email) {
-                    showToast("Please enter both Email/Mobile and Name.", "error");
-                    return;
-                }
-                
-                // FaceID / Biometric Animation
-                const originalBtnContent = loginBtn.innerHTML;
-                loginBtn.innerHTML = '<i class="fas fa-fingerprint fa-spin"></i> Scanning...';
-                loginBtn.style.background = 'linear-gradient(180deg, #10b981 0%, #059669 100%)';
-                
+            const name = document.getElementById('login-name').value.trim();
+            const email = document.getElementById('login-id').value.trim();
+            
+            if (!name || !email) {
+                showToast("Please enter both Email/Mobile and Name.", "error");
+                return;
+            }
+            
+            // FaceID / Biometric Animation
+            const originalBtnContent = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-fingerprint fa-spin"></i> Scanning...';
+            loginBtn.style.background = 'linear-gradient(180deg, #10b981 0%, #059669 100%)';
+            
+            setTimeout(() => {
+                loginBtn.innerHTML = '<i class="fas fa-check"></i> Verified';
                 setTimeout(() => {
-                    loginBtn.innerHTML = '<i class="fas fa-check"></i> Verified';
-                    setTimeout(() => {
-                        userName = name;
-                        userAuth = email;
-                        
-                        // Load User State
-                        const savedState = localStorage.getItem(`apex_state_${userAuth}`);
-                        if (savedState) {
-                            try {
-                                state = JSON.parse(savedState);
-                                showToast(`Welcome back, ${name}!`, 'success');
-                            } catch(e) {
-                                console.error("Could not load state");
-                            }
-                        } else {
-                            showToast(`Account created for ${name}!`, 'success');
-                            // saveState(); // save initial state
+                    userName = name;
+                    userAuth = email;
+                    
+                    // Load User State
+                    const savedState = localStorage.getItem(`apex_state_${userAuth}`);
+                    if (savedState) {
+                        try {
+                            state = JSON.parse(savedState);
+                            showToast(`Welcome back, ${name}!`, 'success');
+                        } catch(e) {
+                            console.error("Could not load state");
                         }
-                        
-                        enterTerminal();
-                        
-                        // Reset button
-                        setTimeout(() => {
-                            loginBtn.innerHTML = originalBtnContent;
-                            loginBtn.style.background = '';
-                        }, 500);
+                    } else {
+                        showToast(`Account created for ${name}!`, 'success');
+                        saveState(); // save initial state
+                    }
+                    
+                    enterTerminal();
+                    
+                    // Reset button
+                    setTimeout(() => {
+                        loginBtn.innerHTML = originalBtnContent;
+                        loginBtn.style.background = '';
                     }, 500);
-                }, 1200);
-            });
+                }, 500);
+            }, 1200);
         }
 
         // Add Enter key support
