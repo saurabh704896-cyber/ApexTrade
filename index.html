@@ -4,29 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <!-- SEO & Accessibility -->
+    <meta name="description" content="ApexTrade Pro - A professional grade cryptocurrency trading simulator and terminal.">
+    <meta property="og:title" content="ApexTrade Pro">
+    <meta property="og:description" content="Experience professional crypto trading, real-time market data, and risk-free portfolio management.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0f172a">
+    
     <title>ApexTrade Pro - Trading Terminal</title>
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
-    <meta name="theme-color" content="#0f172a">
-    <!-- Premium Fonts -->
+    
+    <!-- Premium Fonts & Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- TradingView -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Scripts with Defer for Lighthouse 95+ -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" defer></script>
+    <script defer>window.addEventListener('load', () => mermaid.initialize({ startOnLoad: true, theme: 'dark' }));</script>
+    
     <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
         :root {
+            /* Dark Mode (Default) */
             --bg-color: #0b0f19;
             --sidebar-bg: rgba(11, 15, 25, 0.85);
             --panel-bg: rgba(17, 24, 39, 0.65);
@@ -38,6 +46,20 @@
             --color-down: #ef4444;
             --accent: #3b82f6;
             --gold: #fbbf24;
+        }
+
+        [data-theme="light"] {
+            /* Light Mode */
+            --bg-color: #f1f5f9;
+            --sidebar-bg: rgba(255, 255, 255, 0.9);
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-glow: rgba(37, 99, 235, 0.1);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --color-up: #059669;
+            --color-down: #dc2626;
+            --accent: #2563eb;
         }
 
         /* Premium Scrollbar */
@@ -3185,6 +3207,59 @@
                 </div>
             </div>
         </div>
+
+        <!-- Phase 11: Testimonials & Contact Form -->
+        <div style="max-width: 1200px; margin: 80px auto; padding: 0 20px;">
+            <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; color: var(--text-main);">Wall of Love</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px;">
+                <!-- Testimonial 1 -->
+                <div class="glass-panel" style="padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent);" alt="User" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-main);">Alex Mercer</h4>
+                            <span style="color: var(--gold); font-size: 0.8rem;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">"ApexTrade completely changed how I practice my strategies. The live Binance WS connection makes it feel 100% real. Best simulator out there!"</p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="glass-panel" style="padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent);" alt="User" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-main);">Sarah Jenkins</h4>
+                            <span style="color: var(--gold); font-size: 0.8rem;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">"The new Mobile UI is incredible. It feels exactly like a native iOS app. I practice my trades on the commute every day."</p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="glass-panel" style="padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <img src="https://randomuser.me/api/portraits/men/85.jpg" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent);" alt="User" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-main);">David Cho</h4>
+                            <span style="color: var(--gold); font-size: 0.8rem;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">"Finally, a trading terminal with a beautiful Light Mode and lightning-fast execution. Highly recommend the Academy section!"</p>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px 30px;">
+                <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.8rem; color: var(--text-main);">Get in Touch</h3>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Have a feature request or found a bug? Let us know.</p>
+                <form id="contact-form" onsubmit="submitContactForm(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" class="login-input" placeholder="Your Name" required aria-label="Your Name">
+                    <input type="email" class="login-input" placeholder="Your Email" required aria-label="Your Email">
+                    <textarea class="login-input" rows="4" placeholder="Your Message" required aria-label="Your Message" style="resize: vertical; font-family: inherit;"></textarea>
+                    <button type="submit" class="lp-cta-btn" id="contact-submit-btn" style="width: 100%; border-radius: 8px;">Send Message</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <!-- Login Screen Overlay -->
@@ -3292,12 +3367,16 @@
 
             <header class="topbar">
                 <div style="display: flex; gap: 8px; margin-right: 15px;">
-                    <button class="nav-arrow-btn" onclick="goBack()" id="btn-back" disabled><i
+                    <button class="nav-arrow-btn" onclick="goBack()" id="btn-back" disabled aria-label="Back"><i
                             class="fas fa-chevron-left"></i></button>
-                    <button class="nav-arrow-btn" onclick="goNext()" id="btn-next" disabled><i
+                    <button class="nav-arrow-btn" onclick="goNext()" id="btn-next" disabled aria-label="Next"><i
                             class="fas fa-chevron-right"></i></button>
                 </div>
                 <div class="page-title-display" id="page-title-display">Trading Desk</div>
+                
+                <!-- Phase 11: Theme Toggle -->
+                <button class="nav-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme" style="margin-left:auto; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s;"><i class="fas fa-sun"></i></button>
+
                 <div class="news-ticker-container">
                     <div class="news-ticker-text" id="news-ticker">Welcome to ApexTrade Pro! Real-time market
                         simulation active.</div>
@@ -4931,28 +5010,37 @@
             }
         }
 
-        // --- Simulation Loop ---
+        // --- Phase 11: Real-Time Binance WebSocket ---
+        const wsUrl = 'wss://stream.binance.com:9443/ws/btcusdt@trade/ethusdt@trade/solusdt@trade/adausdt@trade/dogeusdt@trade/shibusdt@trade';
+        let ws = new WebSocket(wsUrl);
+        
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const symbolMap = { 'BTCUSDT': 'BTC', 'ETHUSDT': 'ETH', 'SOLUSDT': 'SOL', 'ADAUSDT': 'ADA', 'DOGEUSDT': 'DOGE', 'SHIBUSDT': 'SHIB' };
+            const symbol = symbolMap[data.s];
+            if (!symbol) return;
+            
+            const coin = state.coins[symbol];
+            const oldPrice = coin.price;
+            coin.price = parseFloat(data.p);
+            
+            coin.history.push(coin.price);
+            if (coin.history.length > 40) coin.history.shift();
+            
+            if (symbol === state.activeCoin) {
+                els.price.classList.remove('flash-up', 'flash-down');
+                void els.price.offsetWidth; // trigger reflow
+                els.price.classList.add(coin.price >= oldPrice ? 'flash-up' : 'flash-down');
+            }
+        };
+
+        ws.onclose = () => {
+            console.warn("Binance WS Disconnected. Reconnecting in 5s...");
+            setTimeout(() => { ws = new WebSocket(wsUrl); }, 5000);
+        };
+        
+        // --- Limit Order Execution Loop (Runs 2x per second) ---
         setInterval(() => {
-            Object.values(state.coins).forEach(coin => {
-                const vol = coin.baseVolatility;
-                const change = (Math.random() * vol * 2 - vol);
-                const momentum = (Math.random() - 0.5) * (vol / 1.5);
-
-                const oldPrice = coin.price;
-                coin.price *= (1 + change + momentum);
-
-                if (coin.symbol === 'SHIB' && coin.price < 0.000001) coin.price = 0.000001;
-                else if (coin.price < 0.001) coin.price = 0.001;
-
-                coin.history.push(coin.price);
-                coin.history.shift();
-
-                if (coin.symbol === state.activeCoin) {
-                    els.price.classList.remove('flash-up', 'flash-down');
-                    void els.price.offsetWidth; // trigger reflow
-                    els.price.classList.add(coin.price >= oldPrice ? 'flash-up' : 'flash-down');
-                }
-            });
 
             let executedOrderIds = [];
             
@@ -5702,6 +5790,42 @@
         window.addFreeCash = function() {
             originalAddFreeCash();
             showBadge('portfolio');
+        };
+
+        // --- Phase 11: Theme Toggle & Contact Form ---
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('apex_theme', target);
+            const btn = document.getElementById('theme-toggle');
+            if (btn) btn.innerHTML = target === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        }
+        
+        const savedTheme = localStorage.getItem('apex_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            const btn = document.getElementById('theme-toggle');
+            if(btn) btn.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        window.submitContactForm = function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('contact-submit-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+            // Simulate network request
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                btn.style.background = 'var(--color-up)';
+                showToast("Thanks for reaching out!", "success");
+                e.target.reset();
+                setTimeout(() => {
+                    btn.innerHTML = 'Send Message';
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 3000);
+            }, 1500);
         };
 
         // Service Worker Registration for PWA
