@@ -4312,7 +4312,7 @@
         };
 
         // --- Page Navigation ---
-        window.switchPage = function(pageId) {
+        window.switchPage = function(pageId, pushState = true) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const targetPage = document.getElementById(pageId);
             if(targetPage) {
@@ -4340,9 +4340,25 @@
             if(pageId === 'page-history') title = "Order History";
             document.getElementById('page-title-display').innerText = title;
             
+            if (pushState) {
+                history.pushState({ pageId: pageId }, title, `#${pageId}`);
+            }
+            
             // Re-render
             updateUI();
         };
+
+        window.addEventListener('popstate', function(event) {
+            // When user presses browser's Back or Forward button
+            if (event.state && event.state.pageId) {
+                switchPage(event.state.pageId, false);
+            } else {
+                // If they go back to the landing page or initial state
+                if (document.querySelector('.app-layout').style.display === 'flex') {
+                    switchPage('page-trade', false); // default to trade if in app
+                }
+            }
+        });
 
         window.updateMobileNav = function(btnEl) {
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
