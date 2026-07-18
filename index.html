@@ -12,6 +12,8 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <meta name="theme-color" content="#020617">
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- TradingView -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <!-- Confetti -->
@@ -64,7 +66,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             height: 100vh;
@@ -619,6 +621,7 @@
             font-weight: 600;
             font-size: 0.9rem;
             animation: ticker 20s linear infinite;
+            transition: opacity 0.5s ease-in-out, color 0.3s;
         }
 
         @keyframes ticker {
@@ -737,6 +740,13 @@
             -webkit-backdrop-filter: blur(20px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            animation: cyberpunk-glow 4s infinite alternate;
+        }
+
+        @keyframes cyberpunk-glow {
+            0% { box-shadow: 0 0 0 1px rgba(0,210,255,0.15), 0 10px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255,255,255,0.05); }
+            50% { box-shadow: 0 0 0 1px rgba(0,255,136,0.35), 0 10px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255,255,255,0.05); }
+            100% { box-shadow: 0 0 0 1px rgba(255,0,85,0.25), 0 10px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255,255,255,0.05); }
         }
 
         .glass-panel:hover {
@@ -4819,6 +4829,38 @@
                 bg.style.width = `${newWidth}%`;
             });
         }, 1500);
+
+        // --- Live Breaking News Ticker ---
+        const newsItems = [
+            "🚨 BREAKING: SEC approves spot Bitcoin ETF applications.",
+            "📈 MARKET UPDATE: Ethereum surges past $3,000 resistance level.",
+            "🐋 WHALE ALERT: 10,000 BTC moved from dormant wallet to Binance.",
+            "⚠️ FED RATE HIKE: Interest rates remain unchanged at 5.25%.",
+            "🚀 ALTCOIN SEASON: Solana (SOL) TVL reaches all-time high.",
+            "📉 LIQUIDATION: $500M in long positions wiped out in flash crash.",
+            "💎 DIAMOND HANDS: MicroStrategy purchases additional 5,000 BTC."
+        ];
+        const tickerEl = document.getElementById('news-ticker');
+        if (tickerEl) {
+            let newsIndex = 0;
+            setInterval(() => {
+                tickerEl.style.opacity = 0;
+                setTimeout(() => {
+                    newsIndex = (newsIndex + 1) % newsItems.length;
+                    const text = newsItems[newsIndex];
+                    tickerEl.innerText = text;
+                    // Dynamic coloring based on sentiment
+                    if (text.includes('🚨') || text.includes('📉') || text.includes('⚠️')) {
+                        tickerEl.style.color = 'var(--color-down)';
+                    } else if (text.includes('📈') || text.includes('🚀')) {
+                        tickerEl.style.color = 'var(--color-up)';
+                    } else {
+                        tickerEl.style.color = 'var(--gold)';
+                    }
+                    tickerEl.style.opacity = 1;
+                }, 500); // Wait for fade out
+            }, 8000); // Change news every 8 seconds
+        }
 
         // Init
         updateUI();
