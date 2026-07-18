@@ -5679,7 +5679,7 @@
             let startX = 0;
             let maxDrag = 0;
             
-            thumb.addEventListener('touchstart', (e) => {
+            function handleStart(e) {
                 const btn = document.querySelector(`.${type}-btn`);
                 if (btn && btn.disabled) {
                     showToast("Order form not ready or insufficient balance.", "error");
@@ -5687,23 +5687,25 @@
                 }
                 isDragging = true;
                 maxDrag = container.offsetWidth - thumb.offsetWidth - 8;
-                startX = e.touches[0].clientX - thumb.offsetLeft;
+                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                startX = clientX - thumb.offsetLeft;
                 thumb.style.transition = 'none';
                 fill.style.transition = 'none';
-            }, {passive: true});
-            
-            document.addEventListener('touchmove', (e) => {
+            }
+
+            function handleMove(e) {
                 if (!isDragging) return;
-                let currentX = e.touches[0].clientX - startX;
+                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let currentX = clientX - startX;
                 if (currentX < 4) currentX = 4;
                 if (currentX > maxDrag) currentX = maxDrag;
                 
                 thumb.style.left = currentX + 'px';
                 fill.style.width = (currentX + 48) + 'px';
                 text.style.opacity = 1 - (currentX / maxDrag);
-            }, {passive: true});
-            
-            document.addEventListener('touchend', (e) => {
+            }
+
+            function handleEnd(e) {
                 if (!isDragging) return;
                 isDragging = false;
                 thumb.style.transition = 'left 0.3s ease';
@@ -5731,7 +5733,18 @@
                     text.style.opacity = '1';
                     if (navigator.vibrate) navigator.vibrate(20); // Snap haptic
                 }
-            });
+            }
+            
+            // Touch events
+            thumb.addEventListener('touchstart', handleStart, {passive: true});
+            document.addEventListener('touchmove', handleMove, {passive: true});
+            document.addEventListener('touchend', handleEnd);
+            
+            // Mouse events
+            thumb.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            document.addEventListener('mouseleave', handleEnd);
         }
         
         setTimeout(() => {
