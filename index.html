@@ -1228,122 +1228,171 @@
             gap: 20px;
         }
 
+        /* --- PAGE 2: Portfolio --- */
+        .portfolio-hero-card {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(11, 15, 25, 0.95));
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-top: 1px solid rgba(37, 99, 235, 0.6);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(37, 99, 235, 0.1);
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .hero-balance {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+            letter-spacing: -1px;
+        }
+
         .port-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(17, 24, 39, 0.9));
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
             border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
             padding: 25px;
             border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
         }
 
-        .port-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
         .port-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(0, 210, 255, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.15), inset 0 0 20px rgba(0, 210, 255, 0.05);
-        }
-
-        .port-card:hover::before {
-            opacity: 1;
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2), inset 0 0 20px rgba(37, 99, 235, 0.1);
         }
 
         .port-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
             font-weight: 800;
         }
 
         .port-card .p-val {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
             text-align: right;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            color: #fff;
         }
 
-        /* --- PAGE 3: History --- */
-        .history-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 12px;
+        /* --- PAGE 3: History Timeline --- */
+        .history-cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        .history-table th {
-            padding: 15px 20px;
-            text-align: left;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
+        .h-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .h-card:hover {
+            transform: translateX(5px);
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .h-card.buy-card {
+            border-left: 4px solid var(--color-up);
+        }
+
+        .h-card.sell-card {
+            border-left: 4px solid var(--color-down);
+        }
+
+        .h-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            margin-right: 20px;
+        }
+
+        .buy-card .h-icon {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-up);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .sell-card .h-icon {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--color-down);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .h-details {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .h-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .h-asset {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .h-time {
             font-size: 0.85rem;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
         }
 
-        .history-table td {
-            padding: 18px 20px;
-            text-align: left;
-            background: rgba(15, 23, 42, 0.6);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s;
+        .h-financials {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
         }
 
-        .history-table tr td:first-child {
-            border-left: 2px solid transparent;
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
+        .h-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
-        .history-table tr td:last-child {
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
-
-        .history-table tr:hover td {
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .history-table tr:hover td:first-child {
-            border-left-color: var(--accent);
-        }
-
-        .badge-buy {
-            color: #00ff88;
-            font-weight: 800;
-            background: rgba(0, 255, 136, 0.15);
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 136, 0.4);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
-        }
-
-        .badge-sell {
-            color: #ff0055;
-            font-weight: 800;
-            background: rgba(255, 0, 85, 0.15);
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 0, 85, 0.4);
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+        .h-pnl {
+            font-size: 0.95rem;
+            font-weight: 600;
         }
 
         /* --- PAGE 4: Leaderboard --- */
@@ -3004,11 +3053,14 @@
 
                 <!-- PAGE: PORTFOLIO -->
                 <div class="page" id="page-portfolio">
-                    <div class="portfolio-grid">
-                        <div class="glass-panel">
-                            <h3 class="section-title">Your Assets</h3>
-                            <div class="large-portfolio-list" id="portfolio-list-page"></div>
-                        </div>
+                    <div class="portfolio-hero-card">
+                        <div class="hero-label">Total Portfolio Value</div>
+                        <div class="hero-balance" id="portfolio-hero-balance">$0.00</div>
+                        <div class="hero-glow"></div>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <h3 class="section-title" style="border:none; padding-bottom:0;">Your Assets</h3>
+                        <div class="large-portfolio-list" id="portfolio-list-page"></div>
                     </div>
                 </div>
 
@@ -3652,27 +3704,10 @@
 
                 <!-- PAGE: HISTORY -->
                 <div class="page" id="page-history">
-                    <div class="glass-panel">
-                        <div style="overflow-x:auto;">
-                            <table class="history-table">
-                                <thead>
-                                    <tr>
-                                        <th>Date & Time</th>
-                                        <th>Action</th>
-                                        <th>Asset</th>
-                                        <th>Amount</th>
-                                        <th>Exec. Price</th>
-                                        <th>Total Value</th>
-                                        <th>PnL</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="history-body">
-                                    <tr>
-                                        <td colspan="7" style="text-align: center; color: var(--text-muted);">No trades
-                                            executed yet.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="history-timeline-container">
+                        <h3 class="section-title" style="border:none;">Trade History</h3>
+                        <div id="history-body" class="history-cards-list">
+                            <div class="empty-state" style="text-align:center; padding: 40px; color: var(--text-muted);">No trades executed yet.</div>
                         </div>
                     </div>
                 </div>
@@ -4099,6 +4134,9 @@
             state.netWorth = state.cash + assetsValue;
             els.gNetworth.innerText = formatMoney(state.netWorth);
             els.gCash.innerText = formatMoney(state.cash);
+            
+            const heroBalance = document.getElementById('portfolio-hero-balance');
+            if(heroBalance) heroBalance.innerText = formatMoney(assetsValue);
 
             // Level / Rank logic
             let rankText = "Novice 🍼";
@@ -4115,26 +4153,35 @@
 
             // History
             if (state.history.length === 0) {
-                els.historyBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted); font-style:italic;">No trades executed yet.</td></tr>';
+                els.historyBody.innerHTML = '<div class="empty-state" style="text-align:center; padding: 40px; color: var(--text-muted);">No trades executed yet.</div>';
             } else {
                 els.historyBody.innerHTML = state.history.map(h => {
-                    let pnlHtml = '<td style="color:var(--text-muted);">-</td>';
+                    let pnlHtml = '<div class="h-pnl" style="color:var(--text-muted);">-</div>';
                     if (h.pnl !== undefined && h.pnl !== null) {
                         const isProfit = h.pnl >= 0;
                         const sign = isProfit ? '+' : '';
                         const color = isProfit ? 'var(--color-up)' : 'var(--color-down)';
-                        pnlHtml = `<td style="font-weight: 700; color: ${color};">${sign}${formatMoney(h.pnl)}</td>`;
+                        pnlHtml = `<div class="h-pnl" style="color: ${color};">${sign}${formatMoney(h.pnl)}</div>`;
                     }
+                    
+                    const isBuy = h.action === 'BUY';
+                    const cardClass = isBuy ? 'buy-card' : 'sell-card';
+                    const iconClass = isBuy ? 'fa-arrow-down' : 'fa-arrow-up';
+                    
                     return `
-                    <tr>
-                        <td style="color: var(--text-muted); font-size:0.85rem;">${h.time}</td>
-                        <td><span class="${h.action === 'BUY' ? 'badge-buy' : 'badge-sell'}">${h.action}</span></td>
-                        <td style="font-weight: 700; color: ${state.coins[h.coin].color}">${h.coin}</td>
-                        <td>${formatQty(h.amount)}</td>
-                        <td>${formatMoney(h.price)}</td>
-                        <td style="font-weight: 700">${formatMoney(h.total)}</td>
-                        ${pnlHtml}
-                    </tr>
+                    <div class="h-card ${cardClass}">
+                        <div class="h-icon"><i class="fas ${iconClass}"></i></div>
+                        <div class="h-details">
+                            <div class="h-main-info">
+                                <div class="h-asset">${h.coin} <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal;">@ ${formatMoney(h.price)}</span></div>
+                                <div class="h-time">${h.time} &bull; <span style="font-weight:600; color:${isBuy ? 'var(--color-up)' : 'var(--color-down)'}">${h.action}</span></div>
+                            </div>
+                            <div class="h-financials">
+                                <div class="h-amount">${formatQty(h.amount)} ${h.coin} <span style="font-size:0.8rem; color:var(--text-muted);">(${formatMoney(h.total)})</span></div>
+                                ${pnlHtml}
+                            </div>
+                        </div>
+                    </div>
                     `;
                 }).join('');
             }
