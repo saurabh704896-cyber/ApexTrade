@@ -1347,96 +1347,153 @@
         }
 
         /* --- PAGE 4: Leaderboard --- */
-        .leaderboard-list {
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 40px;
+            margin-top: 30px;
+            min-height: 250px;
+        }
+
+        .podium-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border-radius: 20px 20px 10px 10px;
+            padding: 25px 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex: 1;
+            max-width: 220px;
+        }
+        .podium-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .podium-card.rank-1 {
+            height: 230px;
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.15), rgba(17, 24, 39, 0.95));
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            border-top: 1px solid rgba(251, 191, 36, 0.8);
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.2), inset 0 1px 0 0 rgba(251, 191, 36, 0.5);
+            z-index: 3;
+        }
+        .podium-card.rank-2 {
+            height: 190px;
+            background: linear-gradient(145deg, rgba(203, 213, 225, 0.1), rgba(17, 24, 39, 0.95));
+            border: 1px solid rgba(203, 213, 225, 0.2);
+            border-top: 1px solid rgba(203, 213, 225, 0.5);
+            z-index: 2;
+        }
+        .podium-card.rank-3 {
+            height: 170px;
+            background: linear-gradient(145deg, rgba(180, 83, 9, 0.1), rgba(17, 24, 39, 0.95));
+            border: 1px solid rgba(180, 83, 9, 0.3);
+            border-top: 1px solid rgba(180, 83, 9, 0.6);
+            z-index: 1;
+        }
+
+        .podium-rank {
+            font-size: 2.8rem;
+            position: absolute;
+            top: -30px;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+        }
+
+        .podium-avatar {
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ff0055);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 800; font-size: 1.8rem;
+            margin-bottom: 15px; margin-top: 15px;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .rank-1 .podium-avatar { border-color: #fbbf24; box-shadow: 0 0 25px rgba(251, 191, 36, 0.6); }
+        .rank-2 .podium-avatar { border-color: #cbd5e1; box-shadow: 0 0 15px rgba(203, 213, 225, 0.4); }
+        .rank-3 .podium-avatar { border-color: #b45309; box-shadow: 0 0 15px rgba(180, 83, 9, 0.4); }
+
+        .podium-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; color: #fff; }
+        .podium-val { color: var(--color-up); font-weight: 800; font-size: 1.15rem; }
+
+        .is-user-podium {
+            animation: podium-pulse 2.5s infinite alternate;
+        }
+        @keyframes podium-pulse {
+            0% { box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); border-color: rgba(0, 210, 255, 0.5); }
+            100% { box-shadow: 0 0 40px rgba(0, 210, 255, 0.8); border-color: rgba(0, 210, 255, 1); }
+        }
+
+        .leaderboard-list-remaining {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .lb-item {
             display: flex;
             align-items: center;
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(0, 0, 0, 0.6));
-            padding: 20px 25px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            padding: 16px 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .lb-item:hover {
-            transform: scale(1.02) translateX(10px);
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(0, 210, 255, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
-            z-index: 10;
+            transform: scale(1.01) translateX(5px);
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.15);
         }
 
         .lb-item.is-user {
-            background: linear-gradient(90deg, rgba(0, 210, 255, 0.2), rgba(17, 24, 39, 0.9));
+            background: linear-gradient(90deg, rgba(0, 210, 255, 0.15), rgba(17, 24, 39, 0.9));
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3), inset 0 0 15px rgba(0, 210, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(0, 210, 255, 0.1);
         }
 
         .lb-rank {
-            font-size: 1.5rem;
-            font-weight: 800;
-            width: 80px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            width: 60px;
             color: var(--text-muted);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .lb-item:nth-child(1) {
-            background: linear-gradient(90deg, rgba(251, 191, 36, 0.2), rgba(17, 24, 39, 0.9));
-            border: 1px solid rgba(251, 191, 36, 0.5);
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.2);
-            transform: scale(1.03);
-            margin-bottom: 5px;
-        }
-
-        .lb-item:nth-child(1) .lb-rank {
-            color: #fbbf24;
-            text-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
-            font-size: 1.8rem;
-        }
-
-        .lb-item:nth-child(2) .lb-rank {
-            color: #cbd5e1;
-            text-shadow: 0 0 10px rgba(203, 213, 225, 0.4);
-            font-size: 1.6rem;
-        }
-
-        .lb-item:nth-child(3) .lb-rank {
-            color: #b45309;
-            text-shadow: 0 0 10px rgba(180, 83, 9, 0.4);
-            font-size: 1.6rem;
         }
 
         .lb-avatar {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent), #ff0055);
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 800;
-            font-size: 1.3rem;
-            margin-right: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
+            margin-right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
         .lb-name {
             flex-grow: 1;
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 0.5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
         }
 
         .lb-val {
-            font-weight: 800;
-            font-size: 1.3rem;
+            font-weight: 700;
+            font-size: 1.15rem;
             color: var(--color-up);
         }
 
@@ -4129,24 +4186,48 @@
             let allPlayers = [...fakeBots, { name: currentName + ' (You)', nw: state.netWorth, isUser: true }];
             allPlayers.sort((a, b) => b.nw - a.nw); // Sort descending
 
-            lbList.innerHTML = allPlayers.map((p, index) => {
-                let badge = `#${index + 1}`;
-                if (index === 0) badge = '🥇 ' + badge;
-                if (index === 1) badge = '🥈 ' + badge;
-                if (index === 2) badge = '🥉 ' + badge;
+            let html = '';
+            
+            // --- Podium (Top 3) ---
+            html += '<div class="podium-container">';
+            // Reorder for podium visually: Rank 2, Rank 1, Rank 3
+            const podiumIndices = [1, 0, 2];
+            podiumIndices.forEach(i => {
+                if(i < allPlayers.length) {
+                    const p = allPlayers[i];
+                    let rankClass = i===0 ? 'rank-1' : (i===1 ? 'rank-2' : 'rank-3');
+                    let badge = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
+                    html += `
+                        <div class="podium-card ${rankClass} ${p.isUser ? 'is-user-podium' : ''}">
+                            <div class="podium-rank">${badge}</div>
+                            <div class="podium-avatar">${p.name.charAt(0).toUpperCase()}</div>
+                            <div class="podium-name">${p.name}</div>
+                            <div class="podium-val">${formatMoney(p.nw)}</div>
+                        </div>
+                    `;
+                }
+            });
+            html += '</div>';
 
-                const initial = p.name.charAt(0).toUpperCase();
+            // --- Remaining List (Rank 4+) ---
+            if(allPlayers.length > 3) {
+                html += '<div class="leaderboard-list-remaining">';
+                for(let i=3; i<allPlayers.length; i++) {
+                    const p = allPlayers[i];
+                    html += `
+                        <div class="lb-item ${p.isUser ? 'is-user' : ''}">
+                            <div class="lb-rank">#${i + 1}</div>
+                            <div class="lb-avatar">${p.name.charAt(0).toUpperCase()}</div>
+                            <div class="lb-name">${p.name}</div>
+                            <div class="lb-val">${formatMoney(p.nw)}</div>
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            }
 
-                return `
-                <div class="lb-item ${p.isUser ? 'is-user' : ''}">
-                    <div class="lb-rank">${badge}</div>
-                    <div class="lb-avatar">${initial}</div>
-                    <div class="lb-name">${p.name}</div>
-                    <div class="lb-val">${formatMoney(p.nw)}</div>
-                </div>
-            `}).join('');
+            lbList.innerHTML = html;
         }
-
         // --- Chart Tabs ---
         els.tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
