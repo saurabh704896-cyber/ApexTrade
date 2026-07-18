@@ -4,34 +4,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- SEO & Accessibility -->
-    <meta name="description" content="ApexTrade Pro - A professional grade cryptocurrency trading simulator and terminal.">
-    <!-- PWA & Mobile Native -->
+
+    <!-- ====== SEO: Primary Meta Tags ====== -->
+    <title>ApexTrade Pro | Next-Gen Risk-Free Crypto Trading Simulator</title>
+    <meta name="title" content="ApexTrade Pro | Next-Gen Risk-Free Crypto Trading Simulator">
+    <meta name="description" content="ApexTrade Pro is a professional-grade cryptocurrency trading simulator with real-time Binance market data, TradingView charts, leverage trading, and portfolio analytics — 100% risk-free.">
+    <meta name="keywords" content="crypto trading simulator, paper trading, bitcoin simulator, real-time trading, TradingView, Binance, cryptocurrency, portfolio, risk-free trading, ApexTrade">
+    <meta name="author" content="ApexTrade Pro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://saurabh704896-cyber.github.io/ApexTrade/">
+
+    <!-- ====== SEO: Open Graph (Facebook/LinkedIn) ====== -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saurabh704896-cyber.github.io/ApexTrade/">
+    <meta property="og:title" content="ApexTrade Pro | Next-Gen Risk-Free Crypto Trading Simulator">
+    <meta property="og:description" content="Trade Bitcoin, Ethereum & more with real Binance prices. Zero risk, 100% real market data. The ultimate portfolio project for aspiring traders.">
+    <meta property="og:image" content="https://saurabh704896-cyber.github.io/ApexTrade/logo.png">
+    <meta property="og:site_name" content="ApexTrade Pro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- ====== SEO: Twitter Cards ====== -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://saurabh704896-cyber.github.io/ApexTrade/">
+    <meta property="twitter:title" content="ApexTrade Pro | Next-Gen Risk-Free Crypto Trading Simulator">
+    <meta property="twitter:description" content="Trade BTC, ETH, SOL & more with real-time Binance prices. No risk, all the thrill.">
+    <meta property="twitter:image" content="https://saurabh704896-cyber.github.io/ApexTrade/logo.png">
+
+    <!-- ====== SEO: JSON-LD Structured Data (Schema.org) ====== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ApexTrade Pro",
+      "description": "A professional-grade, risk-free cryptocurrency trading simulator powered by real-time Binance market data and TradingView charts.",
+      "url": "https://saurabh704896-cyber.github.io/ApexTrade/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires a modern browser.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Real-time Binance WebSocket market data",
+        "TradingView advanced charting",
+        "Leverage trading simulation",
+        "Portfolio analytics & P&L tracking",
+        "Paper trading with no financial risk",
+        "Biometric authentication (WebAuthn)",
+        "Progressive Web App (PWA) installable"
+      ]
+    }
+    </script>
+
+    <!-- ====== PWA & Mobile Native ====== -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta property="og:title" content="ApexTrade Pro">
-    <meta property="og:description" content="Experience professional crypto trading, real-time market data, and risk-free portfolio management.">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#0f172a">
-    
-    <title>ApexTrade Pro - Trading Terminal</title>
-    <!-- PWA Manifest -->
+    <meta name="apple-mobile-web-app-title" content="ApexTrade">
+    <meta name="theme-color" content="#0b0f19">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
-    
-    <!-- Premium Fonts & Preconnect -->
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- ====== Performance: Preconnects (DNS + TLS early handshake) ====== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Scripts with Defer for Lighthouse 95+ -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://s3.tradingview.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://stream.binance.com">
+
+    <!-- ====== Premium Fonts ====== -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ====== Scripts: Deferred for Lighthouse 95+ ====== -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" defer></script>
-    <script defer>window.addEventListener('load', () => mermaid.initialize({ startOnLoad: true, theme: 'dark' }));</script>
-    
-    <!-- FontAwesome for Icons -->
+    <script defer>window.addEventListener('load', () => { if(window.mermaid) mermaid.initialize({ startOnLoad: true, theme: 'dark' }); });</script>
+
+    <!-- ====== FontAwesome: Non-blocking preload ====== -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
@@ -1258,6 +1311,34 @@
         .btn:active {
             transform: scale(0.95);
         }
+
+        /* ====== Accessibility: Focus-Visible Ring (Keyboard Navigation) ====== */
+        :focus { outline: none; } /* Remove default outline */
+        :focus-visible {
+            outline: 2.5px solid #3b82f6 !important;
+            outline-offset: 3px !important;
+            border-radius: 6px;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+        }
+
+        /* Skip to main content link (screen reader / keyboard users) */
+        .skip-nav {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            background: #3b82f6;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            z-index: 9999;
+            transition: top 0.2s;
+            text-decoration: none;
+        }
+        .skip-nav:focus {
+            top: 16px;
+        }
+
 
         .buy-btn {
             background: linear-gradient(135deg, #00ff88, #00b35f);
@@ -3126,7 +3207,11 @@
 </head>
 
 <body>
+    <!-- Accessibility: Skip to main content (keyboard/screen reader users) -->
+    <a href="#main-content" class="skip-nav">Skip to Main Content</a>
+
     <!-- Phase 10: Splash Screen -->
+
     <div id="splash-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.5s ease;">
         <div style="font-size:3rem; font-weight:800; color:#fff; letter-spacing:2px; display:flex; align-items:center; gap:15px; animation: pulse-glow 2s infinite alternate;">
             <i class="fas fa-chart-line" style="color:var(--color-up);"></i> ApexTrade
@@ -3186,53 +3271,64 @@
         </nav>
         
         <div class="lp-hero">
-            <div class="lp-hero-badge">ApexTrade V2.0 Engine</div>
-            <h2>Professional Grade Trading Terminal</h2>
-            <p>Execute real-time trades, monitor global assets, and rise through the competitive leaderboards with zero financial risk.</p>
-            <button class="lp-cta-btn" onclick="enterTerminal()">
-                Launch Trading <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>
-            </button>
+            <div class="lp-hero-badge" aria-label="Feature badge">⚡ Powered by Real Binance Markets</div>
+            <h1 style="font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 0.5rem;">The Smartest Way to<br><span style="background: linear-gradient(135deg, #00d2ff, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Master Crypto Trading</span></h1>
+            <p style="max-width: 560px; font-size: 1.15rem; color: var(--text-muted); margin: 1.5rem auto 2.5rem;">ApexTrade Pro connects you to <strong style="color:#fff;">live Binance market data</strong>, TradingView charts & leverage trading — with absolutely zero financial risk.</p>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                <button class="lp-cta-btn" onclick="enterTerminal()" aria-label="Open trading terminal">
+                    Launch Terminal <i class="fas fa-arrow-right" style="font-size:0.8rem" aria-hidden="true"></i>
+                </button>
+                <button class="lp-login-btn" onclick="openLoginModal()" aria-label="Login to your account" style="padding: 14px 28px; font-size: 1rem;">
+                    <i class="fas fa-user" aria-hidden="true"></i> Login
+                </button>
+            </div>
         </div>
 
         <div class="lp-bento-wrapper">
-            <div class="lp-bento-grid">
-                <!-- Large Card -->
-                <div class="bento-card bento-large">
+            <div class="lp-bento-grid" role="list" aria-label="Key features">
+                <!-- Large Card: Live Prices -->
+                <article class="bento-card bento-large" role="listitem">
                     <div>
-                        <div class="bento-icon"><i class="fas fa-chart-line"></i></div>
-                        <h3>Real-time Market Data</h3>
-                        <p>Powered by TradingView charting and live WebSockets. Analyze trends effortlessly.</p>
+                        <div class="bento-icon" aria-hidden="true"><i class="fas fa-satellite-dish"></i></div>
+                        <h3>Live Binance Market Prices</h3>
+                        <p>WebSocket-powered real prices for BTC, ETH, SOL, ADA, DOGE & more — ticking every second, directly from Binance global markets.</p>
                     </div>
-                    <div class="bento-mockup" style="background: linear-gradient(45deg, #111, #222);"></div>
-                </div>
+                    <div class="bento-chart-preview" aria-hidden="true" style="position: absolute; right: 0; bottom: 0; width: 55%; height: 70%; padding: 15px; overflow: hidden;">
+                        <svg viewBox="0 0 200 80" style="width:100%; height:100%; opacity:0.6;">
+                            <polyline points="0,70 20,55 40,65 60,30 80,45 100,20 120,35 140,15 160,25 180,10 200,18" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="0,70 20,55 40,65 60,30 80,45 100,20 120,35 140,15 160,25 180,10 200,18 200,80 0,80" fill="url(#grad)" stroke="none" opacity="0.3"/>
+                            <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                </article>
 
-                <!-- Small Card -->
-                <div class="bento-card">
+                <!-- Small Card: Execution -->
+                <article class="bento-card" role="listitem">
                     <div>
-                        <div class="bento-icon"><i class="fas fa-bolt"></i></div>
-                        <h3>Instant Execution</h3>
-                        <p>Lightning fast Market and Limit orders simulated at exact market prices.</p>
+                        <div class="bento-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
+                        <h3>Sub-Second Execution</h3>
+                        <p>Market, Limit, Take-Profit & Stop-Loss orders at real bid/ask prices. Zero slippage, instant fills.</p>
                     </div>
-                </div>
+                </article>
 
-                <!-- Small Card -->
-                <div class="bento-card">
+                <!-- Small Card: Risk-Free -->
+                <article class="bento-card" role="listitem">
                     <div>
-                        <div class="bento-icon"><i class="fas fa-shield-alt"></i></div>
-                        <h3>Risk-Free Capital</h3>
-                        <p>Start with a $10,000 simulated portfolio to test strategies safely.</p>
+                        <div class="bento-icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></div>
+                        <h3>$1B Paper Capital</h3>
+                        <p>Start with unlimited risk-free funds. Add more anytime. Learn professional trading strategy with no consequences.</p>
                     </div>
-                </div>
+                </article>
 
-                <!-- Large Card -->
-                <div class="bento-card bento-large">
+                <!-- Large Card: Portfolio -->
+                <article class="bento-card bento-large" role="listitem">
                     <div>
-                        <div class="bento-icon"><i class="fas fa-trophy"></i></div>
-                        <h3>Global Leaderboards</h3>
-                        <p>Compete with thousands of traders worldwide. Prove your profitability and climb the ranks.</p>
+                        <div class="bento-icon" aria-hidden="true"><i class="fas fa-chart-pie"></i></div>
+                        <h3>Pro Portfolio Analytics</h3>
+                        <p>Real-time P&L tracking, position management, history log, and WebAuthn-secured user accounts — all stored locally with zero backend cost.</p>
                     </div>
-                    <div class="bento-mockup" style="border-radius: 50%; width: 150px; height: 150px; right: 20px; top: 50px;"></div>
-                </div>
+                    <div class="bento-mockup" style="border-radius: 50%; width: 140px; height: 140px; right: 20px; top: 50px; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.3), rgba(168,85,247,0.15));" aria-hidden="true"></div>
+                </article>
             </div>
         </div>
 
@@ -3310,9 +3406,11 @@
                 <button class="login-tab" id="tab-phone" onclick="switchLoginMethod('phone')"><i class="fas fa-phone"></i> Phone</button>
             </div>
 
-            <input type="email" id="login-id" class="login-input" placeholder="Enter Email ID" required>
-            <input type="text" id="login-name" class="login-input" placeholder="Enter Username" required>
-            <button class="login-btn" onclick="doLogin()">Secure Login</button>
+            <input type="email" id="login-id" class="login-input" placeholder="Enter Email ID" required
+                aria-label="Email address for login" autocomplete="email">
+            <input type="text" id="login-name" class="login-input" placeholder="Enter Username" required
+                aria-label="Your display name" autocomplete="nickname">
+            <button class="login-btn" onclick="doLogin()" aria-label="Login to ApexTrade Pro">Secure Login</button>
             <i class="fas fa-circle-notch login-spinner" id="login-spinner"></i>
         </div>
     </div>
@@ -3330,7 +3428,7 @@
         </div>
     </div>
 
-    <div class="app-layout">
+    <div class="app-layout" id="main-content" role="main">
 
         <!-- SIDEBAR / BOTTOM NAV -->
         <aside class="sidebar">
@@ -3531,7 +3629,7 @@
                             </div>
 
                             <div class="input-wrapper">
-                                <input type="number" id="trade-qty" placeholder="Quantity" step="any" min="0" oninput="calculateMargin()">
+                                <input type="number" id="trade-qty" placeholder="Quantity" step="any" min="0" oninput="calculateMargin()" aria-label="Trade quantity in selected cryptocurrency">
                                 <span class="currency-suffix" id="trade-coin-label">BTC</span>
                             </div>
 
