@@ -595,7 +595,8 @@
             justify-content: space-between;
             padding: 0 20px;
             background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .page-title-display {
@@ -1091,6 +1092,29 @@
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .flash-up {
+            animation: flashGreen 0.5s ease;
+            color: var(--color-up) !important;
+        }
+
+        .flash-down {
+            animation: flashRed 0.5s ease;
+            color: var(--color-down) !important;
+        }
+
+        @keyframes flashGreen {
+            0% { color: #fff; text-shadow: 0 0 20px #00ff88; }
+            50% { color: #00ff88; text-shadow: 0 0 30px #00ff88; }
+            100% { color: var(--color-up); text-shadow: none; }
+        }
+
+        @keyframes flashRed {
+            0% { color: #fff; text-shadow: 0 0 20px #ff0055; }
+            50% { color: #ff0055; text-shadow: 0 0 30px #ff0055; }
+            100% { color: var(--color-down); text-shadow: none; }
         }
 
         .chart-container {
@@ -4115,6 +4139,23 @@
             tabs: document.querySelectorAll('.tab'), newsTicker: document.getElementById('news-ticker')
         };
 
+        function animateValue(obj, start, end, duration, isMoney = true) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 4);
+                const currentVal = start + (end - start) * easeOut;
+                obj.innerText = isMoney ? formatMoney(currentVal) : formatQty(currentVal);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerText = isMoney ? formatMoney(end) : formatQty(end);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
         function updateUI() {
             let assetsValue = 0;
             els.portfolioPageList.innerHTML = '';
@@ -4144,9 +4185,19 @@
 
             if (els.portfolioPageList.innerHTML === '') els.portfolioPageList.innerHTML = '<div style="color: var(--text-muted); font-size: 0.95rem;">No assets currently held. Go to the Trading Desk to buy some!</div>';
 
-            state.netWorth = state.cash + assetsValue;
-            els.gNetworth.innerText = formatMoney(state.netWorth);
-            els.gCash.innerText = formatMoney(state.cash);
+            const newNetWorth = state.cash + assetsValue;
+            if (state.netWorth !== newNetWorth) {
+                animateValue(els.gNetworth, state.netWorth, newNetWorth, 800, true);
+                state.netWorth = newNetWorth;
+            } else {
+                els.gNetworth.innerText = formatMoney(state.netWorth);
+            }
+            
+            if (els.gCash.dataset.val !== state.cash.toString()) {
+                const oldCash = parseFloat(els.gCash.dataset.val) || state.cash;
+                animateValue(els.gCash, oldCash, state.cash, 800, true);
+                els.gCash.dataset.val = state.cash;
+            }
             
             const heroBalance = document.getElementById('portfolio-hero-balance');
             if(heroBalance) heroBalance.innerText = formatMoney(assetsValue);
@@ -4561,7 +4612,9 @@
                 coin.history.shift();
 
                 if (coin.symbol === state.activeCoin) {
-                    els.price.className = coin.price >= oldPrice ? 'current-price price-up' : 'current-price price-down';
+                    els.price.classList.remove('flash-up', 'flash-down');
+                    void els.price.offsetWidth; // trigger reflow
+                    els.price.classList.add(coin.price >= oldPrice ? 'flash-up' : 'flash-down');
                 }
             });
 
