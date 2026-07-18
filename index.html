@@ -3101,6 +3101,27 @@
         .sidebar, .topbar, .glass-panel, .mc-theory-article, #login-screen, .lp-navbar, .lp-feature-card, .toast, .login-box {
             -webkit-backdrop-filter: blur(20px) !important;
         }
+
+        /* Skeleton Loader */
+        .skeleton {
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.03) !important;
+            color: transparent !important;
+            border-color: transparent !important;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.05) 20%, rgba(255,255,255,0.1) 60%, rgba(255,255,255,0));
+            animation: shimmer 1.5s infinite;
+        }
+        .skeleton * { visibility: hidden !important; }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
     </style>
 </head>
 
@@ -4307,9 +4328,17 @@
             landingPage.style.display = 'none';
             loginScreen.classList.remove('active');
             appLayout.style.display = 'flex';
-            if (typeof chart !== 'undefined' && chart) {
-                setTimeout(() => chart.resize(), 100);
-            }
+            
+            // Add skeleton loaders to UI for simulated API fetching
+            const elementsToSkeleton = [document.querySelector('.market-list'), document.getElementById('portfolio-page-list'), document.querySelector('.main-chart')];
+            elementsToSkeleton.forEach(el => { if(el) el.classList.add('skeleton'); });
+            
+            setTimeout(() => {
+                elementsToSkeleton.forEach(el => { if(el) el.classList.remove('skeleton'); });
+                if (typeof chart !== 'undefined' && chart) {
+                    chart.resize();
+                }
+            }, 800); // simulated API loading time
         };
 
         window.goHome = function() {
@@ -4383,7 +4412,24 @@
             
             const originalBtnContent = loginBtn.innerHTML;
 
-            const finalizeLogin = () => {
+            const finalizeLogin = async () => {
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                
+                // MOCK API CALL TO OUR SERVICE WORKER BACKEND
+                try {
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: name, email: email })
+                    });
+                    const data = await response.json();
+                    if(data.success) {
+                        localStorage.setItem('tp_jwt_token', data.token);
+                    }
+                } catch(err) {
+                    console.log("Mock API unavailable (SW not running yet), falling back to local.");
+                }
+
                 loginBtn.innerHTML = '<i class="fas fa-check"></i> Verified';
                 setTimeout(() => {
                     userName = name;
@@ -5630,7 +5676,7 @@
             document.getElementById('margin-required-display').innerText = '$' + margin.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
         };
 
-        window.executeTrade = function (action) {
+        window.executeTrade = async function (action) {
             const qty = parseFloat(document.getElementById('trade-qty').value);
             if (isNaN(qty) || qty <= 0) {
                 showToast('Please enter a valid quantity', 'error');
@@ -5645,6 +5691,19 @@
             if (marginReq > state.cash) {
                 showToast('Insufficient margin to open position!', 'error');
                 return;
+            }
+
+            // MOCK API BACKEND CALL
+            try {
+                const response = await fetch('/api/trade', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: action, symbol: coin.symbol, qty: qty, price: currentPrice, leverage: state.leverage })
+                });
+                const result = await response.json();
+                console.log("Mock Backend Trade Result:", result);
+            } catch(e) {
+                console.log("Mock API offline, fallback to local execution.");
             }
 
             state.cash -= marginReq;
