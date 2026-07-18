@@ -3076,6 +3076,20 @@
 </head>
 
 <body>
+    <!-- Phase 10: Splash Screen -->
+    <div id="splash-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.5s ease;">
+        <div style="font-size:3rem; font-weight:800; color:#fff; letter-spacing:2px; display:flex; align-items:center; gap:15px; animation: pulse-glow 2s infinite alternate;">
+            <i class="fas fa-chart-line" style="color:var(--color-up);"></i> ApexTrade
+        </div>
+        <div style="margin-top:20px; color:rgba(255,255,255,0.5); font-size:1rem; letter-spacing:4px; text-transform:uppercase;">Initializing...</div>
+    </div>
+    
+    <!-- Phase 10: Offline Overlay -->
+    <div id="offline-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); backdrop-filter:blur(10px); z-index:999998; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; transition:opacity 0.3s ease;">
+        <i class="fas fa-wifi-slash" style="font-size:4rem; color:#ff0055; margin-bottom:20px; animation: flashRed 1s infinite alternate;"></i>
+        <h2 style="color:#fff; font-size:2rem; margin-bottom:10px;">Connection Lost</h2>
+        <p style="color:rgba(255,255,255,0.6); max-width:80%;">Waiting for network signal. Your portfolio data is safely cached.</p>
+    </div>
     
     <!-- Custom Cursor -->
     <div class="cursor-dot" id="cursor-dot"></div>
@@ -3238,12 +3252,12 @@
                     <span>Home</span></button>
                 <button class="nav-btn active" data-page="page-trade"><i class="fas fa-chart-line"></i>
                     <span>Trade</span></button>
-                <button class="nav-btn" data-page="page-portfolio"><i class="fas fa-wallet"></i>
-                    <span>Portfolio</span></button>
+                <button class="nav-btn" data-page="page-portfolio" style="position:relative;"><i class="fas fa-wallet"></i>
+                    <span>Portfolio</span><span class="nav-badge" id="badge-portfolio"></span></button>
                 <button class="nav-btn" data-page="page-leaderboard"><i class="fas fa-trophy"></i>
                     <span>Rankings</span></button>
-                <button class="nav-btn" data-page="page-academy"><i class="fas fa-graduation-cap"></i>
-                    <span>Academy</span></button>
+                <button class="nav-btn" data-page="page-academy" style="position:relative;"><i class="fas fa-graduation-cap"></i>
+                    <span>Academy</span><span class="nav-badge" id="badge-academy"></span></button>
                 <button class="nav-btn" data-page="page-history"><i class="fas fa-list-alt"></i>
                     <span>History</span></button>
                 <button class="nav-btn pulse-btn" onclick="addFreeCash()"
@@ -3256,6 +3270,22 @@
             <button class="reset-btn" onclick="resetGame()" style="margin-top:auto;"><i class="fas fa-power-off"></i>
                 Logout / Reset</button>
         </aside>
+
+        <!-- Phase 7/10: Mobile Bottom Nav -->
+        <nav class="mobile-bottom-nav">
+            <button class="mobile-nav-btn" onclick="goHome()">
+                <i class="fas fa-home"></i><span>Home</span>
+            </button>
+            <button class="mobile-nav-btn active" onclick="switchPage('page-trade'); updateMobileNav(this)">
+                <i class="fas fa-chart-line"></i><span>Trade</span>
+            </button>
+            <button class="mobile-nav-btn" style="position:relative;" onclick="switchPage('page-portfolio'); updateMobileNav(this)">
+                <i class="fas fa-wallet"></i><span>Portfolio</span><span class="nav-badge" id="badge-portfolio-mob"></span>
+            </button>
+            <button class="mobile-nav-btn" style="position:relative;" onclick="switchPage('page-academy'); updateMobileNav(this)">
+                <i class="fas fa-graduation-cap"></i><span>Academy</span><span class="nav-badge" id="badge-academy-mob"></span>
+            </button>
+        </nav>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
@@ -3313,12 +3343,12 @@
                         <!-- Column 2: Chart -->
                             <div class="glass-panel chart-col" style="margin-bottom:0;">
                                 <div class="tabs" id="asset-tabs">
-                                    <div class="tab active" data-coin="BTC"><i class="fab fa-bitcoin" style="color:#f59e0b"></i> BTC</div>
-                                    <div class="tab" data-coin="ETH"><i class="fab fa-ethereum" style="color:#6366f1"></i> ETH</div>
-                                    <div class="tab" data-coin="SOL"><i class="fas fa-bolt" style="color:#14b8a6"></i> SOL</div>
-                                    <div class="tab" data-coin="ADA"><i class="fas fa-circle-nodes" style="color:#3b82f6"></i> ADA</div>
-                                    <div class="tab" data-coin="DOGE"><i class="fas fa-dog" style="color:#eab308"></i> DOGE</div>
-                                    <div class="tab" data-coin="SHIB"><i class="fas fa-paw" style="color:#ef4444"></i> SHIB</div>
+                                    <div class="tab active" data-coin="BTC" style="display:flex; align-items:center; gap:8px;"><i class="fab fa-bitcoin" style="color:#f59e0b"></i> BTC <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 12 Q5 15, 10 8 T20 10 T30 2" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
+                                    <div class="tab" data-coin="ETH" style="display:flex; align-items:center; gap:8px;"><i class="fab fa-ethereum" style="color:#6366f1"></i> ETH <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 10 Q10 5, 15 12 T30 5" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
+                                    <div class="tab" data-coin="SOL" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-bolt" style="color:#14b8a6"></i> SOL <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 15 L10 5 L20 10 L30 0" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
+                                    <div class="tab" data-coin="ADA" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-circle-nodes" style="color:#3b82f6"></i> ADA <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 5 Q10 15, 20 5 T30 10" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
+                                    <div class="tab" data-coin="DOGE" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-dog" style="color:#eab308"></i> DOGE <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 10 L15 0 L20 5 L30 2" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
+                                    <div class="tab" data-coin="SHIB" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-paw" style="color:#ef4444"></i> SHIB <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 2 Q10 10, 15 5 T30 15" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
                                 </div>
 
                                 <div class="chart-header">
@@ -5611,6 +5641,68 @@
             initTradeSlider('buy');
             initTradeSlider('sell');
         }, 1000);
+
+        // --- Phase 10: Ultimate Micro-Interactions Logic ---
+        // 1. Splash Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 500);
+                }
+            }, 1500);
+        });
+
+        // 2. Offline Mode
+        window.addEventListener('offline', () => {
+            const overlay = document.getElementById('offline-overlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }
+        });
+        window.addEventListener('online', () => {
+            const overlay = document.getElementById('offline-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 300);
+                showToast("Connection Restored!", "success");
+            }
+        });
+
+        // 3. Notification Badges
+        window.showBadge = function(tabName) {
+            const desktopBadge = document.getElementById(`badge-${tabName}`);
+            const mobileBadge = document.getElementById(`badge-${tabName}-mob`);
+            if(desktopBadge) desktopBadge.style.display = 'block';
+            if(mobileBadge) mobileBadge.style.display = 'block';
+            if(navigator.vibrate) navigator.vibrate(50);
+        };
+        window.hideBadge = function(tabName) {
+            const desktopBadge = document.getElementById(`badge-${tabName}`);
+            const mobileBadge = document.getElementById(`badge-${tabName}-mob`);
+            if(desktopBadge) desktopBadge.style.display = 'none';
+            if(mobileBadge) mobileBadge.style.display = 'none';
+        };
+        
+        // Hide badge when tab is clicked
+        document.querySelectorAll('[data-page="page-portfolio"], [onclick*="page-portfolio"]').forEach(el => {
+            el.addEventListener('click', () => hideBadge('portfolio'));
+        });
+        
+        // Trigger badge when free cash added or trade executed
+        const originalExecuteTrade = window.executeTrade;
+        window.executeTrade = function(action) {
+            originalExecuteTrade(action);
+            showBadge('portfolio');
+        };
+        const originalAddFreeCash = window.addFreeCash;
+        window.addFreeCash = function() {
+            originalAddFreeCash();
+            showBadge('portfolio');
+        };
 
         // Service Worker Registration for PWA
         if ('serviceWorker' in navigator) {
