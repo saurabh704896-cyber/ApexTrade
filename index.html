@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- SEO & Accessibility -->
     <meta name="description" content="ApexTrade Pro - A professional grade cryptocurrency trading simulator and terminal.">
+    <!-- PWA & Mobile Native -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta property="og:title" content="ApexTrade Pro">
     <meta property="og:description" content="Experience professional crypto trading, real-time market data, and risk-free portfolio management.">
     <meta property="og:type" content="website">
@@ -3054,6 +3057,8 @@
             cursor: grab;
             z-index: 2;
             transition: left 0.1s;
+            transform: translateZ(0);
+            will-change: left, transform;
         }
         .slider-thumb.buy { background: linear-gradient(135deg, #00ff88, #00b35f); color: #000; }
         .slider-thumb.sell { background: linear-gradient(135deg, #ff0055, #cc0044); color: #fff; }
@@ -3063,6 +3068,8 @@
             border-radius: 50px;
             z-index: 0;
             transition: width 0.1s;
+            transform: translateZ(0);
+            will-change: width;
         }
         .slider-fill.buy { background: rgba(0, 255, 136, 0.2); }
         .slider-fill.sell { background: rgba(255, 0, 85, 0.2); }
@@ -3339,6 +3346,10 @@
                     style="color: var(--color-up); border: 1px solid rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05); margin-top: 10px;">
                     <i class="fas fa-money-bill-wave"></i>
                     <span>+ Free Cash</span>
+                </button>
+                <button class="nav-btn" id="install-app-btn" style="display: none; color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); margin-top: 10px;">
+                    <i class="fas fa-download"></i>
+                    <span>Install App</span>
                 </button>
             </nav>
 
@@ -4239,7 +4250,10 @@
                 </div>
             </div>
             
-            <button class="btn buy-btn" style="width: 100%; border-radius: 12px; padding: 16px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,255,136,0.2);" onclick="closeTradeResultModal()">Awesome!</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn buy-btn" style="flex: 1; border-radius: 12px; padding: 16px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,255,136,0.2);" onclick="closeTradeResultModal()">Awesome!</button>
+                <button class="btn" id="share-pnl-btn" style="flex: 1; border-radius: 12px; padding: 16px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; background: #3b82f6; color: #fff; box-shadow: 0 10px 20px rgba(59,130,246,0.2);" onclick="sharePnL()">Share <i class="fas fa-share-alt"></i></button>
+            </div>
         </div>
     </div>
 
@@ -4356,7 +4370,7 @@
             }
         };
 
-        window.doLogin = function () {
+        window.doLogin = async function () {
             const loginBtn = document.querySelector('.login-btn');
             
             const name = document.getElementById('login-name').value.trim();
@@ -4367,12 +4381,9 @@
                 return;
             }
             
-            // FaceID / Biometric Animation
             const originalBtnContent = loginBtn.innerHTML;
-            loginBtn.innerHTML = '<i class="fas fa-fingerprint fa-spin"></i> Scanning...';
-            loginBtn.style.background = 'linear-gradient(180deg, #10b981 0%, #059669 100%)';
-            
-            setTimeout(() => {
+
+            const finalizeLogin = () => {
                 loginBtn.innerHTML = '<i class="fas fa-check"></i> Verified';
                 setTimeout(() => {
                     userName = name;
@@ -4380,29 +4391,62 @@
                     localStorage.setItem('tp_user_name', userName);
                     localStorage.setItem('tp_user_auth', userAuth);
                     
-                    // Load User State
                     const savedState = localStorage.getItem(`apex_state_${userAuth}`);
                     if (savedState) {
                         try {
                             state = JSON.parse(savedState);
                             showToast(`Welcome back, ${name}!`, 'success');
-                        } catch(e) {
-                            console.error("Could not load state");
-                        }
+                        } catch(e) { console.error("Could not load state"); }
                     } else {
                         showToast(`Account created for ${name}!`, 'success');
-                        if (typeof saveState === 'function') saveState(); // save initial state
+                        if (typeof saveState === 'function') saveState();
                     }
                     
                     enterTerminal();
                     
-                    // Reset button
                     setTimeout(() => {
                         loginBtn.innerHTML = originalBtnContent;
                         loginBtn.style.background = '';
                     }, 500);
                 }, 500);
-            }, 1200);
+            };
+
+            // Attempt Native WebAuthn (Fingerprint/FaceID)
+            // GitHub Pages uses HTTPS, so this will trigger on supported mobile devices
+            if (window.PublicKeyCredential && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+                try {
+                    loginBtn.innerHTML = '<i class="fas fa-fingerprint fa-spin"></i> Authenticating...';
+                    const challenge = new Uint8Array(32);
+                    window.crypto.getRandomValues(challenge);
+                    const userId = new Uint8Array(16);
+                    window.crypto.getRandomValues(userId);
+                    
+                    await navigator.credentials.create({
+                        publicKey: {
+                            challenge: challenge,
+                            rp: { name: "ApexTrade Pro", id: window.location.hostname },
+                            user: { id: userId, name: email, displayName: name },
+                            pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+                            authenticatorSelection: { userVerification: "preferred" },
+                            timeout: 60000
+                        }
+                    });
+                    
+                    // WebAuthn Success!
+                    if (window.playSound) playSound('success');
+                    loginBtn.style.background = 'linear-gradient(180deg, #10b981 0%, #059669 100%)';
+                    finalizeLogin();
+                    return;
+                } catch (err) {
+                    console.log("WebAuthn failed or cancelled:", err);
+                    // Fall back to simulated animation below
+                }
+            }
+            
+            // Fallback: FaceID / Biometric Animation
+            loginBtn.innerHTML = '<i class="fas fa-fingerprint fa-spin"></i> Scanning...';
+            loginBtn.style.background = 'linear-gradient(180deg, #10b981 0%, #059669 100%)';
+            setTimeout(finalizeLogin, 1200);
         }
 
         // Add Enter key support
@@ -4974,6 +5018,28 @@
             const modal = document.getElementById('trade-result-modal');
             modal.classList.remove('active');
             setTimeout(() => { modal.style.display = 'none'; }, 300);
+        };
+
+        window.sharePnL = async function() {
+            const asset = document.getElementById('pnl-asset').innerText;
+            const pnl = document.getElementById('pnl-amount').innerText;
+            
+            const shareData = {
+                title: 'My Trade on ApexTrade Pro',
+                text: `I just closed a trade on ${asset} with a ${pnl} return on ApexTrade Pro! 🚀\nStart your trading journey now:`,
+                url: window.location.href
+            };
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    showToast('Shared successfully!', 'success');
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                showToast('Web Share API not supported on this browser.', 'error');
+            }
         };
 
         function executePendingOrder(order, execPrice) {
@@ -5594,6 +5660,7 @@
             });
 
             showToast(`Opened ${action === 'BUY' ? 'Long' : 'Short'} ${qty} ${coin.symbol} @ ${formatMoney(currentPrice)}`, 'success');
+            if (window.playSound) playSound('success');
             
             const time = new Date().toLocaleString();
             state.history.unshift({ time, action, coin: coin.symbol, amount: qty, price: currentPrice, total: notional, pnl: null });
@@ -5862,6 +5929,24 @@
                 });
             });
         }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('install-app-btn');
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                installBtn.addEventListener('click', async () => {
+                    installBtn.style.display = 'none';
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to the install prompt: ${outcome}`);
+                    deferredPrompt = null;
+                });
+            }
+        });
     </script>
 </body>
 
