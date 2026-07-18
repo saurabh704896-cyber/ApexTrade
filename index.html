@@ -23,16 +23,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --bg-color: #030712;
-            --sidebar-bg: rgba(3, 7, 18, 0.85);
-            --panel-bg: rgba(17, 24, 39, 0.75);
-            --border-color: rgba(255, 255, 255, 0.12);
-            --border-glow: rgba(59, 130, 246, 0.4);
+            --bg-color: #0b0f19;
+            --sidebar-bg: rgba(11, 15, 25, 0.85);
+            --panel-bg: rgba(17, 24, 39, 0.65);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(37, 99, 235, 0.3);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --color-up: #00ff88;
-            --color-down: #ff0055;
-            --accent: #00d2ff;
+            --color-up: #10b981;
+            --color-down: #ef4444;
+            --accent: #3b82f6;
             --gold: #fbbf24;
         }
 
@@ -85,13 +85,13 @@
         .aurora {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.4;
-            animation: float 20s infinite alternate;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: float 25s infinite alternate;
         }
 
         .a1 {
-            background: #3b82f6;
+            background: #2563eb;
             width: 50vw;
             height: 50vh;
             top: -10%;
@@ -100,7 +100,7 @@
         }
 
         .a2 {
-            background: #8b5cf6;
+            background: #4f46e5;
             width: 60vw;
             height: 60vh;
             bottom: -20%;
@@ -109,13 +109,13 @@
         }
 
         .a3 {
-            background: #10b981;
+            background: #0ea5e9;
             width: 40vw;
             height: 40vh;
             top: 40%;
             left: 30%;
             animation-delay: -10s;
-            opacity: 0.2;
+            opacity: 0.15;
         }
 
         @keyframes float {
@@ -715,12 +715,13 @@
         .glass-panel {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Frosted Glass 2.0 Edge */
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
