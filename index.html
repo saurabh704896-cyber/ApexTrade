@@ -745,6 +745,26 @@
             transform: translateY(-2px);
         }
 
+        /* Hover Glow Effect */
+        .glass-panel::after, .academy-card::after, .mc-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.08), transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            border-radius: inherit;
+        }
+        .glass-panel:hover::after, .academy-card:hover::after, .mc-card:hover::after {
+            opacity: 1;
+        }
+        .glass-panel > *, .academy-card > *, .mc-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
         .section-title {
             font-size: 1.1rem;
             color: var(--text-main);
@@ -970,6 +990,7 @@
             height: 100%;
             opacity: 0.15;
             z-index: -1;
+            transition: width 0.3s ease-out;
         }
         .ob-row.ask .ob-bg { background-color: #ff0055; }
         .ob-row.bid .ob-bg { background-color: #00ff88; }
@@ -4743,6 +4764,28 @@
                 lpNavbar.classList.remove('scrolled');
             }
         });
+
+        // --- Premium Hover Glow Tracker ---
+        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                document.querySelectorAll('.glass-panel, .academy-card, .mc-card').forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    card.style.setProperty('--mouse-x', `${x}%`);
+                    card.style.setProperty('--mouse-y', `${y}%`);
+                });
+            });
+        }
+
+        // --- Dynamic Order Book Animation ---
+        setInterval(() => {
+            document.querySelectorAll('.ob-row .ob-bg').forEach(bg => {
+                // Randomly fluctuate width between 10% and 100%
+                const newWidth = Math.random() * 90 + 10;
+                bg.style.width = `${newWidth}%`;
+            });
+        }, 1500);
 
         // Init
         updateUI();
