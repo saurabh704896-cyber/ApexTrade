@@ -2596,6 +2596,29 @@
             100% { background-position: 0 0; }
         }
     </style>
+    <style>
+        /* --- Apple / Safari / iOS Specific Fixes --- */
+        @supports (-webkit-touch-callout: none) {
+            /* The 100vh bug fix for iOS Safari */
+            body, html, .app-layout, .ambient-bg, #login-screen, #landing-page {
+                height: -webkit-fill-available !important;
+            }
+            /* Smooth scrolling for iOS */
+            * {
+                -webkit-overflow-scrolling: touch !important;
+            }
+        }
+        
+        /* Prevent Apple default button/input styling */
+        button, input {
+            -webkit-appearance: none;
+        }
+        
+        /* Ensure all frosted glass uses webkit prefix */
+        .sidebar, .topbar, .glass-panel, .mc-theory-article, #login-screen, .lp-navbar, .lp-feature-card, .toast, .login-box {
+            -webkit-backdrop-filter: blur(20px) !important;
+        }
+    </style>
 </head>
 
 <body>
