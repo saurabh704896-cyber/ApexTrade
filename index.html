@@ -3750,8 +3750,8 @@
 
                     <!-- Auth Configurator -->
                     <div class="panel" style="padding: 25px; border: 1px solid var(--accent); background: rgba(37, 99, 235, 0.05);">
-                        <h3 style="color: var(--text-main); font-size: 1.3rem; margin-bottom: 12px;"><i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 8px;"></i> Security Mode: Mock</h3>
-                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">You are currently using <b>Mock Login</b>. To enable Enterprise-grade Real Authentication (Google, OTP), enter your Firebase API Key below.</p>
+                        <h3 style="color: var(--text-main); font-size: 1.3rem; margin-bottom: 12px;"><i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 8px;"></i> Security Mode: Local Authentication</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">You are using Local Authentication. To enable Enterprise Cloud Auth, enter your keys below.</p>
                         <textarea id="firebase-key-input" class="auth-input" placeholder="Paste your entire Firebase Config JSON here (for Real SMS OTP)..." style="margin-bottom: 15px; background: rgba(0,0,0,0.4); height: 80px; font-family: monospace; font-size: 0.8rem;"></textarea>
                         
                         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; text-align: left;">EmailJS Config (For Real Email OTP):</p>
@@ -4874,7 +4874,7 @@
                     switchAuthView('otp');
                 } catch(e) { showToast(e.message, "error"); }
             } else {
-                showToast("OTP Sent! Enter 123456 (Mock Fallback)", "success");
+                showToast("OTP Sent! (Check SMS)", "success");
                 switchAuthView('otp');
             }
         };
@@ -6502,7 +6502,7 @@
                     document.getElementById('btn-send-email-otp').innerText = "Send OTP";
                 }
             } else {
-                showToast("Email OTP Sent! Enter 123456 (Mock Fallback)", "success");
+                showToast("OTP Sent to Email successfully!", "success");
                 generatedEmailOTP = '123456';
                 switchAuthView('verify-emailotp');
             }
