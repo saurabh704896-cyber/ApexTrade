@@ -3752,7 +3752,7 @@
                     <div class="panel" style="padding: 25px; border: 1px solid var(--accent); background: rgba(37, 99, 235, 0.05);">
                         <h3 style="color: var(--text-main); font-size: 1.3rem; margin-bottom: 12px;"><i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 8px;"></i> Security Mode: Mock</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;">You are currently using <b>Mock Login</b>. To enable Enterprise-grade Real Authentication (Google, OTP), enter your Firebase API Key below.</p>
-                        <input type="text" id="firebase-key-input" class="auth-input" placeholder="Enter Firebase API Key (For Phone OTP)..." style="margin-bottom: 15px; background: rgba(0,0,0,0.4);">
+                        <textarea id="firebase-key-input" class="auth-input" placeholder="Paste your entire Firebase Config JSON here (for Real SMS OTP)..." style="margin-bottom: 15px; background: rgba(0,0,0,0.4); height: 80px; font-family: monospace; font-size: 0.8rem;"></textarea>
                         
                         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; text-align: left;">EmailJS Config (For Real Email OTP):</p>
                         <input type="text" id="emailjs-pubkey" class="auth-input" placeholder="EmailJS Public Key" style="margin-bottom: 10px; background: rgba(0,0,0,0.4);">
@@ -6450,6 +6450,14 @@
     <script>
         window.saveFirebaseConfig = function() {
             const fbKey = document.getElementById('firebase-key-input').value.trim();
+            if(fbKey) {
+                try {
+                    JSON.parse(fbKey); // Validate JSON
+                    localStorage.setItem('firebase_full_config', fbKey);
+                } catch(e) {
+                    return showToast("Firebase Config must be valid JSON", "error");
+                }
+            }
             const emailPub = document.getElementById('emailjs-pubkey').value.trim();
             const emailSrv = document.getElementById('emailjs-service').value.trim();
             const emailTpl = document.getElementById('emailjs-template').value.trim();

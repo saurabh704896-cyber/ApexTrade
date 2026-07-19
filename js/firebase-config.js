@@ -1,17 +1,10 @@
 // =========================================================================
 // FIREBASE CLOUD BACKEND CONFIGURATION
 // =========================================================================
-// Instructions:
-// 1. Go to https://firebase.google.com/
-// 2. Create a Project and add a Web App
-// 3. Enable Firestore Database and Email/Password Authentication
-// 4. Copy the config object provided by Firebase and paste it below.
-// 5. Change USE_FIREBASE to true to activate Cloud Sync across devices!
-// =========================================================================
 
-const USE_FIREBASE = false; // Set to true ONLY AFTER filling the config below
-
-const firebaseConfig = {
+// Read config from localStorage if injected via Dashboard Configurator
+let fbConfigRaw = localStorage.getItem('firebase_full_config');
+let firebaseConfig = {
     apiKey: "YOUR_API_KEY_HERE",
     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
     projectId: "YOUR_PROJECT_ID",
@@ -19,6 +12,17 @@ const firebaseConfig = {
     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
     appId: "YOUR_APP_ID"
 };
+
+let USE_FIREBASE = false;
+
+if (fbConfigRaw) {
+    try {
+        firebaseConfig = JSON.parse(fbConfigRaw);
+        USE_FIREBASE = true; // Auto-enable if config exists
+    } catch(e) {
+        console.error("Failed to parse Firebase Config", e);
+    }
+}
 
 // Initialize Firebase (Only if enabled)
 let app, auth, db;
