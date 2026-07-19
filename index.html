@@ -137,14 +137,28 @@
             background: var(--accent);
         }
 
+        /* Smooth Animations & Typography Enhancements */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation-duration: 0.4s;
+        }
+        .main-content, #landing-page, .mc-theory-article {
+            animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Space Grotesk', 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             height: 100vh;
@@ -4770,6 +4784,8 @@
             
             const tvSymbol = symbolMap[coinSymbol] || 'BINANCE:BTCUSDT';
             
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            
             container.innerHTML = ''; 
             
             tvWidget = new TradingView.widget({
@@ -4777,19 +4793,23 @@
                 "symbol": tvSymbol,
                 "interval": "15",
                 "timezone": "Etc/UTC",
-                "theme": "dark",
+                "theme": currentTheme,
                 "style": "1",
                 "locale": "en",
                 "enable_publishing": false,
-                "backgroundColor": "#0f172a",
-                "gridColor": "rgba(255, 255, 255, 0.05)",
+                "backgroundColor": currentTheme === 'light' ? "#ffffff" : "#0f172a",
+                "gridColor": currentTheme === 'light' ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.05)",
                 "hide_top_toolbar": false,
                 "hide_legend": false,
                 "save_image": false,
                 "container_id": "tv_chart_container",
-                "toolbar_bg": "#0f172a",
+                "toolbar_bg": currentTheme === 'light' ? "#f8fafc" : "#0f172a",
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
                 "studies": [
-                    "Volume@tv-basicstudies"
+                    "Volume@tv-basicstudies",
+                    "RSI@tv-basicstudies",
+                    "MACD@tv-basicstudies"
                 ]
             });
         }
