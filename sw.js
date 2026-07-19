@@ -1,8 +1,8 @@
-const CACHE_NAME = 'apextrade-pro-v11';
+const CACHE_NAME = 'apextrade-pro-v12';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './logo.png',
+  './assets/logo.png',
   './manifest.json'
 ];
 

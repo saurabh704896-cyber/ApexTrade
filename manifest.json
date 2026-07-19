@@ -8,7 +8,7 @@
   "theme_color": "#0b0e14",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "assets/logo.png",
       "sizes": "192x192 512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -20,14 +20,14 @@
       "short_name": "Trade",
       "description": "Open Trading Terminal",
       "url": "/?action=trade",
-      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "assets/logo.png", "sizes": "192x192" }]
     },
     {
       "name": "Academy",
       "short_name": "Academy",
       "description": "Learn Crypto Trading",
       "url": "/?action=academy",
-      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "assets/logo.png", "sizes": "192x192" }]
     }
   ]
 }
