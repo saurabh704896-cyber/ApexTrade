@@ -3159,6 +3159,45 @@
             .action-buttons { display: none !important; }
             .mobile-slider-container { display: block; }
         }
+        
+        /* PWA Install Banner */
+        .pwa-install-banner {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150px);
+            background: rgba(11, 14, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            opacity: 0;
+            transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .pwa-install-banner.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .pwa-install-banner img {
+            width: 40px; height: 40px; border-radius: 10px;
+        }
+        .pwa-banner-text h4 { margin: 0; font-size: 14px; color: #fff; font-weight: 700; }
+        .pwa-banner-text p { margin: 3px 0 0; font-size: 11px; color: #aaa; }
+        .pwa-btn-group { display: flex; gap: 8px; margin-left: auto; }
+        .pwa-btn-install { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .pwa-btn-install:hover { background: #2563eb; }
+        .pwa-btn-close { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .pwa-btn-close:hover { background: rgba(255,255,255,0.2); }
     </style>
     <style>
         /* --- Apple / Safari / iOS Specific Fixes --- */
@@ -6045,6 +6084,11 @@
             localStorage.setItem('apex_theme', target);
             const btn = document.getElementById('theme-toggle');
             if (btn) btn.innerHTML = target === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                metaThemeColor.setAttribute('content', target === 'light' ? '#f0f2f5' : '#0b0f19');
+            }
         }
         
         const savedTheme = localStorage.getItem('apex_theme');
@@ -6089,11 +6133,16 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            const installBtn = document.getElementById('install-app-btn');
+            
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner && !localStorage.getItem('pwa_declined')) {
+                setTimeout(() => banner.classList.add('show'), 2500);
+            }
+            
+            const installBtn = document.getElementById('pwa-install-btn');
             if (installBtn) {
-                installBtn.style.display = 'flex';
                 installBtn.addEventListener('click', async () => {
-                    installBtn.style.display = 'none';
+                    banner.classList.remove('show');
                     deferredPrompt.prompt();
                     const { outcome } = await deferredPrompt.userChoice;
                     console.log(`User response to the install prompt: ${outcome}`);
@@ -6101,7 +6150,26 @@
                 });
             }
         });
+
+        window.closeInstallBanner = function() {
+            const banner = document.getElementById('pwa-install-banner');
+            if(banner) banner.classList.remove('show');
+            localStorage.setItem('pwa_declined', 'true');
+        };
     </script>
+    
+    <!-- PWA Install Banner -->
+    <div id="pwa-install-banner" class="pwa-install-banner">
+        <img src="logo.png" alt="ApexTrade">
+        <div class="pwa-banner-text">
+            <h4>ApexTrade App</h4>
+            <p>Add to Home Screen for a native experience.</p>
+        </div>
+        <div class="pwa-btn-group">
+            <button class="pwa-btn-close" onclick="closeInstallBanner()">Later</button>
+            <button class="pwa-btn-install" id="pwa-install-btn">Install</button>
+        </div>
+    </div>
 </body>
 
 </html>

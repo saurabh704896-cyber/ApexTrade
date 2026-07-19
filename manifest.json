@@ -13,5 +13,21 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Trade Now",
+      "short_name": "Trade",
+      "description": "Open Trading Terminal",
+      "url": "/?action=trade",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Academy",
+      "short_name": "Academy",
+      "description": "Learn Crypto Trading",
+      "url": "/?action=academy",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    }
   ]
 }
