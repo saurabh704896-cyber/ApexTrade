@@ -3243,6 +3243,11 @@
         .skeleton * { visibility: hidden !important; }
         @keyframes shimmer { 100% { transform: translateX(100%); } }
     </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
 </head>
 
 <body>
@@ -4527,8 +4532,16 @@
             }
         };
 
-        window.saveState = function() {
+        window.saveState = async function() {
             if (userAuth && typeof state !== 'undefined') {
+                if (typeof USE_FIREBASE !== 'undefined' && USE_FIREBASE && typeof db !== 'undefined') {
+                    try {
+                        await db.collection('users').doc(userAuth).set({
+                            state: JSON.stringify(state),
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                    } catch(e) { console.error("Firebase save error", e); }
+                }
                 localStorage.setItem(`apex_state_${userAuth}`, JSON.stringify(state));
             }
         };
@@ -4549,6 +4562,25 @@
             const finalizeLogin = async () => {
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
                 
+                if (typeof USE_FIREBASE !== 'undefined' && USE_FIREBASE && typeof auth !== 'undefined' && typeof db !== 'undefined') {
+                    try {
+                        const fbEmail = email.includes('@') ? email : `${email}@apextrade.mock`;
+                        try {
+                            await auth.signInWithEmailAndPassword(fbEmail, "ApexTrade123!");
+                        } catch(e) {
+                            if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
+                                await auth.createUserWithEmailAndPassword(fbEmail, "ApexTrade123!");
+                            }
+                        }
+                        const userDoc = await db.collection('users').doc(email).get();
+                        if(userDoc.exists && userDoc.data().state) {
+                            localStorage.setItem(`apex_state_${email}`, userDoc.data().state);
+                        }
+                    } catch(e) {
+                        console.error("Firebase Auth Error", e);
+                    }
+                }
+
                 // MOCK API CALL TO OUR SERVICE WORKER BACKEND
                 try {
                     const response = await fetch('/api/login', {
