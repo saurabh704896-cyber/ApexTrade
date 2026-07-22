@@ -3765,6 +3765,24 @@
                 
             <div class="page active" id="page-dashboard">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <!-- Phase 8: Dash Banners -->
+                    <div style="grid-column: 1 / -1; display:flex; gap:15px; flex-wrap:wrap; margin-bottom:10px;">
+                        <div class="glass-panel" style="flex:1; min-width:250px; background:linear-gradient(135deg, #ef4444, #b91c1c); display:flex; justify-content:space-between; align-items:center; cursor:pointer; padding:20px; transition:0.3s;" onclick="openCrashGame()">
+                            <div>
+                                <div style="font-weight:900; font-size:1.3rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;"><i class="fas fa-rocket"></i> Play CRASH</div>
+                                <div style="font-size:0.9rem; color:rgba(255,255,255,0.8);">Multiply your cash instantly!</div>
+                            </div>
+                            <i class="fas fa-play-circle" style="font-size:2.5rem; opacity:0.8;"></i>
+                        </div>
+                        <div class="glass-panel" style="flex:1; min-width:250px; background:linear-gradient(135deg, #10b981, #047857); display:flex; justify-content:space-between; align-items:center; cursor:pointer; padding:20px; transition:0.3s;" onclick="fakeReferral()">
+                            <div>
+                                <div style="font-weight:900; font-size:1.3rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;"><i class="fas fa-users"></i> Invite & Earn</div>
+                                <div style="font-size:0.9rem; color:rgba(255,255,255,0.8);">Get $500 per friend!</div>
+                            </div>
+                            <i class="fab fa-whatsapp" style="font-size:2.5rem; opacity:0.8;"></i>
+                        </div>
+                    </div>
+
                     <!-- Overview Card -->
                     <div class="panel" style="padding: 25px; background: linear-gradient(145deg, var(--panel-bg), rgba(37,99,235,0.05)); border: 1px solid rgba(37,99,235,0.2);">
                         <h3 style="color: var(--text-muted); font-size: 1rem; margin-bottom: 10px; font-weight: 600;"><i class="fas fa-wallet" style="margin-right: 8px;"></i> Account Summary</h3>
@@ -7547,6 +7565,173 @@
                 }, 2000);
             }, 1500);
         };
+    </script>
+
+        // --- Phase 8: Crash Mini-Game & Referral Logic ---
+        
+        let crashInterval;
+        let crashMultiplier = 1.00;
+        let isCrashRunning = false;
+        let crashTarget = 0;
+        let currentBet = 0;
+        
+        window.openCrashGame = function() {
+            if(typeof vibrate === 'function') vibrate(30);
+            document.getElementById('crash-game-modal').style.display = 'flex';
+            resetCrashUI();
+        };
+        
+        window.closeCrashGame = function() {
+            if(isCrashRunning && currentBet > 0) return; // Cannot close while bet is active
+            document.getElementById('crash-game-modal').style.display = 'none';
+        };
+        
+        function resetCrashUI() {
+            crashMultiplier = 1.00;
+            isCrashRunning = false;
+            currentBet = 0;
+            document.getElementById('crash-multiplier').innerText = "1.00x";
+            document.getElementById('crash-multiplier').style.color = "#10b981";
+            document.getElementById('crash-rocket').style.bottom = "10px";
+            document.getElementById('crash-rocket').style.left = "10px";
+            
+            const btn = document.getElementById('crash-action-btn');
+            btn.innerText = "Place Bet";
+            btn.style.background = "linear-gradient(135deg, #3b82f6, #2563eb)";
+            btn.style.boxShadow = "0 10px 25px rgba(37,99,235,0.4)";
+            btn.onclick = startCrashGame;
+            document.getElementById('crash-bet-amount').disabled = false;
+        }
+        
+        window.startCrashGame = function() {
+            if(typeof vibrate === 'function') vibrate(30);
+            const betInput = document.getElementById('crash-bet-amount').value;
+            const betAmount = parseFloat(betInput);
+            
+            if(isNaN(betAmount) || betAmount <= 0) {
+                if(typeof showToast === 'function') showToast("Enter a valid bet amount", "error");
+                return;
+            }
+            if(betAmount > state.cash) {
+                if(typeof showToast === 'function') showToast("Insufficient funds!", "error");
+                return;
+            }
+            
+            // Deduct bet
+            state.cash -= betAmount;
+            currentBet = betAmount;
+            updateUI();
+            
+            // Setup game
+            isCrashRunning = true;
+            document.getElementById('crash-bet-amount').disabled = true;
+            
+            const btn = document.getElementById('crash-action-btn');
+            btn.innerText = "CASH OUT";
+            btn.style.background = "linear-gradient(135deg, #f59e0b, #d97706)"; // Orange
+            btn.style.boxShadow = "0 10px 25px rgba(245,158,11,0.4)";
+            btn.onclick = cashOutCrash;
+            
+            // Determine crash point (biased towards early crash for casino realism, but fair)
+            // Random float between 1.00 and 10.00, heavily weighted towards < 2.00
+            const random = Math.random();
+            if(random < 0.5) crashTarget = 1.00 + (Math.random() * 0.5); // 1.0 - 1.5
+            else if (random < 0.8) crashTarget = 1.5 + (Math.random() * 1.5); // 1.5 - 3.0
+            else crashTarget = 3.0 + (Math.random() * 7.0); // 3.0 - 10.0
+            
+            crashInterval = setInterval(() => {
+                crashMultiplier += 0.01;
+                document.getElementById('crash-multiplier').innerText = crashMultiplier.toFixed(2) + "x";
+                
+                // Animate rocket
+                const rocket = document.getElementById('crash-rocket');
+                // max bottom: 150px, max left: 400px
+                const progress = Math.min((crashMultiplier - 1) / 3, 1); // visually peaks at 4x
+                rocket.style.bottom = (10 + progress * 140) + "px";
+                rocket.style.left = (10 + progress * 300) + "px";
+                
+                // Periodic vibration for intensity
+                if((crashMultiplier * 100) % 50 === 0 && typeof vibrate === 'function') vibrate(10);
+                
+                if(crashMultiplier >= crashTarget) {
+                    endCrashGame(false);
+                }
+            }, 50); // 50ms per 0.01 tick
+        };
+        
+        window.cashOutCrash = function() {
+            if(!isCrashRunning) return;
+            endCrashGame(true);
+        };
+        
+        function endCrashGame(isWin) {
+            clearInterval(crashInterval);
+            isCrashRunning = false;
+            
+            const btn = document.getElementById('crash-action-btn');
+            const mult = document.getElementById('crash-multiplier');
+            const rocket = document.getElementById('crash-rocket');
+            
+            if(isWin) {
+                const winnings = currentBet * crashMultiplier;
+                state.cash += winnings;
+                updateUI();
+                
+                if(typeof vibrate === 'function') vibrate([50, 50, 100]);
+                if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                
+                mult.style.color = "#10b981";
+                btn.innerText = `WON ${winnings.toFixed(2)}!`;
+                btn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+            } else {
+                if(typeof vibrate === 'function') vibrate([200]);
+                mult.style.color = "#ef4444";
+                mult.innerText = "CRASHED @ " + crashTarget.toFixed(2) + "x";
+                rocket.innerHTML = '<i class="fas fa-bomb"></i>';
+                
+                btn.innerText = "YOU LOST";
+                btn.style.background = "linear-gradient(135deg, #ef4444, #b91c1c)";
+                btn.style.boxShadow = "none";
+            }
+            
+            btn.onclick = resetCrashUI;
+            setTimeout(() => { if(btn.innerText.includes("LOST") || btn.innerText.includes("WON")) btn.innerText = "PLAY AGAIN"; }, 2000);
+        }
+
+        // Referral Logic
+        window.fakeReferral = function() {
+            if(typeof vibrate === 'function') vibrate(30);
+            const referralLink = "https://saurabh704896-cyber.github.io/ApexTrade/?ref=bonus";
+            const text = "Join me on ApexTrade and let's trade crypto! " + referralLink;
+            
+            // Try native share first
+            if (navigator.share) {
+                navigator.share({
+                    title: 'ApexTrade Simulator',
+                    text: text
+                }).then(() => {
+                    grantReferralBonus();
+                }).catch(() => {
+                    // User cancelled share
+                });
+            } else {
+                // Fallback: Open WhatsApp directly
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+                grantReferralBonus();
+            }
+        };
+        
+        function grantReferralBonus() {
+            // Give instant bonus to simulate referral success
+            setTimeout(() => {
+                state.cash += 500;
+                localStorage.setItem('apex_cash', state.cash);
+                updateUI();
+                if(typeof showToast === 'function') showToast("🎉 Referral Bonus! $500 Added!", "success");
+                if(typeof vibrate === 'function') vibrate([50, 100, 50]);
+                if(typeof confetti === 'function') confetti();
+            }, 2000);
+        }
     </script>
 </body>
 
