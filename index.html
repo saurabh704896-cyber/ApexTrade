@@ -3649,7 +3649,7 @@
                 <button class="nav-btn" onclick="goHome()"><i class="fas fa-home"></i>
                     <span>Home</span></button>
                 
-                <button class="nav-btn active" data-page="page-dashboard"><i class="fas fa-chart-pie"></i>
+            <button class="nav-btn active" data-page="page-dashboard"><i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span></button>
                 <button class="nav-btn" data-page="page-trade"><i class="fas fa-chart-line"></i>
                     <span>Trade</span></button>
@@ -3657,6 +3657,8 @@
                     <span>Portfolio</span><span class="nav-badge" id="badge-portfolio"></span></button>
                 <button class="nav-btn" data-page="page-leaderboard"><i class="fas fa-trophy"></i>
                     <span>Rankings</span></button>
+                <button class="nav-btn" data-page="page-achievements"><i class="fas fa-medal"></i>
+                    <span>Achievements</span></button>
                 <button class="nav-btn" data-page="page-academy" style="position:relative;"><i class="fas fa-graduation-cap"></i>
                     <span>Academy</span><span class="nav-badge" id="badge-academy"></span></button>
                 <button class="nav-btn" data-page="page-history"><i class="fas fa-list-alt"></i>
@@ -3777,182 +3779,6 @@
                 </div>
             </div>
 
-            <div class="page" id="page-trade">
-                    <div class="trade-grid">
-                        
-                        <!-- Column 1: Order Book -->
-                        <div class="order-book-container ob-col">
-                            <h3 style="margin-bottom:15px; font-size:1.1rem;">Order Book</h3>
-                            <div class="ob-header">
-                                <span>Price</span>
-                                <span>Amount</span>
-                                <span>Total</span>
-                            </div>
-                            <div class="ob-list" id="ob-asks" style="justify-content: flex-end;">
-                                <!-- Populated by JS -->
-                            </div>
-                            <div class="ob-spread" id="ob-spread">
-                                $0.00
-                            </div>
-                            <div class="ob-list" id="ob-bids">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Column 2: Chart -->
-                            <div class="glass-panel chart-col" style="margin-bottom:0;">
-                                <div class="tabs" id="asset-tabs">
-                                    <div class="tab active" data-coin="BTC" style="display:flex; align-items:center; gap:8px;"><i class="fab fa-bitcoin" style="color:#f59e0b"></i> BTC <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 12 Q5 15, 10 8 T20 10 T30 2" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
-                                    <div class="tab" data-coin="ETH" style="display:flex; align-items:center; gap:8px;"><i class="fab fa-ethereum" style="color:#6366f1"></i> ETH <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 10 Q10 5, 15 12 T30 5" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
-                                    <div class="tab" data-coin="SOL" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-bolt" style="color:#14b8a6"></i> SOL <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 15 L10 5 L20 10 L30 0" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
-                                    <div class="tab" data-coin="ADA" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-circle-nodes" style="color:#3b82f6"></i> ADA <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 5 Q10 15, 20 5 T30 10" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
-                                    <div class="tab" data-coin="DOGE" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-dog" style="color:#eab308"></i> DOGE <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 10 L15 0 L20 5 L30 2" fill="none" stroke="#00ff88" stroke-width="2"/></svg></div>
-                                    <div class="tab" data-coin="SHIB" style="display:flex; align-items:center; gap:8px;"><i class="fas fa-paw" style="color:#ef4444"></i> SHIB <svg width="30" height="15" viewBox="0 0 30 15"><path d="M0 2 Q10 10, 15 5 T30 15" fill="none" stroke="#ff0055" stroke-width="2"/></svg></div>
-                                </div>
-
-                                <div class="chart-header">
-                                    <div>
-                                        <h2 id="active-coin-name" style="color:var(--text-muted); font-size:1.1rem; font-weight:600;">Bitcoin / USD</h2>
-                                        <div class="current-price price-up" id="current-price">$62,000.00</div>
-                                    </div>
-                                </div>
-                                <div class="chart-container" id="tv_chart_container"></div>
-                            </div>
-                            
-                            <!-- Active Positions Panel -->
-                            <div class="glass-panel positions-col" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
-                                <h3 class="section-title">Active Positions</h3>
-                                <div style="overflow-x:auto; flex:1;">
-                                    <table class="positions-table" id="positions-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Symbol</th>
-                                                <th>Size</th>
-                                                <th>Entry</th>
-                                                <th>Mark Price</th>
-                                                <th>Liq. Price</th>
-                                                <th>Margin</th>
-                                                <th>PnL (ROE%)</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="positions-tbody">
-                                            <tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No open positions.</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        <!-- Column 3: Advanced Trade Panel -->
-                        <div class="glass-panel panel-col" style="height: fit-content; display:flex; flex-direction:column;">
-                            <h3 class="section-title">Order Execution</h3>
-                            
-                            <div class="challenge-timer" id="challenge-timer-container">
-                                <span id="challenge-time-display">00:00</span>
-                                <button class="btn" id="start-challenge-btn" onclick="startTradingChallenge(60)" style="padding: 10px 20px; font-size: 0.9rem; background: var(--accent); color: #000;">Start 60s Challenge</button>
-                            </div>
-
-                            <!-- Margin Mode -->
-                            <div class="margin-mode">
-                                <button class="active">Cross</button>
-                                <button>Isolated</button>
-                            </div>
-
-                            <!-- Leverage Slider -->
-                            <div class="leverage-slider-container">
-                                <div class="leverage-header">
-                                    <span>Leverage</span>
-                                    <span class="leverage-value" id="leverage-display">20x</span>
-                                </div>
-                                <input type="range" id="leverage-slider" min="1" max="125" value="20" oninput="document.getElementById('leverage-display').innerText = this.value + 'x'; calculateMargin();">
-                            </div>
-
-                            <div class="order-type-tabs tabs" style="margin-bottom: 15px;">
-                                <div class="tab" id="tab-limit" onclick="switchOrderType('LIMIT')">Limit</div>
-                                <div class="tab active" id="tab-market" onclick="switchOrderType('MARKET')">Market</div>
-                                <div class="tab" id="tab-stop" onclick="switchOrderType('MARKET')">Stop</div>
-                            </div>
-
-                            <div class="input-wrapper" id="limit-price-wrapper" style="display: none;">
-                                <input type="number" id="trade-limit-price" placeholder="Limit Price" step="any" min="0">
-                                <span class="currency-suffix">USD</span>
-                            </div>
-
-                            <div class="input-wrapper">
-                                <input type="number" id="trade-qty" placeholder="Quantity" step="any" min="0" oninput="calculateMargin()" aria-label="Trade quantity in selected cryptocurrency">
-                                <span class="currency-suffix" id="trade-coin-label">BTC</span>
-                            </div>
-
-                            <!-- TP/SL -->
-                            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                                <div class="input-wrapper" style="flex:1; margin-bottom:0;">
-                                    <input type="number" id="trade-tp" placeholder="Take Profit" step="any" min="0">
-                                </div>
-                                <div class="input-wrapper" style="flex:1; margin-bottom:0;">
-                                    <input type="number" id="trade-sl" placeholder="Stop Loss" step="any" min="0">
-                                </div>
-                            </div>
-                            
-                            <!-- Dynamic Margin Display -->
-                            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem; padding: 0 5px;">
-                                <span style="color:var(--text-muted)">Cost / Margin:</span>
-                                <span style="font-weight:bold; color:#fff" id="margin-required-display">$0.00</span>
-                            </div>
-
-                            <label style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px; display:block;">Amount</label>
-                            <div class="quick-btns">
-                                <button class="q-btn" onclick="quickFill('BUY', 0.25)">25%</button>
-                                <button class="q-btn" onclick="quickFill('BUY', 0.50)">50%</button>
-                                <button class="q-btn" onclick="quickFill('BUY', 1.00)">MAX</button>
-                            </div>
-
-                            <div class="action-buttons" style="margin-top: 10px;">
-                                <button class="btn buy-btn" onclick="executeTrade('BUY')">BUY</button>
-                                <button class="btn sell-btn" onclick="executeTrade('SELL')">SELL</button>
-                            </div>
-                            
-                            <!-- Phase 9: Mobile Trade Sliders -->
-                            <div class="mobile-slider-container" id="slider-buy">
-                                <div class="slider-fill buy" id="slider-fill-buy"></div>
-                                <div class="slider-text" id="slider-text-buy">Slide to Buy <i class="fas fa-arrow-right"></i></div>
-                                <div class="slider-thumb buy" id="slider-thumb-buy"><i class="fas fa-chevron-right"></i></div>
-                            </div>
-                            <div class="mobile-slider-container" id="slider-sell">
-                                <div class="slider-fill sell" id="slider-fill-sell"></div>
-                                <div class="slider-text" id="slider-text-sell">Slide to Sell <i class="fas fa-arrow-right"></i></div>
-                                <div class="slider-thumb sell" id="slider-thumb-sell"><i class="fas fa-chevron-right"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE: PORTFOLIO -->
-                <div class="page" id="page-portfolio">
-                    <div class="portfolio-hero-card">
-                        <div class="hero-label">Total Portfolio Value</div>
-                        <div class="hero-balance" id="portfolio-hero-balance">$0.00</div>
-                        <div class="hero-glow"></div>
-                    </div>
-                    <div style="margin-top: 30px;">
-                        <h3 class="section-title" style="border:none; padding-bottom:0;">Your Assets</h3>
-                        <div class="large-portfolio-list" id="portfolio-list-page"></div>
-                    </div>
-                </div>
-
-                <!-- PAGE: LEADERBOARD -->
-                <div class="page" id="page-leaderboard">
-                    <div class="glass-panel" style="max-width: 800px; margin: 0 auto;">
-                        <h3 class="section-title">Global Rankings</h3>
-                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 20px;">Compete with top
-                            traders globally based on total net worth.</p>
-
-                        <div class="leaderboard-list" id="lb-list">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE: ACADEMY -->
                 <div class="page" id="page-academy">
                     <div>
                         
@@ -6794,6 +6620,123 @@
             const modal = document.getElementById('daily-bonus-modal');
             if (modal) modal.style.display = 'none';
         };
+    </script>
+    <script>
+        // Phase 2: Gamification Logic
+        function populateLeaderboard() {
+            const lbList = document.getElementById('lb-list');
+            if(!lbList) return;
+            const mockData = [
+                { name: "CryptoKing99", netWorth: 154320.50, rank: 1 },
+                { name: "DiamondHands", netWorth: 121000.00, rank: 2 },
+                { name: "TraderJoe", netWorth: 95400.75, rank: 3 },
+                { name: "MoonWalker", netWorth: 45000.00, rank: 4 },
+                { name: "You (User)", netWorth: (typeof state !== 'undefined') ? state.cash : 10000, rank: 5, isUser: true }
+            ];
+            
+            let html = '';
+            mockData.forEach(u => {
+                let color = '#fff';
+                let trophy = '';
+                if(u.rank === 1) { color = '#fbbf24'; trophy = '<i class="fas fa-trophy"></i>'; }
+                else if(u.rank === 2) { color = '#e2e8f0'; trophy = '<i class="fas fa-medal"></i>'; }
+                else if(u.rank === 3) { color = '#b45309'; trophy = '<i class="fas fa-award"></i>'; }
+                
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid ${u.isUser ? 'var(--accent)' : 'rgba(255,255,255,0.05)'};">
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <h2 style="color:${color}; width:30px; margin:0;">#${u.rank}</h2>
+                            <div>
+                                <h4 style="margin:0; font-size:1.1rem; color:${u.isUser ? 'var(--accent)' : '#fff'}">${u.name} ${trophy}</h4>
+                            </div>
+                        </div>
+                        <div style="font-weight:700; font-family:'Space Grotesk', sans-serif;">$${u.netWorth.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+                    </div>
+                `;
+            });
+            lbList.innerHTML = html;
+        }
+
+        function populateAchievements() {
+            const achList = document.getElementById('achievements-list');
+            if(!achList) return;
+            
+            const achievements = [
+                { id: "first_trade", title: "First Step", desc: "Execute your very first trade.", icon: "fa-shoe-prints", color: "#00d2ff" },
+                { id: "profit_maker", title: "Profit Maker", desc: "Close a trade in profit.", icon: "fa-chart-line", color: "#00ff88" },
+                { id: "diamond_hands", title: "Diamond Hands", desc: "Hold a position for more than 5 minutes.", icon: "fa-gem", color: "#fbbf24" }
+            ];
+            
+            let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
+            
+            let html = '';
+            achievements.forEach(a => {
+                const isUnlocked = unlocked.includes(a.id);
+                const bg = isUnlocked ? `rgba(255,255,255,0.05)` : `rgba(0,0,0,0.4)`;
+                const border = isUnlocked ? `1px solid ${a.color}` : `1px solid rgba(255,255,255,0.1)`;
+                const iconColor = isUnlocked ? a.color : 'rgba(255,255,255,0.2)';
+                const opacity = isUnlocked ? '1' : '0.5';
+                
+                html += `
+                    <div style="background:${bg}; border:${border}; border-radius:15px; padding:20px; text-align:center; opacity:${opacity}; transition:0.3s;">
+                        <i class="fas ${a.icon}" style="font-size:2.5rem; color:${iconColor}; margin-bottom:15px; text-shadow:0 0 10px ${iconColor};"></i>
+                        <h4 style="margin-bottom:5px; color:#fff;">${a.title}</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">${a.desc}</p>
+                        ${isUnlocked ? '<div style="margin-top:10px; font-size:0.75rem; color:var(--color-up);"><i class="fas fa-check"></i> Unlocked</div>' : '<div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted);"><i class="fas fa-lock"></i> Locked</div>'}
+                    </div>
+                `;
+            });
+            achList.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateLeaderboard();
+            populateAchievements();
+            // Update leaderboard periodically
+            setInterval(populateLeaderboard, 10000);
+        });
+
+        // Hooks for unlocking achievements
+        if(typeof window.executeTrade !== 'undefined') {
+            const _originalExecTrade = window.executeTrade;
+            window.executeTrade = function(action) {
+                _originalExecTrade(action);
+                let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
+                if(!unlocked.includes("first_trade")) {
+                    unlocked.push("first_trade");
+                    localStorage.setItem('apex_achievements', JSON.stringify(unlocked));
+                    if(typeof showToast === 'function') showToast("🏆 Achievement Unlocked: First Step!", "success");
+                    populateAchievements();
+                }
+            };
+        }
+
+        if(typeof window.closePosition !== 'undefined') {
+            const _originalClosePos = window.closePosition;
+            window.closePosition = function(id) {
+                let pnl = 0;
+                if(typeof state !== 'undefined' && state.positions) {
+                    let posIndex = state.positions.findIndex(p => p.id === id);
+                    if(posIndex > -1) {
+                        let p = state.positions[posIndex];
+                        let exitPrice = state.coins[p.symbol].price;
+                        pnl = p.action === 'BUY' ? (exitPrice - p.entryPrice) * p.size : (p.entryPrice - exitPrice) * p.size;
+                    }
+                }
+                
+                _originalClosePos(id);
+                
+                if(pnl > 0) {
+                    let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
+                    if(!unlocked.includes("profit_maker")) {
+                        unlocked.push("profit_maker");
+                        localStorage.setItem('apex_achievements', JSON.stringify(unlocked));
+                        if(typeof showToast === 'function') showToast("🏆 Achievement Unlocked: Profit Maker!", "success");
+                        populateAchievements();
+                    }
+                }
+            };
+        }
     </script>
 </body>
 
