@@ -4616,6 +4616,30 @@
                     </div>
                 </div>
 
+                <!-- Phase 5: Interactive Quiz -->
+                <div class="glass-panel" style="margin-top:40px;">
+                    <h3 class="section-title"><i class="fas fa-question-circle" style="color:var(--accent)"></i> Knowledge Test: Trading Basics</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 20px;">Test your knowledge to unlock your Crypto Master Certificate!</p>
+                    
+                    <div id="quiz-container" style="background:rgba(0,0,0,0.3); padding:20px; border-radius:15px;">
+                        <h4 id="quiz-question" style="margin-bottom:15px; font-size:1.1rem;">1. What is a "Stop Loss"?</h4>
+                        <div id="quiz-options" style="display:flex; flex-direction:column; gap:10px;">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div style="margin-top:20px; display:flex; justify-content:space-between; align-items:center;">
+                            <span id="quiz-progress" style="color:var(--text-muted); font-size:0.85rem;">Question 1 / 3</span>
+                            <button id="quiz-next-btn" class="buy-btn" style="padding:10px 20px; border-radius:8px;" onclick="nextQuizQuestion()" disabled>Next</button>
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-result" style="display:none; text-align:center; padding:30px; background:rgba(0,255,136,0.1); border-radius:15px; border:1px solid var(--color-up); margin-top:20px;">
+                        <i class="fas fa-award" style="font-size:3rem; color:var(--color-up); margin-bottom:15px;"></i>
+                        <h3 style="color:#fff;">Congratulations! You Passed!</h3>
+                        <p style="color:var(--text-muted); margin-bottom:20px;">You are now officially a certified Crypto Master on ApexTrade.</p>
+                        <button class="buy-btn" style="padding:15px 30px; font-size:1.1rem; border-radius:10px;" onclick="generateCertificate()"><i class="fas fa-download"></i> Get Certificate</button>
+                    </div>
+                </div>
+
                 <!-- PAGE: HISTORY -->
                 <div class="page" id="page-history">
                     <div class="history-timeline-container">
@@ -6778,6 +6802,24 @@
             if(pfChart) pfChart.resize();
         });
     </script>
+    <!-- Phase 5: Hidden Certificate (for html2canvas) -->
+    <div id="certificate-card" style="position:fixed; top:-9999px; left:-9999px; width:600px; padding:40px; background:linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid #fbbf24; border-radius:20px; text-align:center; font-family:'Inter', sans-serif;">
+        <i class="fas fa-graduation-cap" style="font-size:4rem; color:#fbbf24; margin-bottom:20px;"></i>
+        <h1 style="color:#fff; font-size:2.5rem; margin-bottom:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Certificate of Completion</h1>
+        <p style="color:#94a3b8; font-size:1.1rem; margin-bottom:30px;">This certifies that</p>
+        <h2 style="color:#3b82f6; font-size:2rem; margin-bottom:30px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; display:inline-block; width:80%;">ApexTrade User</h2>
+        <p style="color:#94a3b8; font-size:1.1rem; margin-bottom:40px; line-height:1.6;">Has successfully completed the Trading Basics Masterclass and passed the rigorous knowledge assessment.</p>
+        <div style="display:flex; justify-content:space-around; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+            <div>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://saurabh704896-cyber.github.io/ApexTrade" style="border-radius:10px; border:2px solid #fff;">
+            </div>
+            <div style="text-align:right;">
+                <div style="font-family:'Space Grotesk', sans-serif; font-size:1.5rem; font-weight:bold; color:#fbbf24; font-style:italic;">ApexTrade Pro</div>
+                <div style="font-size:0.8rem; color:#64748b;" id="cert-date">Date: YYYY-MM-DD</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Phase 3: Hidden PnL Share Card (for html2canvas) -->
     <div id="pnl-share-card" style="position:fixed; top:-9999px; left:-9999px; width:400px; padding:30px; background:linear-gradient(135deg, #0b0f19, #111827); border-radius:20px; color:#fff; font-family:'Inter', sans-serif;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -7120,6 +7162,149 @@
                 oldClaim();
             };
         }
+    </script>
+
+        // --- Phase 5: Interactive Academy (Quiz & Certificate) ---
+        const quizQuestions = [
+            {
+                question: "1. What is a 'Stop Loss' order?",
+                options: [
+                    "An order to buy at the lowest possible price.",
+                    "An order to automatically close a position to prevent further losses.",
+                    "A tool used to freeze your account.",
+                    "A fee charged by the exchange."
+                ],
+                answer: 1
+            },
+            {
+                question: "2. If you expect the price of Bitcoin to go DOWN, you should:",
+                options: [
+                    "Open a LONG position.",
+                    "Buy more Bitcoin.",
+                    "Open a SHORT position.",
+                    "Wait for the dip."
+                ],
+                answer: 2
+            },
+            {
+                question: "3. What does 'Leverage' do in trading?",
+                options: [
+                    "Guarantees a profit on every trade.",
+                    "Reduces the trading fees.",
+                    "Multiplies both potential profits and potential losses.",
+                    "Slows down the execution speed."
+                ],
+                answer: 2
+            }
+        ];
+        
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedOptionIndex = -1;
+
+        function loadQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-question').innerText = q.question;
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.style.cssText = 'padding:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer; transition:0.2s;';
+                btn.innerText = opt;
+                btn.onclick = () => selectQuizOption(idx, btn);
+                optionsDiv.appendChild(btn);
+            });
+            document.getElementById('quiz-progress').innerText = `Question ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('quiz-next-btn').disabled = true;
+            selectedOptionIndex = -1;
+        }
+
+        function selectQuizOption(idx, btnElement) {
+            selectedOptionIndex = idx;
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                el.style.background = 'rgba(255,255,255,0.05)';
+                el.style.borderColor = 'rgba(255,255,255,0.1)';
+            });
+            btnElement.style.background = 'rgba(37,99,235,0.2)';
+            btnElement.style.borderColor = 'var(--accent)';
+            document.getElementById('quiz-next-btn').disabled = false;
+        }
+
+        window.nextQuizQuestion = function() {
+            if(selectedOptionIndex === quizQuestions[currentQuizIndex].answer) {
+                quizScore++;
+            }
+            currentQuizIndex++;
+            if(currentQuizIndex < quizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        };
+
+        function finishQuiz() {
+            document.getElementById('quiz-container').style.display = 'none';
+            if(quizScore === quizQuestions.length) {
+                document.getElementById('quiz-result').style.display = 'block';
+                if(typeof showToast === 'function') showToast("Perfect Score! Certificate Unlocked.", "success");
+            } else {
+                const res = document.getElementById('quiz-result');
+                res.style.display = 'block';
+                res.style.background = 'rgba(239,68,68,0.1)';
+                res.style.borderColor = 'var(--color-down)';
+                res.innerHTML = `
+                    <i class="fas fa-times-circle" style="font-size:3rem; color:var(--color-down); margin-bottom:15px;"></i>
+                    <h3 style="color:#fff;">You scored ${quizScore} / ${quizQuestions.length}</h3>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">You need a perfect score to unlock the certificate. Review the videos and try again.</p>
+                    <button class="btn" style="padding:10px 20px; background:rgba(255,255,255,0.1); border-radius:8px;" onclick="resetQuiz()">Retry Quiz</button>
+                `;
+            }
+        }
+
+        window.resetQuiz = function() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            loadQuizQuestion();
+        };
+
+        window.generateCertificate = async function() {
+            const btn = document.querySelector('#quiz-result button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
+            
+            document.getElementById('cert-date').innerText = "Date: " + new Date().toISOString().split('T')[0];
+            
+            try {
+                const card = document.getElementById('certificate-card');
+                const canvas = await html2canvas(card, { backgroundColor: '#0f172a', scale: 2 });
+                canvas.toBlob(async (blob) => {
+                    if (navigator.share && navigator.canShare) {
+                        const file = new File([blob], 'apextrade_certificate.png', { type: 'image/png' });
+                        if (navigator.canShare({ files: [file] })) {
+                            try {
+                                await navigator.share({ title: 'Crypto Master Certificate', text: 'I just became a certified Crypto Master on ApexTrade!', files: [file] });
+                            } catch(e) {}
+                        } else fallbackDownloadCert(canvas);
+                    } else fallbackDownloadCert(canvas);
+                    btn.innerHTML = originalText; btn.disabled = false;
+                });
+            } catch(e) {
+                console.error(e);
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
+        };
+        
+        function fallbackDownloadCert(canvas) {
+            const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'apextrade_certificate.png'; a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuizQuestion();
+        });
     </script>
 </body>
 
