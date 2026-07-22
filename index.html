@@ -82,6 +82,7 @@
     <!-- ====== Scripts: Deferred for Lighthouse 95+ ====== -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" defer></script>
     <script defer>window.addEventListener('load', () => { if(window.mermaid) mermaid.initialize({ startOnLoad: true, theme: 'dark' }); });</script>
 
@@ -6565,8 +6566,8 @@
         });
     </script>
     <!-- Phase 1: Daily Bonus Modal -->
-    <div id="daily-bonus-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(10px);">
-        <div style="background:var(--panel-bg); border:1px solid var(--border-color); border-radius:20px; padding:40px; text-align:center; max-width:400px; box-shadow:0 10px 30px rgba(0,210,255,0.2);">
+    <div id="daily-bonus-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(10px); opacity:0; transition:opacity 0.3s ease;">
+        <div class="modal-content" style="background:var(--panel-bg); border:1px solid var(--border-color); border-radius:20px; padding:40px; text-align:center; max-width:400px; box-shadow:0 10px 30px rgba(0,210,255,0.2);">
             <i class="fas fa-gift" style="font-size:4rem; color:var(--gold); margin-bottom:20px; text-shadow:0 0 20px rgba(251,191,36,0.5);"></i>
             <h2 style="font-size:2rem; margin-bottom:10px; color:#fff;">Daily Reward!</h2>
             <p style="color:var(--text-muted); margin-bottom:30px;">Welcome back! Here is your daily $100 trading bonus to keep you going.</p>
@@ -6574,7 +6575,35 @@
         </div>
     </div>
 
-    <!-- Phase 1: CSS and Logic -->
+    <!-- Phase 3: Hidden PnL Share Card (for html2canvas) -->
+    <div id="pnl-share-card" style="position:fixed; top:-9999px; left:-9999px; width:400px; padding:30px; background:linear-gradient(135deg, #0b0f19, #111827); border-radius:20px; color:#fff; font-family:'Inter', sans-serif;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div style="font-size:1.5rem; font-weight:800; color:#3b82f6;">ApexTrade Pro</div>
+            <div style="font-size:0.9rem; color:#94a3b8;">Paper Trading</div>
+        </div>
+        <div id="share-coin" style="font-size:1.2rem; font-weight:600; margin-bottom:5px;">BTC / USD - LONG</div>
+        <div id="share-leverage" style="font-size:0.85rem; color:#fbbf24; margin-bottom:15px; border:1px solid #fbbf24; display:inline-block; padding:2px 8px; border-radius:5px;">20x Leverage</div>
+        
+        <div id="share-roi" style="font-size:3.5rem; font-weight:900; color:#10b981; margin-bottom:10px;">+150.00%</div>
+        
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div>
+                <div style="font-size:0.75rem; color:#94a3b8;">Entry Price</div>
+                <div id="share-entry" style="font-size:1rem; font-weight:600;">$62,000</div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:0.75rem; color:#94a3b8;">Exit Price</div>
+                <div id="share-exit" style="font-size:1rem; font-weight:600;">$64,000</div>
+            </div>
+        </div>
+        
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:15px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:0.8rem; color:#94a3b8;">Join me on ApexTrade</div>
+            <i class="fas fa-qrcode" style="font-size:2rem; color:#fff;"></i>
+        </div>
+    </div>
+
+    <!-- Phase 1 & 3: CSS and Logic -->
     <style>
         .shake-anim {
             animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
@@ -6588,6 +6617,35 @@
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); background-color: rgba(239, 68, 68, 0.1); }
         }
+
+        /* Phase 3: Bottom Sheet Popups for Mobile */
+        @media (max-width: 768px) {
+            #trade-result-modal .modal-content, #daily-bonus-modal .modal-content {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 24px 24px 0 0;
+                transform: translateY(100%);
+                transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+                padding: 40px 20px 40px;
+                border-top: 1px solid rgba(0,210,255,0.3);
+            }
+            #trade-result-modal.active .modal-content, #daily-bonus-modal.active .modal-content {
+                transform: translateY(0);
+            }
+            #trade-result-modal .modal-content::before, #daily-bonus-modal .modal-content::before {
+                content: '';
+                position: absolute;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 5px;
+                background: rgba(255,255,255,0.3);
+                border-radius: 10px;
+            }
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -6599,6 +6657,8 @@
                     const modal = document.getElementById('daily-bonus-modal');
                     if (modal) {
                         modal.style.display = 'flex';
+                        setTimeout(() => modal.style.opacity = '1', 10);
+                        setTimeout(() => modal.classList.add('active'), 50);
                         if (typeof confetti === 'function') {
                             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                         }
@@ -6618,8 +6678,83 @@
                 showToast("Claimed $100 Daily Bonus!", "success");
             }
             const modal = document.getElementById('daily-bonus-modal');
-            if (modal) modal.style.display = 'none';
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.opacity = '0';
+                setTimeout(() => modal.style.display = 'none', 300);
+            }
         };
+
+        // Phase 3: Share PnL Logic
+        window.sharePnL = async function() {
+            const btn = document.getElementById('share-pnl-btn');
+            if(!btn) return;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
+            
+            try {
+                // Populate Share Card
+                const asset = document.getElementById('pnl-asset').innerText;
+                const entry = document.getElementById('pnl-entry').innerText;
+                const exit = document.getElementById('pnl-exit').innerText;
+                const pnlAmountStr = document.getElementById('pnl-amount').innerText;
+                const isProfit = !pnlAmountStr.includes('-');
+                
+                document.getElementById('share-coin').innerText = `${asset} / USD - Trade`;
+                const roiEl = document.getElementById('share-roi');
+                roiEl.innerText = pnlAmountStr;
+                roiEl.style.color = isProfit ? '#10b981' : '#ef4444';
+                document.getElementById('share-entry').innerText = entry;
+                document.getElementById('share-exit').innerText = exit;
+                
+                if(typeof html2canvas === 'undefined') {
+                    throw new Error("html2canvas library not loaded");
+                }
+                
+                const card = document.getElementById('pnl-share-card');
+                const canvas = await html2canvas(card, { backgroundColor: '#0b0f19', scale: 2 });
+                
+                canvas.toBlob(async (blob) => {
+                    if (navigator.share && navigator.canShare) {
+                        const file = new File([blob], 'apextrade_pnl.png', { type: 'image/png' });
+                        if (navigator.canShare({ files: [file] })) {
+                            try {
+                                await navigator.share({
+                                    title: 'My Trade Result',
+                                    text: 'Check out my latest trade on ApexTrade Pro!',
+                                    files: [file]
+                                });
+                                if(typeof showToast === 'function') showToast('Shared successfully!', 'success');
+                            } catch(e) {
+                                console.log("Share cancelled or failed", e);
+                            }
+                        } else {
+                            fallbackDownload(canvas);
+                        }
+                    } else {
+                        fallbackDownload(canvas);
+                    }
+                    
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                });
+            } catch(e) {
+                console.error(e);
+                if(typeof showToast === 'function') showToast("Failed to generate image.", "error");
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        };
+        
+        function fallbackDownload(canvas) {
+            const url = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'apextrade_pnl.png';
+            a.click();
+            if(typeof showToast === 'function') showToast('Image downloaded!', 'success');
+        }
     </script>
     <script>
         // Phase 2: Gamification Logic
