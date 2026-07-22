@@ -8024,6 +8024,101 @@
             });
         }
     </script>
+
+        // --- Phase 11: Elite Polish (God Mode & FOMO) ---
+        
+        // 1. God Mode Easter Egg
+        const logoElement = document.getElementById('apex-logo');
+        let logoClickCount = 0;
+        let logoClickTimer;
+        
+        if(logoElement) {
+            logoElement.addEventListener('click', () => {
+                logoClickCount++;
+                clearTimeout(logoClickTimer);
+                
+                if(logoClickCount === 5) {
+                    activateGodMode();
+                    logoClickCount = 0;
+                } else {
+                    logoClickTimer = setTimeout(() => {
+                        logoClickCount = 0;
+                    }, 2000); // Reset if not clicked 5 times within 2 seconds
+                }
+            });
+        }
+        
+        function activateGodMode() {
+            // Check if already in God Mode
+            if(localStorage.getItem('apex_god_mode') === 'true') {
+                if(typeof showToast === 'function') showToast("God Mode is already active!", "info");
+                return;
+            }
+            
+            if(typeof playSFX === 'function') playSFX('kaching');
+            if(typeof vibrate === 'function') vibrate([100, 50, 100, 50, 300]);
+            
+            // Mega Confetti
+            if(typeof confetti === 'function') {
+                const end = Date.now() + 3 * 1000;
+                const colors = ['#fbbf24', '#ffffff', '#10b981'];
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
+            }
+            
+            // Grant $1,000,000
+            state.cash += 1000000;
+            localStorage.setItem('apex_cash', state.cash);
+            localStorage.setItem('apex_god_mode', 'true');
+            
+            // UI Update
+            document.body.style.boxShadow = "inset 0 0 50px rgba(251, 191, 36, 0.2)"; // Gold glow
+            logoElement.innerHTML = '<i class="fas fa-crown" style="color:#fbbf24;"></i> ApexGod';
+            logoElement.style.color = '#fbbf24';
+            
+            updateUI();
+            
+            setTimeout(() => {
+                alert("👑 GOD MODE UNLOCKED! You have been granted $1,000,000 virtual cash and the Developer Crown. Use your power wisely!");
+            }, 500);
+        }
+        
+        // Restore God Mode UI on load if active
+        document.addEventListener('DOMContentLoaded', () => {
+            if(localStorage.getItem('apex_god_mode') === 'true' && logoElement) {
+                document.body.style.boxShadow = "inset 0 0 50px rgba(251, 191, 36, 0.2)";
+                logoElement.innerHTML = '<i class="fas fa-crown" style="color:#fbbf24;"></i> ApexGod';
+                logoElement.style.color = '#fbbf24';
+            }
+        });
+
+        // 2. Live FOMO Notifications (Whale Alerts)
+        const fomoAlerts = [
+            { icon: '🐳', msg: 'Whale Alert: 1,500 BTC transferred to unknown wallet!', type: 'warning' },
+            { icon: '🔥', msg: 'Market Heat: Trading volume up by 45% in the last hour.', type: 'info' },
+            { icon: '🚀', msg: 'Elon just tweeted about Dogecoin!', type: 'success' },
+            { icon: '🚨', msg: 'Major Exchange experiencing withdrawal delays.', type: 'error' },
+            { icon: '💰', msg: 'AlexTheBull just closed a $50k profit position.', type: 'success' }
+        ];
+        
+        function triggerFOMOAlert() {
+            // Only trigger randomly (30% chance every check)
+            if(Math.random() > 0.3) return;
+            
+            const alertData = fomoAlerts[Math.floor(Math.random() * fomoAlerts.length)];
+            
+            if(typeof showToast === 'function') {
+                showToast(`${alertData.icon} ${alertData.msg}`, alertData.type);
+                if(typeof playSFX === 'function') playSFX('click');
+            }
+        }
+        
+        // Check for FOMO alerts every 45 seconds
+        setInterval(triggerFOMOAlert, 45000);
+    </script>
 </body>
 
 </html>
