@@ -7971,6 +7971,59 @@
             }, 1000);
         });
     </script>
+
+        // --- Phase 10: Hardware Integrations (Gyro & Battery) ---
+        
+        // 1. 3D Parallax Tilt (Gyroscope)
+        const balanceCard = document.getElementById('main-balance-card');
+        if (window.DeviceOrientationEvent && balanceCard) {
+            // Need permission for iOS 13+
+            let gyroPermissionGranted = false;
+            
+            // Add a click listener to request permission (iOS requires user gesture)
+            balanceCard.addEventListener('click', async () => {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function' && !gyroPermissionGranted) {
+                    try {
+                        const permissionState = await DeviceOrientationEvent.requestPermission();
+                        if (permissionState === 'granted') gyroPermissionGranted = true;
+                    } catch (e) { console.log(e); }
+                }
+            });
+            
+            window.addEventListener('deviceorientation', (e) => {
+                // e.beta (front-to-back tilt in degrees, [-180, 180])
+                // e.gamma (left-to-right tilt in degrees, [-90, 90])
+                
+                if (e.beta === null || e.gamma === null) return;
+                
+                // Limit tilt
+                let xTilt = Math.max(-15, Math.min(15, e.beta - 45)); // Assuming user holds phone at 45 deg
+                let yTilt = Math.max(-15, Math.min(15, e.gamma));
+                
+                // CSS Transform (Invert for realistic feel)
+                balanceCard.style.transform = `perspective(1000px) rotateX(${-xTilt}deg) rotateY(${yTilt}deg)`;
+                balanceCard.style.boxShadow = `${-yTilt}px ${xTilt}px 20px rgba(0,0,0,0.5)`;
+            });
+        }
+
+        // 2. Battery Monitoring API
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(function(battery) {
+                function updateBatteryStatus() {
+                    const level = Math.round(battery.level * 100);
+                    if (!battery.charging && level <= 20) {
+                        if(typeof showToast === 'function') {
+                            showToast(`⚠️ Low Battery (${level}%)! Secure your crypto trades before your phone dies!`, 'error');
+                        }
+                    }
+                }
+
+                updateBatteryStatus();
+                battery.addEventListener('levelchange', updateBatteryStatus);
+                battery.addEventListener('chargingchange', updateBatteryStatus);
+            });
+        }
+    </script>
 </body>
 
 </html>
