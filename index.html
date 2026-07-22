@@ -6148,6 +6148,16 @@
                 state.cash += p.margin + pnl;
                 state.positions.splice(posIndex, 1);
                 
+                // Phase 1: Profit/Loss Animations
+                if (pnl > 0) {
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: ['#00ff88', '#00d2ff', '#ffffff'] });
+                    }
+                } else if (pnl < 0) {
+                    document.body.classList.add('shake-anim');
+                    setTimeout(() => document.body.classList.remove('shake-anim'), 500);
+                }
+                
                 showTradeSettlementModal(p.symbol, p.size, p.entryPrice, exitPrice, pnl);
                 updateUI();
             }
@@ -6727,6 +6737,63 @@
         window.addEventListener('resize', () => {
             if(pfChart) pfChart.resize();
         });
+    </script>
+    <!-- Phase 1: Daily Bonus Modal -->
+    <div id="daily-bonus-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(10px);">
+        <div style="background:var(--panel-bg); border:1px solid var(--border-color); border-radius:20px; padding:40px; text-align:center; max-width:400px; box-shadow:0 10px 30px rgba(0,210,255,0.2);">
+            <i class="fas fa-gift" style="font-size:4rem; color:var(--gold); margin-bottom:20px; text-shadow:0 0 20px rgba(251,191,36,0.5);"></i>
+            <h2 style="font-size:2rem; margin-bottom:10px; color:#fff;">Daily Reward!</h2>
+            <p style="color:var(--text-muted); margin-bottom:30px;">Welcome back! Here is your daily $100 trading bonus to keep you going.</p>
+            <button onclick="claimDailyBonus()" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; border:none; padding:15px 30px; font-size:1.2rem; font-weight:700; border-radius:12px; cursor:pointer; width:100%; box-shadow:0 10px 20px rgba(0,210,255,0.3);">Claim $100</button>
+        </div>
+    </div>
+
+    <!-- Phase 1: CSS and Logic -->
+    <style>
+        .shake-anim {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); background-color: rgba(239, 68, 68, 0.1); }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lastLogin = localStorage.getItem('apex_last_login');
+            const today = new Date().toDateString();
+            
+            if (lastLogin !== today) {
+                setTimeout(() => {
+                    const modal = document.getElementById('daily-bonus-modal');
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        if (typeof confetti === 'function') {
+                            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                        }
+                    }
+                }, 2000);
+            }
+        });
+
+        window.claimDailyBonus = function() {
+            const today = new Date().toDateString();
+            localStorage.setItem('apex_last_login', today);
+            if (typeof state !== 'undefined') {
+                state.cash += 100;
+                if(typeof updateUI === 'function') updateUI();
+            }
+            if (typeof showToast === 'function') {
+                showToast("Claimed $100 Daily Bonus!", "success");
+            }
+            const modal = document.getElementById('daily-bonus-modal');
+            if (modal) modal.style.display = 'none';
+        };
     </script>
 </body>
 
