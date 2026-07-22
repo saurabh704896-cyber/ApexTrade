@@ -7496,10 +7496,12 @@
         
         function unlockApp() {
             const lock = document.getElementById('pin-lock-screen');
-            if(lock) { lock.style.opacity = '0';
-            setTimeout(() => {
-                lock.style.display = 'none';
-            } }, 500);
+            if(lock) {
+                lock.style.opacity = '0';
+                setTimeout(() => {
+                    lock.style.display = 'none';
+                }, 500);
+            }
         }
 
         // 4. Swipe Gestures
