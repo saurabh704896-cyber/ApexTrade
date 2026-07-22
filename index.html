@@ -7306,6 +7306,155 @@
             loadQuizQuestion();
         });
     </script>
+
+        // --- Phase 6: Mobile Native Logic ---
+        
+        // 1. Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+        
+        // 2. Haptic Feedback Helper
+        window.vibrate = function(ms = 50) {
+            if (navigator.vibrate) {
+                navigator.vibrate(ms);
+            }
+        };
+
+        // Attach Haptics to key elements
+        document.addEventListener('click', (e) => {
+            const t = e.target.closest('button, .nav-btn, .mobile-nav-btn');
+            if(t) {
+                // If it's a buy/sell button make it stronger
+                if(t.classList.contains('buy-btn') || t.classList.contains('sell-btn')) {
+                    vibrate([30, 50, 30]);
+                } else {
+                    vibrate(30);
+                }
+            }
+        });
+
+        // 3. PIN Lock Logic
+        let enteredPin = "";
+        let savedPin = localStorage.getItem('apex_pin');
+        
+        if(!savedPin) {
+            document.getElementById('pin-title').innerText = "Create New 4-Digit PIN";
+        }
+        
+        window.enterPin = function(num) {
+            vibrate(30);
+            if(enteredPin.length < 4) {
+                enteredPin += num;
+                updatePinUI();
+                
+                if(enteredPin.length === 4) {
+                    setTimeout(() => processPin(), 200);
+                }
+            }
+        };
+        
+        window.deletePin = function() {
+            if(enteredPin.length > 0) {
+                enteredPin = enteredPin.slice(0, -1);
+                updatePinUI();
+            }
+        };
+        
+        window.clearPin = function() {
+            enteredPin = "";
+            updatePinUI();
+        };
+        
+        function updatePinUI() {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                if(index < enteredPin.length) {
+                    dot.style.background = 'var(--accent)';
+                } else {
+                    dot.style.background = 'transparent';
+                }
+            });
+        }
+        
+        function processPin() {
+            if(!savedPin) {
+                savedPin = enteredPin;
+                localStorage.setItem('apex_pin', savedPin);
+                unlockApp();
+            } else {
+                if(enteredPin === savedPin) {
+                    unlockApp();
+                } else {
+                    vibrate([50, 50, 50, 50]); // Error vibration
+                    document.getElementById('pin-title').innerText = "Incorrect PIN!";
+                    document.getElementById('pin-title').style.color = "var(--color-down)";
+                    clearPin();
+                    setTimeout(() => {
+                        document.getElementById('pin-title').innerText = "Enter Apex PIN";
+                        document.getElementById('pin-title').style.color = "var(--text-main)";
+                    }, 1500);
+                }
+            }
+        }
+        
+        function unlockApp() {
+            const lock = document.getElementById('pin-lock-screen');
+            lock.style.opacity = '0';
+            setTimeout(() => {
+                lock.style.display = 'none';
+            }, 500);
+        }
+
+        // 4. Swipe Gestures
+        let touchstartX = 0;
+        let touchendX = 0;
+        const swipeThreshold = 100;
+        const pageOrder = ['page-dashboard', 'page-trade', 'page-portfolio', 'page-leaderboard', 'page-achievements', 'page-copy', 'page-academy'];
+
+        function handleSwipe() {
+            if (touchendX < touchstartX - swipeThreshold) {
+                // Swiped Left - Go to Next Page
+                let current = document.querySelector('.page.active').id;
+                let idx = pageOrder.indexOf(current);
+                if(idx < pageOrder.length - 1) {
+                    vibrate(40);
+                    switchPage(pageOrder[idx+1]);
+                    // Update mobile nav UI
+                    document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+                    const btn = document.querySelector(`.mobile-nav-btn[onclick*='${pageOrder[idx+1]}']`);
+                    if(btn) btn.classList.add('active');
+                }
+            }
+            if (touchendX > touchstartX + swipeThreshold) {
+                // Swiped Right - Go to Prev Page
+                let current = document.querySelector('.page.active').id;
+                let idx = pageOrder.indexOf(current);
+                if(idx > 0) {
+                    vibrate(40);
+                    switchPage(pageOrder[idx-1]);
+                    // Update mobile nav UI
+                    document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+                    const btn = document.querySelector(`.mobile-nav-btn[onclick*='${pageOrder[idx-1]}']`);
+                    if(btn) btn.classList.add('active');
+                }
+            }
+        }
+
+        const pagesWrapper = document.querySelector('.pages-wrapper');
+        if(pagesWrapper) {
+            pagesWrapper.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            pagesWrapper.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+        }
+    </script>
 </body>
 
 </html>
