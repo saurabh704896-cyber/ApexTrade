@@ -7455,6 +7455,99 @@
             }, {passive: true});
         }
     </script>
+
+        // --- Phase 7: AI Chat & Loot Box Logic ---
+        window.toggleAIChat = function() {
+            if(typeof vibrate === 'function') vibrate(30);
+            const modal = document.getElementById('ai-chat-modal');
+            if(modal.style.display === 'none' || modal.style.opacity === '0') {
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                    modal.style.transform = 'scale(1)';
+                }, 10);
+            } else {
+                modal.style.opacity = '0';
+                modal.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        };
+        
+        window.sendAIMessage = function(msg) {
+            if(typeof vibrate === 'function') vibrate(30);
+            const chatBody = document.getElementById('ai-chat-body');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-chat-user';
+            userMsg.innerText = msg;
+            chatBody.appendChild(userMsg);
+            
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+            
+            // Generate AI response
+            setTimeout(() => {
+                let reply = "I am a simulated AI. But remember, always do your own research (DYOR) before trading! 📈";
+                if(msg.includes("Meme")) reply = "Meme coins are cryptocurrencies inspired by jokes or internet memes (like Dogecoin). They are highly volatile and risky! 🐶";
+                if(msg.includes("Buy BTC")) reply = "The market is currently showing mixed signals. Dollar-cost averaging (DCA) is usually a safer strategy than going all in! ₿";
+                if(msg.includes("Leverage")) reply = "Leverage lets you trade with borrowed money to amplify gains. But beware, it also amplifies losses and can liquidate your account! ⚠️";
+                
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-chat-bot';
+                botMsg.innerHTML = reply;
+                chatBody.appendChild(botMsg);
+                if(typeof vibrate === 'function') vibrate([30, 30]); // double tap for msg received
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1000);
+        };
+        
+        // Loot Box Logic
+        window.openLootBox = function() {
+            const icon = document.getElementById('loot-box-icon');
+            const btn = document.getElementById('loot-btn');
+            
+            if(typeof vibrate === 'function') vibrate([50, 50, 50]);
+            
+            btn.disabled = true;
+            btn.innerText = "Opening...";
+            icon.classList.add('loot-box-shake');
+            
+            setTimeout(() => {
+                icon.classList.remove('loot-box-shake');
+                icon.innerHTML = '<i class="fas fa-coins" style="color:var(--color-up);"></i>';
+                if(typeof vibrate === 'function') vibrate([100, 50, 100]); // Jackpot feel
+                
+                // Random reward logic
+                const rewards = [1000, 2000, 5000, 500];
+                const win = rewards[Math.floor(Math.random() * rewards.length)];
+                
+                state.cash += win;
+                localStorage.setItem('apex_cash', state.cash);
+                updateUI();
+                
+                if(typeof showToast === 'function') showToast(`🎉 Epic Loot! You won ${win}!`, 'success');
+                if(typeof confetti === 'function') confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                
+                setTimeout(() => {
+                    if (typeof claimDailyBonus === 'function') {
+                        // We override the original claim so it just closes the modal
+                        const modal = document.getElementById('daily-bonus-modal');
+                        if(modal) {
+                            modal.classList.remove('active');
+                            setTimeout(() => modal.style.display = 'none', 300);
+                        }
+                        
+                        // Set login date so it doesn't pop up again today
+                        const today = new Date().toISOString().split('T')[0];
+                        localStorage.setItem('apex_last_login', today);
+                    }
+                }, 2000);
+            }, 1500);
+        };
+    </script>
 </body>
 
 </html>
