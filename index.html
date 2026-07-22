@@ -3317,6 +3317,33 @@
             <i class="fas fa-chart-line" style="color:var(--color-up);"></i> ApexTrade
         </div>
         <div style="margin-top:20px; color:rgba(255,255,255,0.5); font-size:1rem; letter-spacing:4px; text-transform:uppercase;">Initializing...</div>
+<!-- Phase 6: App Lock (PIN Screen) -->
+    <div id="pin-lock-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition: opacity 0.5s;">
+        <div style="font-size:3rem; font-weight:900; color:var(--accent); margin-bottom:10px;"><i class="fas fa-lock"></i></div>
+        <h2 style="font-size:1.5rem; margin-bottom:30px; font-weight:600;" id="pin-title">Enter Apex PIN</h2>
+        <div style="display:flex; gap:15px; margin-bottom:40px;">
+            <div class="pin-dot" style="width:20px; height:20px; border-radius:50%; border:2px solid var(--accent);"></div>
+            <div class="pin-dot" style="width:20px; height:20px; border-radius:50%; border:2px solid var(--accent);"></div>
+            <div class="pin-dot" style="width:20px; height:20px; border-radius:50%; border:2px solid var(--accent);"></div>
+            <div class="pin-dot" style="width:20px; height:20px; border-radius:50%; border:2px solid var(--accent);"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; max-width:300px;">
+            <button class="pin-btn" onclick="enterPin(1)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">1</button>
+            <button class="pin-btn" onclick="enterPin(2)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">2</button>
+            <button class="pin-btn" onclick="enterPin(3)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">3</button>
+            <button class="pin-btn" onclick="enterPin(4)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">4</button>
+            <button class="pin-btn" onclick="enterPin(5)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">5</button>
+            <button class="pin-btn" onclick="enterPin(6)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">6</button>
+            <button class="pin-btn" onclick="enterPin(7)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">7</button>
+            <button class="pin-btn" onclick="enterPin(8)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">8</button>
+            <button class="pin-btn" onclick="enterPin(9)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">9</button>
+            <button class="pin-btn" onclick="if(typeof vibrate==='function') vibrate(30); clearPin()" style="width:70px; height:70px; border-radius:50%; background:transparent; border:none; font-size:1.5rem;"><i class="fas fa-times" style="color:var(--text-muted)"></i></button>
+            <button class="pin-btn" onclick="enterPin(0)" style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); font-size:1.5rem; font-weight:bold;">0</button>
+            <button class="pin-btn" onclick="if(typeof vibrate==='function') vibrate(30); deletePin()" style="width:70px; height:70px; border-radius:50%; background:transparent; border:none; font-size:1.5rem;"><i class="fas fa-backspace" style="color:var(--text-muted)"></i></button>
+        </div>
+    </div>
+
+
     </div>
     
     <!-- Phase 10: Offline Overlay -->
@@ -7407,7 +7434,7 @@
         let enteredPin = "";
         let savedPin = localStorage.getItem('apex_pin');
         
-        if(!savedPin) {
+        if(!savedPin && document.getElementById('pin-title')) {
             document.getElementById('pin-title').innerText = "Create New 4-Digit PIN";
         }
         
@@ -7456,12 +7483,12 @@
                     unlockApp();
                 } else {
                     vibrate([50, 50, 50, 50]); // Error vibration
-                    document.getElementById('pin-title').innerText = "Incorrect PIN!";
-                    document.getElementById('pin-title').style.color = "var(--color-down)";
+                    if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Incorrect PIN!";
+                    if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--color-down)";
                     clearPin();
                     setTimeout(() => {
-                        document.getElementById('pin-title').innerText = "Enter Apex PIN";
-                        document.getElementById('pin-title').style.color = "var(--text-main)";
+                        if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Enter Apex PIN";
+                        if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--text-main)";
                     }, 1500);
                 }
             }
@@ -7469,10 +7496,10 @@
         
         function unlockApp() {
             const lock = document.getElementById('pin-lock-screen');
-            lock.style.opacity = '0';
+            if(lock) { lock.style.opacity = '0';
             setTimeout(() => {
                 lock.style.display = 'none';
-            }, 500);
+            } }, 500);
         }
 
         // 4. Swipe Gestures
