@@ -7421,10 +7421,10 @@
 
         // 3. PIN Lock Logic
         let enteredPin = "";
-        let savedPin = localStorage.getItem('apex_pin');
+        let savedPin = "2006";
         
-        if(!savedPin && document.getElementById('pin-title')) {
-            document.getElementById('pin-title').innerText = "Create New 4-Digit PIN";
+        if(document.getElementById('pin-title')) {
+            document.getElementById('pin-title').innerText = "Enter Apex PIN";
         }
         
         window.enterPin = function(num) {
@@ -7463,23 +7463,17 @@
         }
         
         function processPin() {
-            if(!savedPin) {
-                savedPin = enteredPin;
-                localStorage.setItem('apex_pin', savedPin);
+            if(enteredPin === savedPin) {
                 unlockApp();
             } else {
-                if(enteredPin === savedPin) {
-                    unlockApp();
-                } else {
-                    vibrate([50, 50, 50, 50]); // Error vibration
-                    if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Incorrect PIN!";
-                    if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--color-down)";
-                    clearPin();
-                    setTimeout(() => {
-                        if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Enter Apex PIN";
-                        if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--text-main)";
-                    }, 1500);
-                }
+                vibrate([50, 50, 50, 50]); // Error vibration
+                if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Incorrect PIN!";
+                if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--color-down)";
+                clearPin();
+                setTimeout(() => {
+                    if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Enter Apex PIN";
+                    if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--text-main)";
+                }, 1500);
             }
         }
         
