@@ -3992,6 +3992,9 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                     <span class="auth-link" onclick="switchAuthView('signup')">Create Account</span>
                 </div>
                 <div style="margin-top:15px; display:flex; justify-content: space-between;"><span class="auth-link" onclick="switchAuthView('phone')" style="color:var(--text-muted);"><i class="fas fa-phone"></i> Phone OTP</span><span class="auth-link" onclick="switchAuthView('emailotp')" style="color:var(--text-muted);"><i class="fas fa-envelope"></i> Email OTP</span></div>
+                <div style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    <button class="auth-btn" id="login-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(37, 99, 235, 0.1); border: 1px solid var(--accent); color: var(--accent);"><i class="fas fa-download"></i> Install ApexTrade App</button>
+                </div>
             </div>
 
             <div id="auth-view-signup" style="display: none;">
@@ -7011,6 +7014,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             const mobBtn = document.getElementById('mobile-install-btn');
             if (deskBtn) deskBtn.style.display = 'none';
             if (mobBtn) mobBtn.style.display = 'none';
+            const loginBtn = document.getElementById('login-install-btn');
+            if (loginBtn) loginBtn.style.display = 'none';
         }
 
         window.triggerUniversalInstall = async function() {
