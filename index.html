@@ -3244,6 +3244,121 @@
             }
         }
         
+        
+        /* --- Premium Light Mode Overrides --- */
+        [data-theme="light"] {
+            --bg-color: #f4f7fb;
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-glow: rgba(37, 99, 235, 0.15);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --color-up: #059669;
+            --color-down: #dc2626;
+            --accent: #2563eb;
+        }
+        [data-theme="light"] body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+        [data-theme="light"] .ambient-bg {
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.05), transparent 40%);
+            background-color: var(--bg-color);
+        }
+        [data-theme="light"] .panel, 
+        [data-theme="light"] .port-card, 
+        [data-theme="light"] .pnl-card, 
+        [data-theme="light"] .history-card, 
+        [data-theme="light"] .trade-pnl-card,
+        [data-theme="light"] .order-book-container,
+        [data-theme="light"] .login-box,
+        [data-theme="light"] .premium-hero,
+        [data-theme="light"] .premium-glass-card {
+            background: var(--panel-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04) !important;
+        }
+        [data-theme="light"] .nav-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        [data-theme="light"] .mobile-bottom-nav {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-top: 1px solid var(--border-color) !important;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.03) !important;
+        }
+        [data-theme="light"] input, 
+        [data-theme="light"] select, 
+        [data-theme="light"] .trade-input-group {
+            background: rgba(0, 0, 0, 0.03) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-main) !important;
+        }
+        [data-theme="light"] input::placeholder {
+            color: #94a3b8 !important;
+        }
+        [data-theme="light"] .trade-btn:not(.active) {
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: var(--text-main) !important;
+        }
+        [data-theme="light"] .buy-btn {
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3) !important;
+        }
+        [data-theme="light"] .sell-btn {
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3) !important;
+        }
+        [data-theme="light"] .tab {
+            color: var(--text-muted);
+        }
+        [data-theme="light"] .tab.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+        [data-theme="light"] .pulse-btn {
+            background: rgba(37, 99, 235, 0.1) !important;
+            border: 1px solid rgba(37, 99, 235, 0.3) !important;
+            color: var(--accent) !important;
+        }
+        [data-theme="light"] .skeleton-box {
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%) !important;
+            background-size: 400% 100% !important;
+        }
+        [data-theme="light"] .ctx-menu {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+        }
+        [data-theme="light"] .ctx-item:hover {
+            background: rgba(0, 0, 0, 0.05) !important;
+        }
+        [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, [data-theme="light"] h4, [data-theme="light"] p {
+            color: var(--text-main);
+        }
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+        /* Fix hardware texts that might be hardcoded to white */
+        [data-theme="light"] *[style*="color: #fff"], 
+        [data-theme="light"] *[style*="color:#fff"],
+        [data-theme="light"] *[style*="color: white"],
+        [data-theme="light"] *[style*="color:white"] {
+            color: var(--text-main) !important;
+        }
+        /* Buttons that are normally white */
+        [data-theme="light"] .auth-btn {
+            background: var(--accent) !important;
+            color: #fff !important;
+        }
+        [data-theme="light"] .hero-glow {
+            opacity: 0.5;
+        }
+        /* Modals */
+        [data-theme="light"] .modal-content, [data-theme="light"] .video-modal-content {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+
         /* Hide Mobile Nav on Desktop globally */
         @media (min-width: 769px) { .mobile-bottom-nav { display: none !important; } }
     </style>
