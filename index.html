@@ -3463,6 +3463,14 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 }
 
     </style>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(r) {
+          for(let i of r) i.unregister();
+        });
+        navigator.serviceWorker.register('./sw.js?v=' + Date.now());
+      }
+    </script>
 </head>
 
 <body>
@@ -6191,10 +6199,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         });
 
         // --- Service Worker Registration ---
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log('Service Worker registered');
-            }).catch(err => console.log('SW Error', err));
+        ).catch(err => console.log('SW Error', err));
         }
 
         // --- Mobile FAB Logic ---
@@ -6725,11 +6730,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         };
 
         // Service Worker Registration for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful');
-                }).catch(err => {
+        ).catch(err => {
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
@@ -7550,10 +7551,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         // --- Phase 6: Mobile Native Logic ---
         
         // 1. Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js');
-            });
+        );
         }
         
         // 2. Haptic Feedback Helper
