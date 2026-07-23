@@ -3812,6 +3812,9 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 <button class="lp-cta-btn" onclick="enterTerminal()" aria-label="Open trading terminal">
                     Launch Terminal <i class="fas fa-arrow-right" style="font-size:0.8rem" aria-hidden="true"></i>
                 </button>
+                <button class="lp-cta-btn" id="home-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
+                    <i class="fas fa-download"></i> Install App
+                </button>
             </div>
         </div>
 
@@ -7016,6 +7019,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             if (mobBtn) mobBtn.style.display = 'none';
             const loginBtn = document.getElementById('login-install-btn');
             if (loginBtn) loginBtn.style.display = 'none';
+            const homeBtn = document.getElementById('home-install-btn');
+            if (homeBtn) homeBtn.style.display = 'none';
         }
 
         window.triggerUniversalInstall = async function() {
