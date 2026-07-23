@@ -6734,9 +6734,24 @@
                             <div style="text-align: right;">
                                 <div style="font-weight: 700; font-size: 1.15rem; font-family: 'Space Grotesk', sans-serif;">${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
                                 <div style="color: ${color}; font-weight: 600; font-size: 0.9rem; margin-top: 3px;"><i class="fas ${arrow}"></i> ${Math.abs(change).toFixed(2)}%</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                const mf = document.getElementById('market-feed');
+                if(mf) mf.innerHTML = html;
+            } catch(e) { console.error(e); }
+        }
+
+        setInterval(() => {
+            const nwEl = document.getElementById('dash-networth');
+            if(nwEl && typeof state !== 'undefined') {
+                nwEl.innerText = '$' + (state.cash + (typeof getPortfolioValue === 'function' ? getPortfolioValue() : 0)).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             }
+        }, 1000);
+
+        document.addEventListener('DOMContentLoaded', () => {
             setTimeout(fetchCoinGeckoData, 2000);
-            // Refresh API every 30 seconds
             setInterval(fetchCoinGeckoData, 30000);
         });
     </script>
