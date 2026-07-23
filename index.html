@@ -5093,7 +5093,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         }
 
         // --- Login & LocalStorage Logic ---
-        const loginScreen = document.getElementById('login-screen');
+        var loginScreen = document.getElementById('login-screen');
         const loginIdInput = document.getElementById('login-id');
         const loginNameInput = document.getElementById('login-name');
         const loginBtn = document.getElementById('btn-login');
@@ -5103,8 +5103,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         let userAuth = localStorage.getItem('tp_user_auth');
 
         // --- Landing Page Logic ---
-        const landingPage = document.getElementById('landing-page');
-        const appLayout = document.querySelector('.app-layout');
+        var landingPage = document.getElementById('landing-page');
+        var appLayout = document.querySelector('.app-layout');
         
         window.openLoginModal = function() {
             if (userName && userAuth) {
@@ -6327,9 +6327,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             ptrDistance = 0;
         });
 
-        // --- Service Worker Registration ---
-        ).catch(err => console.log('SW Error', err));
-        }
+        // --- Service Worker Registration (Moved to top of document) ---
 
         // --- Mobile FAB Logic ---
         window.toggleFab = function() {
@@ -6381,8 +6379,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
     <!-- PRO TRADING LOGIC -->
     <script>
         // --- Web Audio API Synthesizer (Premium Sound FX) ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioCtx = new AudioContext();
 
         window.playSound = function(type) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -6644,7 +6642,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             }
 
             // Only swipe if landing page is hidden (user is in terminal)
-            const landingPage = document.getElementById('landing-page');
+            var landingPage = document.getElementById('landing-page');
             if (landingPage && landingPage.style.display !== 'none') return;
             
             const activeBtn = document.querySelector('.nav-btn.active');
@@ -6850,12 +6848,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             }, 1500);
         };
 
-        // Service Worker Registration for PWA
-        ).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
+        // Service Worker Registration (Moved to top of document)
         
         // PWA Install Prompt
         let deferredPrompt;
@@ -7671,9 +7664,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
     
         // --- Phase 6: Mobile Native Logic ---
         
-        // 1. Service Worker Registration
-        );
-        }
+        // 1. Service Worker Registration (Moved to top of document)
         
         // 2. Haptic Feedback Helper
         window.vibrate = function(ms = 50) {
@@ -8074,8 +8065,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         // --- Phase 9: Masterpiece (SFX, Trollbox, Stories) ---
         
         // 1. Web Audio API SFX Synth
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioCtx;
         
         function initAudio() {
             if(!audioCtx) audioCtx = new AudioContext();
