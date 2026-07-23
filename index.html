@@ -3245,7 +3245,7 @@
         }
         
         /* Hide Mobile Nav on Desktop globally */
-        .mobile-bottom-nav { display: none; }
+        @media (min-width: 769px) { .mobile-bottom-nav { display: none !important; } }
     </style>
     <style>
         /* --- Apple / Safari / iOS Specific Fixes --- */
