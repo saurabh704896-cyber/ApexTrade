@@ -3809,9 +3809,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             <h1 style="font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 0.5rem;">The Smartest Way to<br><span style="background: linear-gradient(135deg, #00d2ff, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Master Crypto Trading</span></h1>
             <p style="max-width: 560px; font-size: 1.15rem; color: var(--text-muted); margin: 1.5rem auto 2.5rem;">ApexTrade Pro connects you to <strong style="color:#fff;">live Binance market data</strong>, TradingView charts & leverage trading — with absolutely zero financial risk.</p>
             <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
-                <button class="lp-cta-btn" onclick="enterTerminal()" aria-label="Open trading terminal">
-                    Launch Terminal <i class="fas fa-arrow-right" style="font-size:0.8rem" aria-hidden="true"></i>
-                </button>
+                
                 <button class="lp-cta-btn" id="home-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px); display:flex; align-items:center; gap:8px;">
                     <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"> Install App
                 </button>
@@ -5292,9 +5290,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             document.querySelectorAll('.lp-login-btn').forEach(btn => {
                 if(btn.id !== 'lp-logout-btn') btn.innerHTML = 'Launch Trading';
             });
-            document.querySelectorAll('.lp-cta-btn').forEach(btn => {
-                btn.innerHTML = 'Launch Trading <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>';
-            });
+            
             
             // Inject Logout button into LP Navbar
             if (!document.getElementById('lp-logout-btn')) {
