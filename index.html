@@ -6727,36 +6727,6 @@
                             <div style="text-align: right;">
                                 <div style="font-weight: 700; font-size: 1.15rem; font-family: 'Space Grotesk', sans-serif;">${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
                                 <div style="color: ${color}; font-weight: 600; font-size: 0.9rem; margin-top: 3px;"><i class="fas ${arrow}"></i> ${Math.abs(change).toFixed(2)}%</div>
-                            </div>
-                        </div>
-                    `;
-                }
-                if(document.getElementById('coingecko-widgets')) {
-                    document.getElementById('coingecko-widgets').innerHTML = html;
-                }
-            } catch(e) {
-                console.error("CoinGecko API Error", e);
-            }
-        }
-
-        // Initialize Dashboard Loop
-        setInterval(() => {
-            const nwEl = document.getElementById('dash-networth');
-            if(nwEl && typeof state !== 'undefined') {
-                nwEl.innerText = '
-
-</html>
- + (state.cash + getPortfolioValue()).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            }
-        }, 1000);
-
-        // Fetch API when logged in
-        document.addEventListener('DOMContentLoaded', () => {
-            if(document.getElementById('firebase-key-input')) {
-                document.getElementById('firebase-key-input').value = localStorage.getItem('firebase_real_key') || '';
-                document.getElementById('emailjs-pubkey').value = localStorage.getItem('emailjs_pubkey') || '';
-                document.getElementById('emailjs-service').value = localStorage.getItem('emailjs_service') || '';
-                document.getElementById('emailjs-template').value = localStorage.getItem('emailjs_template') || '';
             }
             setTimeout(fetchCoinGeckoData, 2000);
             // Refresh API every 30 seconds
@@ -6966,8 +6936,7 @@
             if (lastLogin !== today) {
                 setTimeout(() => {
                     const modal = document.getElementById('daily-bonus-modal');
-                    if (modal) {
-                        modal.style.display = 'flex';
+                    if (modal) { modal.style.display = 'flex'; setTimeout(() => modal.classList.add('active'), 50);
                         if (typeof confetti === 'function') {
                             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                         }
