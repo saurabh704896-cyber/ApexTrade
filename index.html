@@ -3995,17 +3995,17 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 <button class="nav-btn" onclick="goHome()"><i class="fas fa-home"></i>
                     <span>Home</span></button>
                 
-                <button class="nav-btn active" data-page="page-dashboard"><i class="fas fa-chart-pie"></i>
+                <button class="nav-btn active" data-page="page-dashboard" onclick="switchPage('page-dashboard')"><i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span></button>
-                <button class="nav-btn" data-page="page-trade"><i class="fas fa-chart-line"></i>
+                <button class="nav-btn" data-page="page-trade" onclick="switchPage('page-trade')"><i class="fas fa-chart-line"></i>
                     <span>Trade</span></button>
-                <button class="nav-btn" data-page="page-portfolio" style="position:relative;"><i class="fas fa-wallet"></i>
+                <button class="nav-btn" data-page="page-portfolio" style="position:relative;" onclick="switchPage('page-portfolio')"><i class="fas fa-wallet"></i>
                     <span>Portfolio</span><span class="nav-badge" id="badge-portfolio"></span></button>
-                <button class="nav-btn" data-page="page-leaderboard"><i class="fas fa-trophy"></i>
+                <button class="nav-btn" data-page="page-leaderboard" onclick="switchPage('page-leaderboard')"><i class="fas fa-trophy"></i>
                     <span>Rankings</span></button>
-                <button class="nav-btn" data-page="page-academy" style="position:relative;"><i class="fas fa-graduation-cap"></i>
+                <button class="nav-btn" data-page="page-academy" style="position:relative;" onclick="switchPage('page-academy')"><i class="fas fa-graduation-cap"></i>
                     <span>Academy</span><span class="nav-badge" id="badge-academy"></span></button>
-                <button class="nav-btn" data-page="page-history"><i class="fas fa-list-alt"></i>
+                <button class="nav-btn" data-page="page-history" onclick="switchPage('page-history')"><i class="fas fa-list-alt"></i>
                     <span>History</span></button>
                 <button class="nav-btn pulse-btn" onclick="addFreeCash()"
                     style="color: var(--color-up); border: 1px solid rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05); margin-top: 10px;">
@@ -6754,6 +6754,15 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         }, 1000);
 
         // --- Phase 10: Ultimate Micro-Interactions Logic ---
+        // --- Attach Desktop Nav Click Listeners ---
+        document.querySelectorAll('button.nav-btn[data-page]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(typeof window.switchPage === 'function') {
+                    window.switchPage(this.getAttribute('data-page'));
+                }
+            });
+        });
+
         // 1. Splash Screen
         // Splash screen hiding is now triggered by PIN unlock
 
