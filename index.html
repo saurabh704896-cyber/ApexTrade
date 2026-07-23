@@ -3812,8 +3812,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 <button class="lp-cta-btn" onclick="enterTerminal()" aria-label="Open trading terminal">
                     Launch Terminal <i class="fas fa-arrow-right" style="font-size:0.8rem" aria-hidden="true"></i>
                 </button>
-                <button class="lp-cta-btn" id="home-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px);">
-                    <i class="fas fa-download"></i> Install App
+                <button class="lp-cta-btn" id="home-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px); display:flex; align-items:center; gap:8px;">
+                    <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"> Install App
                 </button>
             </div>
         </div>
@@ -3996,7 +3996,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 </div>
                 <div style="margin-top:15px; display:flex; justify-content: space-between;"><span class="auth-link" onclick="switchAuthView('phone')" style="color:var(--text-muted);"><i class="fas fa-phone"></i> Phone OTP</span><span class="auth-link" onclick="switchAuthView('emailotp')" style="color:var(--text-muted);"><i class="fas fa-envelope"></i> Email OTP</span></div>
                 <div style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                    <button class="auth-btn" id="login-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(37, 99, 235, 0.1); border: 1px solid var(--accent); color: var(--accent);"><i class="fas fa-download"></i> Install ApexTrade App</button>
+                    <button class="auth-btn" id="login-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(37, 99, 235, 0.1); border: 1px solid var(--accent); color: var(--accent);"><img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"> Install ApexTrade App</button>
                 </div>
             </div>
 
@@ -4137,8 +4137,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                     <i class="fas fa-money-bill-wave"></i>
                     <span>+ Free Cash</span>
                 </button>
-                <button class="nav-btn" id="install-app-btn" onclick="triggerUniversalInstall()" style="color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); margin-top: 10px; font-weight: bold;">
-                    <i class="fas fa-download"></i>
+                <button class="nav-btn" id="install-app-btn" onclick="triggerUniversalInstall()" style="color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05); margin-top: 10px; font-weight: bold; display:flex; align-items:center; justify-content:center;">
+                    <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo">
                     <span>Install App</span>
                 </button>
             </nav>
@@ -4150,7 +4150,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         <!-- Phase 7/10: Mobile Bottom Nav -->
         <nav class="mobile-bottom-nav">
             <button class="mobile-nav-btn" id="mobile-install-btn" onclick="triggerUniversalInstall()" style="color: #3b82f6;">
-                <i class="fas fa-download"></i><span>Install</span>
+                <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"><span>Install</span>
             </button>
             <button class="mobile-nav-btn" onclick="goHome()">
                 <i class="fas fa-home"></i><span>Home</span>
@@ -7021,6 +7021,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             if (loginBtn) loginBtn.style.display = 'none';
             const homeBtn = document.getElementById('home-install-btn');
             if (homeBtn) homeBtn.style.display = 'none';
+            // Also let's expose the button forcibly if user wants to see it:
+            // homeBtn.style.display = 'flex';
         }
 
         window.triggerUniversalInstall = async function() {
@@ -7047,7 +7049,11 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 document.getElementById('ios-install-modal').classList.add('active');
             } else {
                 // Fallback / Already installed or unsupported browser
-                alert("To install this app, look for the 'Install' or 'Add to Home Screen' option in your browser menu.");
+                
+                // Enhanced Fallback Alert
+                const msg = "App installation might be blocked by your browser settings (e.g. Incognito mode). \n\nTo install manually:\n1. Click the 3-dots menu (⋮) in Chrome/Edge.\n2. Click 'Install App' or 'Add to Home screen'.";
+                alert(msg);
+
             }
         };
 
