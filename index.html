@@ -7042,7 +7042,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                     console.log('User accepted the install prompt');
                     deferredPrompt = null;
                 }
-            } else if (isIos() && isSafari()) {
+            } else if (isIos()) {
                 // iOS Safari: Show Custom Modal
                 document.getElementById('ios-install-modal').classList.add('active');
             } else {
