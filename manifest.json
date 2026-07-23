@@ -1,21 +1,17 @@
 {
-  "name": "ApexTrade Simulator",
+  "name": "ApexTrade Pro",
   "short_name": "ApexTrade",
-  "description": "A gamified crypto trading simulator.",
+  "description": "Next-Gen Risk-Free Crypto Trading Simulator",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1490/1490806.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1490/1490806.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "assets/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
