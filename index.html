@@ -7577,12 +7577,14 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         // 3. PIN Lock Logic
         let enteredPin = "";
         let savedPin = "2006";
+        window.apexSavedPin = "2006";
         
         if(document.getElementById('pin-title')) {
             document.getElementById('pin-title').innerText = "Enter Apex PIN";
         }
         
         window.enterPin = function(num) {
+            num = String(num); // Force string
             vibrate(30);
             if(enteredPin.length < 4) {
                 enteredPin += num;
@@ -7618,7 +7620,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         }
         
         function processPin() {
-            if(enteredPin === savedPin) {
+            console.log("Processing PIN:", enteredPin);
+            if(enteredPin === "2006" || enteredPin === savedPin || enteredPin === window.apexSavedPin) {
                 unlockApp();
             } else {
                 vibrate([50, 50, 50, 50]); // Error vibration
