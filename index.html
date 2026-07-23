@@ -3810,6 +3810,9 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             <p style="max-width: 560px; font-size: 1.15rem; color: var(--text-muted); margin: 1.5rem auto 2.5rem;">ApexTrade Pro connects you to <strong style="color:#fff;">live Binance market data</strong>, TradingView charts & leverage trading — with absolutely zero financial risk.</p>
             <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
                 
+                                <button class="lp-cta-btn" id="main-launch-btn" onclick="enterTerminal()" aria-label="Open trading terminal">
+                    Launch Terminal <i class="fas fa-arrow-right" style="font-size:0.8rem" aria-hidden="true"></i>
+                </button>
                 <button class="lp-cta-btn" id="home-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(255,255,255,0.1); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(10px); display:flex; align-items:center; gap:8px;">
                     <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"> Install App
                 </button>
@@ -5252,6 +5255,11 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         
         window.openLoginModal = function() {
             if (userName && userAuth) {
+            const mainLaunchBtn = document.getElementById('main-launch-btn');
+            if (mainLaunchBtn) {
+                mainLaunchBtn.innerHTML = 'Launch Trading <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>';
+            }
+
                 enterTerminal();
             } else {
                 loginScreen.classList.add('active');
