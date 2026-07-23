@@ -3486,7 +3486,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         <div style="font-size:3rem; font-weight:800; color:#fff; letter-spacing:2px; display:flex; align-items:center; gap:15px; animation: pulse-glow 2s infinite alternate;">
             <i class="fas fa-chart-line" style="color:var(--color-up);"></i> ApexTrade
         </div>
-        <div style="margin-top:20px; color:rgba(255,255,255,0.5); font-size:1rem; letter-spacing:4px; text-transform:uppercase;">Initializing...</div>
+        <div style="margin-top:20px; color:rgba(255,255,255,0.5); font-size:1rem; letter-spacing:4px; text-transform:uppercase;">Apex Trade is initializing...</div>
     </div>
 <!-- Phase 6: App Lock (PIN Screen) -->
     <!-- Premium Glassmorphism PIN Lock Screen -->
@@ -3600,8 +3600,20 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                     if(document.getElementById('cursor-dot')) document.getElementById('cursor-dot').style.display = 'block';
                     if(document.getElementById('cursor-outline')) document.getElementById('cursor-outline').style.display = 'block';
                     document.body.style.cursor = 'auto';
+                    
                     setTimeout(() => {
                         lock.style.display = 'none';
+                        
+                        // Show "Apex Trade Initializing..." for exactly 3 seconds
+                        const splash = document.getElementById('splash-screen');
+                        if (splash) {
+                            setTimeout(() => {
+                                splash.style.opacity = '0';
+                                setTimeout(() => {
+                                    splash.style.display = 'none';
+                                }, 500);
+                            }, 3000); // Wait 3 seconds
+                        }
                     }, 600);
                 } else {
                     if(typeof navigator.vibrate === 'function') navigator.vibrate([50, 100, 50, 100]);
@@ -6745,14 +6757,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
         // --- Phase 10: Ultimate Micro-Interactions Logic ---
         // 1. Splash Screen
-        // Execute immediately, don't wait for massive images to load
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            if (splash) {
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.display = 'none', 500);
-            }
-        }, 1500);
+        // Splash screen hiding is now triggered by PIN unlock
 
         // 2. Offline Mode
         window.addEventListener('offline', () => {
