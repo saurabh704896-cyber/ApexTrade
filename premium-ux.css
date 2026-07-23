@@ -101,16 +101,10 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
 /* 5. Desktop Pro Terminal Layout */
 @media (min-width: 1200px) {
-    /* Limit the overall width and center it */
-    body {
-        display: flex;
-        justify-content: center;
-    }
-    
     .app-container {
         max-width: 1600px !important;
         width: 100% !important;
-        margin: 0 auto;
+        margin: 0 auto !important;
         position: relative;
     }
 
@@ -151,10 +145,4 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         transform: scale(4);
         opacity: 0;
     }
-}
-
-/* Magnetic Buttons */
-.magnetic-btn {
-    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform;
 }
