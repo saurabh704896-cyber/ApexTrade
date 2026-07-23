@@ -3304,6 +3304,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- EmailJS for Real Email OTP -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        /* Premium Mobile UX Enhancements */
+        body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+        button, a, .panel, .trade-btn, .nav-item, .glass-panel { user-select: none; -webkit-user-select: none; }
+        button:active, .trade-btn:active, .nav-item:active, .panel:active { transform: scale(0.97) !important; transition: transform 0.05s ease !important; }
+    </style>
 </head>
 
 <body>
@@ -8116,6 +8123,25 @@
         
         // Check for FOMO alerts every 45 seconds
         setInterval(triggerFOMOAlert, 45000);
+    </script>
+
+    <script>
+        window.playHaptic = function(type = 'light') {
+            if(navigator.vibrate) {
+                try { 
+                    if(type === 'light') navigator.vibrate(10); 
+                    else if(type === 'heavy') navigator.vibrate(50); 
+                    else if(type === 'error') navigator.vibrate([50, 50, 50]); 
+                } catch(e){}
+            }
+        };
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button, .nav-item, .trade-btn');
+            if(btn) { 
+                if(btn.innerText.toLowerCase().includes('buy') || btn.innerText.toLowerCase().includes('sell')) playHaptic('heavy'); 
+                else playHaptic('light'); 
+            }
+        });
     </script>
 </body>
 
