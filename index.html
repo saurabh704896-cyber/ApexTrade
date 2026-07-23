@@ -2922,7 +2922,7 @@
                 padding: 15px 0 max(15px, env(safe-area-inset-bottom)) 0;
                 z-index: 9998;
             }
-            .mobile-bottom-nav { display: none; }
+            
         .mobile-nav-btn {
                 background: none; border: none; color: #94a3b8;
                 font-size: 1.4rem; cursor: pointer;
@@ -3243,6 +3243,9 @@
                 border-radius: 10px;
             }
         }
+        
+        /* Hide Mobile Nav on Desktop globally */
+        .mobile-bottom-nav { display: none; }
     </style>
     <style>
         /* --- Apple / Safari / iOS Specific Fixes --- */
