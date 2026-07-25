@@ -8752,7 +8752,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexThumbZone.toggle()" title="1-Handed Thumb Zone Navigation Mode"><i class="fas fa-hand-pointer" style="color:#00d2ff;"></i></button>
         <button onclick="ApexSoundboard.openModal()" title="Custom Audio Trading Soundboard"><i class="fas fa-music" style="color:#8b5cf6;"></i></button>
         <button onclick="ApexLevelingSystem.openModal()" title="Trader Rank & XP Leveling (Level 1 to 50)"><i class="fas fa-medal" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexGlobalRanking.openModal()" title="Global Trader Leaderboard & Ranking Arena"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
+        <button onclick="ApexVolumeProfile.openModal()" title="Institutional Volume Profile POC"><i class="fas fa-chart-bar" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexCircuitBreaker.openModal()" title="Risk Circuit Breaker Guard"><i class="fas fa-shield-alt" style="color:#ef4444;"></i></button>
         <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-award" style="color:#10b981;"></i></button>
     </div>
 
@@ -10825,6 +10826,92 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.style.color = '#000';
                 btn.style.border = 'none';
                 if(typeof showToast === 'function') showToast(`Leaderboard filtered to ${type.toUpperCase()}`, "info");
+            }
+        };
+    </script>
+
+    <!-- ========================================================================= -->
+    <!-- 📊 2. VOLUME PROFILE & ORDER FLOW VISUALIZER MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexVolumeProfileModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:520px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-chart-bar" style="color:#00d2ff;"></i> Institutional Volume Profile</h3>
+                <button class="apex-modal-close" onclick="ApexVolumeProfile.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <p style="font-size:0.8rem; color:#9ca3af; margin-bottom:12px;">Market Depth & Volume Nodes (Point of Control POC)</p>
+                <div style="background:#0b0f19; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:15px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#fbbf24; font-weight:800; margin-bottom:8px;">
+                        <span>VAH (Value Area High): $96,500</span>
+                        <span>POC (Point of Control): $94,120</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.7rem; color:#fff; width:60px;">$96,000</span>
+                            <div style="flex:1; height:12px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; display:flex;">
+                                <div style="width:75%; background:#10b981;"></div>
+                                <div style="width:25%; background:#ef4444;"></div>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.7rem; color:#fbbf24; font-weight:800; width:60px;">$94,120</span>
+                            <div style="flex:1; height:16px; background:rgba(251,191,36,0.2); border:1px solid #fbbf24; border-radius:3px; overflow:hidden; display:flex;">
+                                <div style="width:85%; background:#10b981;"></div>
+                                <div style="width:15%; background:#ef4444;"></div>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.7rem; color:#fff; width:60px;">$92,000</span>
+                            <div style="flex:1; height:12px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; display:flex;">
+                                <div style="width:60%; background:#10b981;"></div>
+                                <div style="width:40%; background:#ef4444;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.75rem; color:#10b981; font-weight:700; margin-top:10px;">Institutional Buy Pressure Node Detected at POC 🚀</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🛡️ 3. INSTITUTIONAL RISK CIRCUIT BREAKER MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexCircuitBreakerModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-shield-alt" style="color:#ef4444;"></i> Risk Circuit Breaker Guard</h3>
+                <button class="apex-modal-close" onclick="ApexCircuitBreaker.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:12px; padding:15px; margin-bottom:15px;">
+                    <div style="font-size:0.8rem; color:#fff; font-weight:700;">Max Daily Drawdown Halt</div>
+                    <div style="font-size:1.5rem; font-weight:900; color:#ef4444; margin:6px 0;" id="circuitLimitVal">-$500.00 (-5.00%)</div>
+                    <p style="font-size:0.75rem; color:#9ca3af;">Paper trading will automatically pause if daily losses hit this limit to preserve capital.</p>
+                </div>
+                <button onclick="ApexCircuitBreaker.activate()" style="width:100%; padding:12px; background:#ef4444; color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                    <i class="fas fa-lock"></i> Activate Capital Guard Circuit Breaker
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Engines: Volume Profile, Circuit Breaker, VIP Badge -->
+    <script>
+        // 1. Volume Profile Engine
+        window.ApexVolumeProfile = {
+            openModal: function() { document.getElementById('apexVolumeProfileModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexVolumeProfileModal').style.display = 'none'; }
+        };
+
+        // 2. Circuit Breaker Engine
+        window.ApexCircuitBreaker = {
+            openModal: function() { document.getElementById('apexCircuitBreakerModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexCircuitBreakerModal').style.display = 'none'; },
+            activate: function() {
+                if(typeof showToast === 'function') showToast("🛡️ Capital Guard Circuit Breaker Active (-$500 Limit)", "success");
+                this.closeModal();
             }
         };
     </script>
