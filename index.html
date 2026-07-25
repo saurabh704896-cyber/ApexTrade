@@ -8711,11 +8711,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fas fa-bell" style="color:#fbbf24;"></i>
             <span>Alerts</span>
         </button>
+        <button class="mobile-nav-item" onclick="ApexProToolsHub.openModal()">
+            <i class="fas fa-toolbox" style="color:#00d2ff;"></i>
+            <span>Tools (25)</span>
+        </button>
         <button class="mobile-nav-item" onclick="ApexSync.openSyncModal()">
             <i class="fas fa-qrcode"></i>
             <span>Sync</span>
         </button>
     </nav>
+
+    <!-- Glowing Mobile Floating Action Button (25 Tools FAB) -->
+    <button id="apexFloatingToolsFab" onclick="ApexProToolsHub.openModal()" style="position:fixed; bottom:75px; right:15px; background:linear-gradient(135deg,#00d2ff,#3a7bd5); color:#fff; font-weight:800; border:none; border-radius:30px; padding:10px 18px; z-index:99998; box-shadow:0 8px 25px rgba(0,210,255,0.5); font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-toolbox"></i> <span>25 Pro Tools</span>
+    </button>
+
     <!-- Floating Pro Toolbar Dock (PC & Mobile Access) -->
     <div class="apex-floating-dock">
         <button onclick="ApexVoiceControl.openModal()" title="Voice Trading Commands"><i class="fas fa-microphone" style="color:#10b981;"></i></button>
@@ -8759,6 +8769,18 @@ document.addEventListener('DOMContentLoaded', () => {
             gap: 12px;
             z-index: 99998;
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        @media (max-width: 768px) {
+            .apex-floating-dock {
+                bottom: 125px;
+                right: 10px;
+                left: 10px;
+                max-width: calc(100vw - 20px);
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .apex-floating-dock::-webkit-scrollbar { display: none; }
         }
         .apex-floating-dock button {
             background: none;
@@ -10552,7 +10574,123 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.closeModal();
             }
         };
+
+        // 6. Mobile Pro Tools Hub Engine
+        window.ApexProToolsHub = {
+            openModal: function() { document.getElementById('apexProToolsHubModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexProToolsHubModal').style.display = 'none'; },
+            launch: function(engineName) {
+                this.closeModal();
+                if(window[engineName]) {
+                    if(window[engineName].openModal) window[engineName].openModal();
+                    else if(window[engineName].toggle) window[engineName].toggle();
+                    else if(window[engineName].open) window[engineName].open();
+                    else if(window[engineName].readPrice) window[engineName].readPrice();
+                }
+            }
+        };
     </script>
+
+    <!-- ========================================================================= -->
+    <!-- 🧰 MOBILE PRO TOOLS HUB MODAL (ALL 25 TOOLS GRID) -->
+    <!-- ========================================================================= -->
+    <div id="apexProToolsHubModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:500px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-toolbox" style="color:#00d2ff;"></i> Pro Trading Tools Hub (25 Tools)</h3>
+                <button class="apex-modal-close" onclick="ApexProToolsHub.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body" style="max-height:72vh; overflow-y:auto; padding-right:4px;">
+                <p style="font-size:0.8rem; color:var(--text-muted,#9ca3af); margin-bottom:12px;">Tap any tool below to launch instantly on Android or iOS:</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <button onclick="ApexProToolsHub.launch('ApexAICopilot')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-robot" style="color:#00d2ff;"></i> AI Copilot
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexPnLCard')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-camera" style="color:#10b981;"></i> P&L Card Exporter
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexPriceAlerts')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-bell" style="color:#fbbf24;"></i> Price Alerts
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexBattleArena')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-gamepad" style="color:#ef4444;"></i> 1v1 Battle Arena
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexVoiceControl')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-microphone" style="color:#10b981;"></i> Voice Controls
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexSentiment')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-compass" style="color:#fbbf24;"></i> Fear & Greed Radar
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexHeatmap')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-fire" style="color:#ef4444;"></i> Liquidation Heatmap
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexStrategyBuilder')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-cogs" style="color:#00d2ff;"></i> Bot Strategy Builder
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexRiskCalculator')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-calculator" style="color:#00d2ff;"></i> Position Calculator
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexJournal')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-book" style="color:#10b981;"></i> Trade Journal
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexTapeReader')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-tachometer-alt" style="color:#fbbf24;"></i> Tape Speed Reader
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexPatternQuiz')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(139,92,246,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-graduation-cap" style="color:#8b5cf6;"></i> Pattern Quiz
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexThemeEngine')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-palette" style="color:#00d2ff;"></i> Themes (OLED)
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexQRScanner')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-qrcode" style="color:#10b981;"></i> Camera QR Sync
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexHapticCustomizer')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-vibrate" style="color:#fbbf24;"></i> Haptics Customizer
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexMiniChart')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-window-restore" style="color:#00d2ff;"></i> Mini Chart Widget
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexAppLock')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-lock" style="color:#ef4444;"></i> Security App Lock
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexWidgetCreator')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-mobile-alt" style="color:#00d2ff;"></i> Widget Creator
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexVoiceReader')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-volume-up" style="color:#10b981;"></i> Voice Reader TTS
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexRadialMenu')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-crosshairs" style="color:#ef4444;"></i> Radial Action Wheel
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexChartHandles')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-sliders-h" style="color:#00d2ff;"></i> SL/TP Handles
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexDailyRewards')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-gift" style="color:#fbbf24;"></i> Daily Rewards
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexWakeLock')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-eye" style="color:#00d2ff;"></i> Screen Keep Awake
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexVoiceNoteRecorder')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(16,185,129,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-microphone-alt" style="color:#10b981;"></i> Voice Note Journal
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexLiqCalc')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-calculator" style="color:#ef4444;"></i> Liquidation Gauge
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexThumbZone')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(0,210,255,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-hand-pointer" style="color:#00d2ff;"></i> 1-Handed Mode
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexSoundboard')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(139,92,246,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-music" style="color:#8b5cf6;"></i> Soundboard SFX
+                    </button>
+                    <button onclick="ApexProToolsHub.launch('ApexLevelingSystem')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-medal" style="color:#fbbf24;"></i> Trader Rank XP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ========================================================================= -->
     <!-- 🟢 GLOBAL TOAST NOTIFICATION CONTAINER & ERROR REPAIR ENGINE -->
