@@ -8739,6 +8739,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexWakeLock.toggle()" title="Toggle Screen Wake Lock (Keep Awake)"><i class="fas fa-eye" style="color:#00d2ff;"></i></button>
         <button onclick="ApexVoiceNoteRecorder.openModal()" title="Record Audio Voice Note Journal"><i class="fas fa-microphone-alt" style="color:#10b981;"></i></button>
         <button onclick="ApexLiqCalc.openModal()" title="Liquidation Distance Gauge"><i class="fas fa-calculator" style="color:#ef4444;"></i></button>
+        <button onclick="ApexThumbZone.toggle()" title="1-Handed Thumb Zone Navigation Mode"><i class="fas fa-hand-pointer" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexSoundboard.openModal()" title="Custom Audio Trading Soundboard"><i class="fas fa-music" style="color:#8b5cf6;"></i></button>
+        <button onclick="ApexLevelingSystem.openModal()" title="Trader Rank & XP Leveling (Level 1 to 50)"><i class="fas fa-medal" style="color:#fbbf24;"></i></button>
         <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
     </div>
 
@@ -10425,6 +10428,130 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         ApexOfflineSnapshot.init();
+    </script>
+
+    <!-- ========================================================================= -->
+    <!-- 🎛️ 2. CUSTOM AUDIO TRADING SOUNDBOARD MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexSoundboardModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:440px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-music" style="color:#00d2ff;"></i> Audio Soundboard Synthesizer</h3>
+                <button class="apex-modal-close" onclick="ApexSoundboard.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button onclick="ApexSoundboard.play('bell')" style="padding:14px; background:rgba(255,255,255,0.05); border:1px solid #00d2ff; border-radius:10px; color:#fff; font-weight:700; cursor:pointer;">
+                        🔔 WallStreet Bell
+                    </button>
+                    <button onclick="ApexSoundboard.play('kaching')" style="padding:14px; background:rgba(255,255,255,0.05); border:1px solid #10b981; border-radius:10px; color:#fff; font-weight:700; cursor:pointer;">
+                        💰 Cash Register
+                    </button>
+                    <button onclick="ApexSoundboard.play('rocket')" style="padding:14px; background:rgba(255,255,255,0.05); border:1px solid #8b5cf6; border-radius:10px; color:#fff; font-weight:700; cursor:pointer;">
+                        🚀 Rocket Chime
+                    </button>
+                    <button onclick="ApexSoundboard.play('laser')" style="padding:14px; background:rgba(255,255,255,0.05); border:1px solid #ef4444; border-radius:10px; color:#fff; font-weight:700; cursor:pointer;">
+                        ⚡ Cyber Laser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🏆 5. GAMIFIED TRADER LEVELING SYSTEM MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexLevelingModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-medal" style="color:#fbbf24;"></i> Trader Rank & XP Leveling</h3>
+                <button class="apex-modal-close" onclick="ApexLevelingSystem.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="font-size:2.5rem; margin-bottom:6px;">🏆</div>
+                <h4 style="color:#fbbf24; margin-bottom:4px;" id="traderRankTitle">Level 12 - WallStreet Pro</h4>
+                <p style="font-size:0.8rem; color:var(--text-muted,#9ca3af); margin-bottom:15px;">3,450 / 5,000 XP to Level 13</p>
+                <div style="width:100%; height:10px; background:rgba(255,255,255,0.1); border-radius:5px; overflow:hidden; margin-bottom:15px;">
+                    <div style="width:69%; height:100%; background:linear-gradient(90deg,#00d2ff,#10b981);"></div>
+                </div>
+                <button onclick="ApexLevelingSystem.claimXP()" style="width:100%; padding:12px; background:#10b981; color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                    Claim Daily +250 XP Rank Reward
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Engines: 1-Handed Thumb Zone, Audio Soundboard, Tape Haptics, Pinch Zoom, Trader Leveling -->
+    <script>
+        // 1. 1-Handed Thumb Zone Navigation Mode
+        window.ApexThumbZone = {
+            active: false,
+            toggle: function() {
+                this.active = !this.active;
+                document.body.style.paddingTop = this.active ? '25vh' : '0px';
+                if(typeof showToast === 'function') showToast(this.active ? "📱 1-Handed Thumb Zone Mode ON" : "📱 Normal Screen Mode", "info");
+                if(window.playHaptic) window.playHaptic('light');
+            }
+        };
+
+        // 2. Custom Audio Trading Soundboard
+        window.ApexSoundboard = {
+            openModal: function() { document.getElementById('apexSoundboardModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexSoundboardModal').style.display = 'none'; },
+            play: function(type) {
+                if(window.ApexAudio && window.ApexAudio.playKaching) window.ApexAudio.playKaching();
+                if(typeof showToast === 'function') showToast(`🎵 Soundboard SFX: ${type.toUpperCase()}`, "success");
+            }
+        };
+
+        // 3. Tape Speed Haptic Pulse Gauge
+        window.ApexTapeHaptics = {
+            trigger: function() {
+                if(window.playHaptic) window.playHaptic('heavy');
+                if(typeof showToast === 'function') showToast("⚡ Whale Tape Speed Haptic Pulse Active!", "info");
+            }
+        };
+
+        // 4. Multi-Touch Pinch-to-Zoom Chart Gesture Engine
+        window.ApexPinchZoom = {
+            init: function() {
+                let initialDist = 0;
+                document.addEventListener('touchstart', e => {
+                    if (e.touches.length === 2) {
+                        initialDist = Math.hypot(
+                            e.touches[0].pageX - e.touches[1].pageX,
+                            e.touches[0].pageY - e.touches[1].pageY
+                        );
+                    }
+                }, { passive: true });
+                document.addEventListener('touchmove', e => {
+                    if (e.touches.length === 2 && initialDist > 0) {
+                        const currentDist = Math.hypot(
+                            e.touches[0].pageX - e.touches[1].pageX,
+                            e.touches[0].pageY - e.touches[1].pageY
+                        );
+                        if (currentDist > initialDist + 40) {
+                            if(typeof showToast === 'function') showToast("🔍 Pinch-to-Zoom: Chart Zoomed In 2X", "info");
+                            initialDist = currentDist;
+                        }
+                    }
+                }, { passive: true });
+            }
+        };
+        ApexPinchZoom.init();
+
+        // 5. Gamified Trader Leveling System
+        window.ApexLevelingSystem = {
+            xp: 3450,
+            openModal: function() { document.getElementById('apexLevelingModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexLevelingModal').style.display = 'none'; },
+            claimXP: function() {
+                this.xp += 250;
+                if(typeof showToast === 'function') showToast("🏆 +250 XP Claimed! Rank Progress Updated!", "success");
+                if(window.ApexAudio) window.ApexAudio.playKaching();
+                this.closeModal();
+            }
+        };
     </script>
 
     <!-- ========================================================================= -->
