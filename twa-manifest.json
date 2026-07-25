@@ -1,0 +1,27 @@
+{
+  "packageId": "com.apextrade.pro",
+  "host": "saurabh704896-cyber.github.io",
+  "name": "ApexTrade Pro",
+  "launcherName": "ApexTrade",
+  "themeColor": "#0b0f19",
+  "navigationColor": "#0b0f19",
+  "backgroundColor": "#0b0f19",
+  "enableNotifications": true,
+  "startUrl": "/ApexTrade/",
+  "iconUrl": "https://saurabh704896-cyber.github.io/ApexTrade/assets/pwa-icon.svg",
+  "splashScreenFadeOutDuration": 300,
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://saurabh704896-cyber.github.io/ApexTrade/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  }
+}

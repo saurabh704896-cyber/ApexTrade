@@ -61,10 +61,12 @@
     <!-- ====== PWA & Mobile Native ====== -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ApexTrade">
+    <meta name="apple-mobile-web-app-title" content="ApexTrade Pro">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0b0f19">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="assets/logo.png">
+    <link rel="apple-touch-startup-image" href="assets/logo.png">
     <link rel="icon" type="image/png" href="assets/logo.png">
 
     <!-- ====== Performance: Preconnects (DNS + TLS early handshake) ====== -->
@@ -9795,6 +9797,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button onclick="ApexThemeEngine.setTheme('coinbase')" style="padding:14px; background:#0f172a; border:1px solid #3b82f6; border-radius:10px; color:#fff; font-weight:700; cursor:pointer; text-align:left;">
                         🔵 Coinbase Minimalist Clean
                     </button>
+                    <button onclick="ApexThemeEngine.setTheme('oled')" style="padding:14px; background:#000000; border:1px solid #10b981; border-radius:10px; color:#fff; font-weight:700; cursor:pointer; text-align:left;">
+                        🖤 OLED Pitch-Black (Battery Saver)
+                    </button>
                 </div>
             </div>
         </div>
@@ -9872,6 +9877,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if(theme === 'coinbase') {
                     document.documentElement.style.setProperty('--bg-color', '#0f172a');
                     document.documentElement.style.setProperty('--accent', '#3b82f6');
+                } else if(theme === 'oled') {
+                    document.documentElement.style.setProperty('--bg-color', '#000000');
+                    document.documentElement.style.setProperty('--sidebar-bg', '#000000');
+                    document.documentElement.style.setProperty('--panel-bg', '#050505');
+                    document.documentElement.style.setProperty('--accent', '#10b981');
                 } else {
                     document.documentElement.style.setProperty('--bg-color', '#0b0f19');
                     document.documentElement.style.setProperty('--accent', '#00d2ff');
@@ -9880,6 +9890,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.closeModal();
             }
         };
+
+        // Universal Native Share API
+        window.ApexNativeShare = function(title = 'ApexTrade Pro', text = 'Trade Crypto 100% Risk-Free on ApexTrade Pro!', url = 'https://saurabh704896-cyber.github.io/ApexTrade/') {
+            if (navigator.share) {
+                navigator.share({ title, text, url }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    if(typeof showToast === 'function') showToast("Link copied to clipboard! Share on WhatsApp/Telegram", "success");
+                });
+            }
+        };
+
+        // Touch Pull-to-Refresh Listener
+        let touchStartY = 0;
+        document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const touchEndY = e.changedTouches[0].clientY;
+            if (window.scrollY === 0 && touchEndY - touchStartY > 120) {
+                if(typeof showToast === 'function') showToast("🔄 Pull-to-Refresh: Syncing live data...", "info");
+                if(window.playHaptic) window.playHaptic('light');
+                if(typeof updateUI === 'function') updateUI();
+            }
+        }, { passive: true });
     </script>
 
     <!-- ========================================================================= -->
