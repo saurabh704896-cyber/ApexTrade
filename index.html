@@ -8720,6 +8720,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexSentiment.openModal()" title="Fear & Greed Radar"><i class="fas fa-compass" style="color:#fbbf24;"></i></button>
         <button onclick="ApexHeatmap.openModal()" title="Liquidation Heatmap"><i class="fas fa-fire" style="color:#ef4444;"></i></button>
         <button onclick="ApexStrategyBuilder.openModal()" title="No-Code Bot Builder"><i class="fas fa-cogs" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexRiskCalculator.openModal()" title="Risk & Position Size Calculator"><i class="fas fa-calculator" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexJournal.openModal()" title="Trading Journal & Equity Analytics"><i class="fas fa-book" style="color:#10b981;"></i></button>
+        <button onclick="ApexTapeReader.openModal()" title="Orderbook Tape Speed Reader"><i class="fas fa-tachometer-alt" style="color:#fbbf24;"></i></button>
+        <button onclick="ApexPatternQuiz.openModal()" title="Chart Pattern Quiz Arena"><i class="fas fa-graduation-cap" style="color:#8b5cf6;"></i></button>
+        <button onclick="ApexThemeEngine.openModal()" title="Exchange Theme Switcher"><i class="fas fa-palette" style="color:#00d2ff;"></i></button>
         <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
     </div>
 
@@ -9612,9 +9617,274 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal: function() { document.getElementById('apexBadgesModal').style.display = 'none'; }
         };
     </script>
+
+    <!-- ========================================================================= -->
+    <!-- 📐 1. POSITION SIZE & RISK CALCULATOR MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexRiskCalcModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:500px; border-color:rgba(0,210,255,0.4);">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-calculator" style="color:#00d2ff;"></i> Risk & Position Size Calculator</h3>
+                <button class="apex-modal-close" onclick="ApexRiskCalculator.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Account Balance ($)</label>
+                        <input type="number" id="riskBalance" value="10000" oninput="ApexRiskCalculator.calculate()" style="width:100%; padding:8px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Max Risk (% of Cash)</label>
+                        <input type="number" id="riskPercent" value="2" oninput="ApexRiskCalculator.calculate()" style="width:100%; padding:8px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px;">
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Entry Price</label>
+                        <input type="number" id="riskEntry" value="94000" oninput="ApexRiskCalculator.calculate()" style="width:100%; padding:8px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:6px;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Stop Loss</label>
+                        <input type="number" id="riskStop" value="92500" oninput="ApexRiskCalculator.calculate()" style="width:100%; padding:8px; background:#0b0f19; color:#ef4444; border:1px solid rgba(239,68,68,0.3); border-radius:6px;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Take Profit</label>
+                        <input type="number" id="riskTarget" value="98000" oninput="ApexRiskCalculator.calculate()" style="width:100%; padding:8px; background:#0b0f19; color:#10b981; border:1px solid rgba(16,185,129,0.3); border-radius:6px;">
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,210,255,0.08); padding:15px; border-radius:10px; border:1px solid rgba(0,210,255,0.2);">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; text-align:center;">
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Max $ Loss</div>
+                            <div id="riskLossVal" style="font-size:1.2rem; font-weight:800; color:#ef4444;">$200.00</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Position Size</div>
+                            <div id="riskSizeVal" style="font-size:1.2rem; font-weight:800; color:#00d2ff;">0.133 BTC</div>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; text-align:center; margin-top:10px; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Required Leverage</div>
+                            <div id="riskLeverageVal" style="font-size:1.1rem; font-weight:800; color:#fbbf24;">12.5X</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Risk:Reward Ratio</div>
+                            <div id="riskRRVal" style="font-size:1.1rem; font-weight:800; color:#10b981;">2.67 R:R</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 📊 2. AUTO TRADING JOURNAL & EQUITY ANALYTICS MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexJournalModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:540px;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-book" style="color:#10b981;"></i> Trading Journal & Equity Analytics</h3>
+                <button class="apex-modal-close" onclick="ApexJournal.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:#0b0f19; padding:15px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); margin-bottom:15px;">
+                    <div style="font-size:0.8rem; color:var(--text-muted,#9ca3af); font-weight:700; margin-bottom:8px;">Equity Growth Curve</div>
+                    <div style="height:80px; display:flex; align-items:flex-end; gap:6px;">
+                        <div style="flex:1; height:30%; background:#10b981; border-radius:3px;" title="Day 1: $10,000"></div>
+                        <div style="flex:1; height:45%; background:#10b981; border-radius:3px;" title="Day 2: $10,450"></div>
+                        <div style="flex:1; height:40%; background:#ef4444; border-radius:3px;" title="Day 3: $10,200"></div>
+                        <div style="flex:1; height:65%; background:#10b981; border-radius:3px;" title="Day 4: $11,100"></div>
+                        <div style="flex:1; height:85%; background:#10b981; border-radius:3px;" title="Day 5: $12,450"></div>
+                    </div>
+                </div>
+
+                <h5 style="color:#fff; margin-bottom:10px;">Recent Journal Entries</h5>
+                <div id="journalEntriesList" style="max-height:160px; overflow-y:auto; font-size:0.85rem;">
+                    <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong style="color:#fff;">BTC/USDT LONG 20X</strong>
+                            <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Notes: RSI Breakout & Support Bounce</div>
+                        </div>
+                        <span style="color:#10b981; font-weight:800;">+$450.00 (+45%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ⚡ 3. TAPE SPEED & WHALE BUYING PRESSURE METER MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexTapeReaderModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-tachometer-alt" style="color:#fbbf24;"></i> Orderbook Tape Speed Reader</h3>
+                <button class="apex-modal-close" onclick="ApexTapeReader.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:15px; border-radius:12px; margin-bottom:15px;">
+                    <div style="font-size:0.8rem; color:#fbbf24; font-weight:700; text-transform:uppercase;">Tape Speed (Trades / Sec)</div>
+                    <div id="tapeSpeedVal" style="font-size:2.8rem; font-weight:900; color:#fff; font-family:monospace;">42 TPS</div>
+                    <div id="tapeSpeedLabel" style="font-size:0.8rem; color:#10b981; font-weight:700;">⚡ HIGH VOLUME MOMENTUM</div>
+                </div>
+
+                <div style="text-align:left;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
+                        <span style="color:#10b981;">Whale Buy Volume: 68%</span>
+                        <span style="color:#ef4444;">Sell Volume: 32%</span>
+                    </div>
+                    <div style="height:12px; background:#ef4444; border-radius:6px; overflow:hidden;">
+                        <div id="tapeWhaleBar" style="width:68%; height:100%; background:#10b981;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🧠 4. CHART PATTERN QUIZ ARENA MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexQuizModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:480px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-graduation-cap" style="color:#8b5cf6;"></i> Chart Pattern Quiz Arena</h3>
+                <button class="apex-modal-close" onclick="ApexPatternQuiz.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:#0b0f19; padding:20px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); margin-bottom:15px;">
+                    <div style="font-size:2.5rem; margin-bottom:10px;">📈 📉</div>
+                    <h4 style="color:#fff; margin-bottom:8px;">Pattern Challenge: Double Bottom</h4>
+                    <p style="font-size:0.85rem; color:var(--text-muted,#9ca3af);">Price has tested $92,000 support twice and is breaking above the neckline. Which direction will the breakout go?</p>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button onclick="ApexPatternQuiz.submitAnswer('BULLISH')" style="flex:1; padding:12px; background:#10b981; color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                        🚀 BULLISH (UP)
+                    </button>
+                    <button onclick="ApexPatternQuiz.submitAnswer('BEARISH')" style="flex:1; padding:12px; background:#ef4444; color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                        🩸 BEARISH (DOWN)
+                    </button>
+                </div>
+
+                <div style="font-size:0.85rem; color:#fbbf24; font-weight:700;" id="quizXPScore">Total Quiz XP: 250 XP 🏆</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🎛️ 5. MULTI-EXCHANGE THEME SWITCHER MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexThemeModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:440px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-palette" style="color:#00d2ff;"></i> Exchange Theme Switcher</h3>
+                <button class="apex-modal-close" onclick="ApexThemeEngine.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <button onclick="ApexThemeEngine.setTheme('binance')" style="padding:14px; background:#0b0f19; border:2px solid #00d2ff; border-radius:10px; color:#fff; font-weight:700; cursor:pointer; text-align:left; display:flex; justify-content:space-between; align-items:center;">
+                        <span>🟡 Binance Pro Dark (Default)</span>
+                        <i class="fas fa-check" style="color:#00d2ff;"></i>
+                    </button>
+                    <button onclick="ApexThemeEngine.setTheme('bybit')" style="padding:14px; background:#050508; border:1px solid #8b5cf6; border-radius:10px; color:#fff; font-weight:700; cursor:pointer; text-align:left;">
+                        🟣 Bybit Cyber Neon
+                    </button>
+                    <button onclick="ApexThemeEngine.setTheme('coinbase')" style="padding:14px; background:#0f172a; border:1px solid #3b82f6; border-radius:10px; color:#fff; font-weight:700; cursor:pointer; text-align:left;">
+                        🔵 Coinbase Minimalist Clean
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Engines: Risk Calculator, Journal, Tape Reader, Pattern Quiz, Theme Engine -->
+    <script>
+        // 1. Position Size & Risk Calculator Engine
+        window.ApexRiskCalculator = {
+            openModal: function() {
+                document.getElementById('apexRiskCalcModal').style.display = 'flex';
+                this.calculate();
+            },
+            closeModal: function() {
+                document.getElementById('apexRiskCalcModal').style.display = 'none';
+            },
+            calculate: function() {
+                const bal = parseFloat(document.getElementById('riskBalance').value) || 10000;
+                const pct = parseFloat(document.getElementById('riskPercent').value) || 2;
+                const entry = parseFloat(document.getElementById('riskEntry').value) || 94000;
+                const stop = parseFloat(document.getElementById('riskStop').value) || 92500;
+                const target = parseFloat(document.getElementById('riskTarget').value) || 98000;
+
+                const maxLoss = bal * (pct / 100);
+                const priceDiff = Math.abs(entry - stop);
+                const posSize = priceDiff > 0 ? (maxLoss / priceDiff) : 0;
+                const reqLeverage = entry > 0 ? Math.ceil((posSize * entry) / bal) : 1;
+                const rewardDiff = Math.abs(target - entry);
+                const rr = priceDiff > 0 ? (rewardDiff / priceDiff).toFixed(2) : 0;
+
+                document.getElementById('riskLossVal').innerText = `$${maxLoss.toFixed(2)}`;
+                document.getElementById('riskSizeVal').innerText = `${posSize.toFixed(3)} BTC`;
+                document.getElementById('riskLeverageVal').innerText = `${reqLeverage}X`;
+                document.getElementById('riskRRVal').innerText = `${rr} R:R`;
+            }
+        };
+
+        // 2. Auto Trading Journal
+        window.ApexJournal = {
+            openModal: function() { document.getElementById('apexJournalModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexJournalModal').style.display = 'none'; }
+        };
+
+        // 3. Tape Reader
+        window.ApexTapeReader = {
+            openModal: function() { document.getElementById('apexTapeReaderModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexTapeReaderModal').style.display = 'none'; }
+        };
+
+        // 4. Pattern Quiz
+        window.ApexPatternQuiz = {
+            xp: 250,
+            openModal: function() { document.getElementById('apexQuizModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexQuizModal').style.display = 'none'; },
+            submitAnswer: function(choice) {
+                if(choice === 'BULLISH') {
+                    this.xp += 50;
+                    if(typeof showToast === 'function') showToast("🎉 Correct! Double Bottom is a Bullish Reversal Pattern! +50 XP", "success");
+                    if(window.ApexAudio) window.ApexAudio.playKaching();
+                } else {
+                    if(typeof showToast === 'function') showToast("❌ Incorrect. Double bottom is a bullish reversal pattern.", "error");
+                }
+                document.getElementById('quizXPScore').innerText = `Total Quiz XP: ${this.xp} XP 🏆`;
+            }
+        };
+
+        // 5. Exchange Theme Engine
+        window.ApexThemeEngine = {
+            openModal: function() { document.getElementById('apexThemeModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexThemeModal').style.display = 'none'; },
+            setTheme: function(theme) {
+                if(theme === 'bybit') {
+                    document.documentElement.style.setProperty('--bg-color', '#050508');
+                    document.documentElement.style.setProperty('--accent', '#8b5cf6');
+                } else if(theme === 'coinbase') {
+                    document.documentElement.style.setProperty('--bg-color', '#0f172a');
+                    document.documentElement.style.setProperty('--accent', '#3b82f6');
+                } else {
+                    document.documentElement.style.setProperty('--bg-color', '#0b0f19');
+                    document.documentElement.style.setProperty('--accent', '#00d2ff');
+                }
+                if(typeof showToast === 'function') showToast(`Theme switched to ${theme.toUpperCase()}!`, "info");
+                this.closeModal();
+            }
+        };
+    </script>
 </body>
 
 </html>
+
 
 
 
