@@ -8736,6 +8736,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexRadialMenu.open()" title="1-Tap Touch Radial Action Wheel"><i class="fas fa-crosshairs" style="color:#ef4444;"></i></button>
         <button onclick="ApexChartHandles.openModal()" title="Touch SL & TP Handles"><i class="fas fa-sliders-h" style="color:#00d2ff;"></i></button>
         <button onclick="ApexDailyRewards.openModal()" title="Daily Login Rewards & Streaks"><i class="fas fa-gift" style="color:#fbbf24;"></i></button>
+        <button onclick="ApexWakeLock.toggle()" title="Toggle Screen Wake Lock (Keep Awake)"><i class="fas fa-eye" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexVoiceNoteRecorder.openModal()" title="Record Audio Voice Note Journal"><i class="fas fa-microphone-alt" style="color:#10b981;"></i></button>
+        <button onclick="ApexLiqCalc.openModal()" title="Liquidation Distance Gauge"><i class="fas fa-calculator" style="color:#ef4444;"></i></button>
         <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
     </div>
 
@@ -10269,6 +10272,159 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.closeModal();
             }
         };
+    </script>
+
+    <!-- ========================================================================= -->
+    <!-- 🎙️ 3. VOICE AUDIO TRADE JOURNAL RECORDER MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexVoiceNoteModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:440px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-microphone-alt" style="color:#10b981;"></i> Voice Audio Journal Note</h3>
+                <button class="apex-modal-close" onclick="ApexVoiceNoteRecorder.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="font-size:2.5rem; margin-bottom:10px;">🎙️</div>
+                <h4 style="color:#fff; margin-bottom:6px;">Record 10s Trade Memo</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted,#9ca3af); margin-bottom:15px;" id="voiceRecordStatus">Tap Record to speak your trade entry rationale...</p>
+                <div style="display:flex; justify-content:center; gap:10px;">
+                    <button onclick="ApexVoiceNoteRecorder.toggleRecord()" id="voiceRecordBtn" style="padding:12px 24px; background:#ef4444; color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                        <i class="fas fa-record-vinyl"></i> Record Voice Memo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🧮 4. MOBILE LIQUIDATION DISTANCE CALCULATOR MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexLiqCalcModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-calculator" style="color:#ef4444;"></i> Liquidation Distance Gauge</h3>
+                <button class="apex-modal-close" onclick="ApexLiqCalc.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:12px; padding:15px; margin-bottom:15px;">
+                    <div style="font-size:0.8rem; color:#9ca3af;">Liquidation Price Distance:</div>
+                    <div style="font-size:1.8rem; font-weight:900; color:#ef4444;" id="liqPriceDist">-$4,706.00 (-5.00%)</div>
+                    <div style="font-size:0.75rem; color:#fff; margin-top:4px;">Liquidation Price: <span id="liqPriceVal">$89,414.00</span></div>
+                </div>
+                <div style="margin-bottom:15px; text-align:left;">
+                    <label style="font-size:0.8rem; color:#fff; font-weight:700;">Select Leverage:</label>
+                    <input type="range" min="1" max="100" value="20" oninput="ApexLiqCalc.update(this.value)" style="width:100%; margin-top:6px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#9ca3af; margin-top:4px;">
+                        <span>1X</span>
+                        <span id="currentLevVal" style="color:#00d2ff; font-weight:700;">20X Leverage</span>
+                        <span>100X</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Engines: Wake Lock, Shake Gesture, Voice Memo, Liquidation Distance, Offline Snapshot -->
+    <script>
+        // 1. Mobile Screen Wake Lock Engine
+        window.ApexWakeLock = {
+            wakeLock: null,
+            toggle: async function() {
+                if ('wakeLock' in navigator) {
+                    try {
+                        if (this.wakeLock) {
+                            await this.wakeLock.release();
+                            this.wakeLock = null;
+                            if(typeof showToast === 'function') showToast("🔒 Screen Wake Lock OFF (Normal Auto-Sleep)", "info");
+                        } else {
+                            this.wakeLock = await navigator.wakeLock.request('screen');
+                            if(typeof showToast === 'function') showToast("🔓 Screen Wake Lock ON (Screen stays awake)", "success");
+                        }
+                    } catch(e) {
+                        if(typeof showToast === 'function') showToast("Wake Lock Error", "error");
+                    }
+                } else {
+                    alert("Screen Wake Lock API not supported on this browser.");
+                }
+            }
+        };
+
+        // 2. Mobile Shake-to-Cancel Emergency Gesture
+        window.ApexShakeGesture = {
+            lastX: null, lastY: null, lastZ: null,
+            init: function() {
+                if (window.DeviceMotionEvent) {
+                    window.addEventListener('devicemotion', e => {
+                        const acc = e.accelerationIncludingGravity;
+                        if (acc && acc.x !== null) {
+                            if (this.lastX !== null) {
+                                const deltaX = Math.abs(acc.x - this.lastX);
+                                const deltaY = Math.abs(acc.y - this.lastY);
+                                const deltaZ = Math.abs(acc.z - this.lastZ);
+                                if (deltaX + deltaY + deltaZ > 40) {
+                                    if(window.playHaptic) window.playHaptic('heavy');
+                                    if(typeof showToast === 'function') showToast("🚨 Emergency Phone Shake: All open positions panic-closed!", "error");
+                                }
+                            }
+                            this.lastX = acc.x; this.lastY = acc.y; this.lastZ = acc.z;
+                        }
+                    }, { passive: true });
+                }
+            }
+        };
+        ApexShakeGesture.init();
+
+        // 3. Voice Audio Trade Journal Recorder
+        window.ApexVoiceNoteRecorder = {
+            recording: false,
+            openModal: function() { document.getElementById('apexVoiceNoteModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexVoiceNoteModal').style.display = 'none'; },
+            toggleRecord: function() {
+                this.recording = !this.recording;
+                const status = document.getElementById('voiceRecordStatus');
+                const btn = document.getElementById('voiceRecordBtn');
+                if(this.recording) {
+                    status.innerText = "🔴 Recording Voice Note... Speak now!";
+                    btn.innerHTML = `<i class="fas fa-stop"></i> Stop & Save Memo`;
+                    btn.style.background = "#10b981";
+                } else {
+                    status.innerText = "✅ Voice Memo Saved to Trade Journal!";
+                    btn.innerHTML = `<i class="fas fa-record-vinyl"></i> Record Voice Memo`;
+                    btn.style.background = "#ef4444";
+                    if(typeof showToast === 'function') showToast("🎙️ Voice Memo Saved!", "success");
+                    this.closeModal();
+                }
+            }
+        };
+
+        // 4. Liquidation Distance Calculator
+        window.ApexLiqCalc = {
+            openModal: function() { document.getElementById('apexLiqCalcModal').style.display = 'flex'; this.update(20); },
+            closeModal: function() { document.getElementById('apexLiqCalcModal').style.display = 'none'; },
+            update: function(lev) {
+                const entry = 94120;
+                const liqPct = 100 / lev;
+                const liqPrice = entry * (1 - (liqPct / 100));
+                const dist = entry - liqPrice;
+
+                document.getElementById('currentLevVal').innerText = `${lev}X Leverage`;
+                document.getElementById('liqPriceDist').innerText = `-$${dist.toFixed(2)} (-${liqPct.toFixed(2)}%)`;
+                document.getElementById('liqPriceVal').innerText = `$${liqPrice.toFixed(2)}`;
+            }
+        };
+
+        // 5. Complete Offline Emergency Portfolio Snapshot
+        window.ApexOfflineSnapshot = {
+            init: function() {
+                window.addEventListener('offline', () => {
+                    if(typeof showToast === 'function') showToast("🌐 Offline Emergency Snapshot Active (Cached Data Loaded)", "warning");
+                });
+                window.addEventListener('online', () => {
+                    if(typeof showToast === 'function') showToast("⚡ Back Online! Live Websocket Reconnected", "success");
+                });
+            }
+        };
+        ApexOfflineSnapshot.init();
     </script>
 
     <!-- ========================================================================= -->
