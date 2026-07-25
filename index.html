@@ -8731,6 +8731,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexHapticCustomizer.openModal()" title="Haptic Vibration Selector"><i class="fas fa-vibrate" style="color:#fbbf24;"></i></button>
         <button onclick="ApexMiniChart.toggle()" title="Toggle Floating Mini Chart"><i class="fas fa-window-restore" style="color:#00d2ff;"></i></button>
         <button onclick="ApexAppLock.openModal()" title="Security App Lock"><i class="fas fa-lock" style="color:#ef4444;"></i></button>
+        <button onclick="ApexWidgetCreator.openModal()" title="Mobile Home Screen Widget Creator"><i class="fas fa-mobile-alt" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexVoiceReader.readPrice()" title="Hands-Free Price Voice Reader"><i class="fas fa-volume-up" style="color:#10b981;"></i></button>
+        <button onclick="ApexRadialMenu.open()" title="1-Tap Touch Radial Action Wheel"><i class="fas fa-crosshairs" style="color:#ef4444;"></i></button>
+        <button onclick="ApexChartHandles.openModal()" title="Touch SL & TP Handles"><i class="fas fa-sliders-h" style="color:#00d2ff;"></i></button>
+        <button onclick="ApexDailyRewards.openModal()" title="Daily Login Rewards & Streaks"><i class="fas fa-gift" style="color:#fbbf24;"></i></button>
         <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
     </div>
 
@@ -10114,6 +10119,155 @@ document.addEventListener('DOMContentLoaded', () => {
         window.ApexAppLock = {
             openModal: function() { document.getElementById('apexAppLockModal').style.display = 'flex'; },
             closeModal: function() { document.getElementById('apexAppLockModal').style.display = 'none'; }
+        };
+    </script>
+
+    <!-- ========================================================================= -->
+    <!-- 📱 1. MOBILE HOME SCREEN WIDGET CREATOR MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexWidgetModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:440px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-mobile-alt" style="color:#00d2ff;"></i> Home Screen Widget Simulator</h3>
+                <button class="apex-modal-close" onclick="ApexWidgetCreator.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b); border:1px solid rgba(0,210,255,0.3); border-radius:18px; padding:20px; text-align:left; box-shadow:0 15px 35px rgba(0,0,0,0.6); margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <span style="font-size:0.8rem; font-weight:800; color:#00d2ff;"><i class="fas fa-bolt"></i> ApexTrade Widget</span>
+                        <span style="font-size:0.7rem; color:#10b981; font-weight:700;">LIVE</span>
+                    </div>
+                    <div style="font-size:1.8rem; font-weight:900; color:#fff;">$94,120.00</div>
+                    <div style="font-size:0.85rem; color:#10b981; font-weight:700; margin-bottom:10px;">+4.25% BTC/USDT 🚀</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted,#9ca3af);">Cash Balance: $10,450.00</div>
+                </div>
+                <button onclick="ApexWidgetCreator.installWidget()" style="width:100%; padding:12px; background:linear-gradient(135deg,#00d2ff,#3a7bd5); color:#fff; font-weight:800; border:none; border-radius:8px; cursor:pointer;">
+                    <i class="fas fa-download"></i> Add Simulated Widget to Home Screen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🎯 3. TOUCH RADIAL ACTION WHEEL -->
+    <!-- ========================================================================= -->
+    <div id="apexRadialMenu" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:999998; display:none;">
+        <div style="position:relative; width:200px; height:200px;">
+            <button onclick="ApexRadialMenu.select('BUY 5X')" style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:60px; height:60px; background:#10b981; color:#fff; border:none; border-radius:50%; font-weight:800; font-size:0.75rem; cursor:pointer; box-shadow:0 0 20px rgba(16,185,129,0.5);">BUY 5X</button>
+            <button onclick="ApexRadialMenu.select('BUY 20X')" style="position:absolute; top:50%; right:0; transform:translateY(-50%); width:60px; height:60px; background:#10b981; color:#fff; border:none; border-radius:50%; font-weight:800; font-size:0.75rem; cursor:pointer; box-shadow:0 0 20px rgba(16,185,129,0.5);">BUY 20X</button>
+            <button onclick="ApexRadialMenu.select('SHORT 5X')" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:60px; height:60px; background:#ef4444; color:#fff; border:none; border-radius:50%; font-weight:800; font-size:0.75rem; cursor:pointer; box-shadow:0 0 20px rgba(239,68,68,0.5);">SELL 5X</button>
+            <button onclick="ApexRadialMenu.select('SHORT 20X')" style="position:absolute; top:50%; left:0; transform:translateY(-50%); width:60px; height:60px; background:#ef4444; color:#fff; border:none; border-radius:50%; font-weight:800; font-size:0.75rem; cursor:pointer; box-shadow:0 0 20px rgba(239,68,68,0.5);">SELL 20X</button>
+            <button onclick="ApexRadialMenu.close()" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:45px; height:45px; background:#111827; color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:50%; font-weight:900; font-size:1.1rem; cursor:pointer;">&times;</button>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 📈 4. INTERACTIVE DRAG SL & TP CHART HANDLES MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexChartHandlesModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:480px;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-sliders-h" style="color:#00d2ff;"></i> Touch Chart SL & TP Handles</h3>
+                <button class="apex-modal-close" onclick="ApexChartHandles.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.8rem; color:#10b981; font-weight:700;">Take Profit Target: <span id="tpHandleVal">$98,000</span> (+$400 Profit)</label>
+                    <input type="range" min="94500" max="105000" value="98000" oninput="ApexChartHandles.updateTP(this.value)" style="width:100%; margin-top:6px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.8rem; color:#ef4444; font-weight:700;">Stop Loss Risk: <span id="slHandleVal">$92,500</span> (-$150 Loss)</label>
+                    <input type="range" min="85000" max="93800" value="92500" oninput="ApexChartHandles.updateSL(this.value)" style="width:100%; margin-top:6px;">
+                </div>
+                <button onclick="ApexChartHandles.saveHandles()" style="width:100%; padding:10px; background:#10b981; color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">
+                    Save Targets
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🎁 5. DAILY LOGIN STREAKS & MYSTERY CRATE REWARDS MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexRewardsModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px; text-align:center;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-gift" style="color:#fbbf24;"></i> Daily Login Streaks & Rewards</h3>
+                <button class="apex-modal-close" onclick="ApexDailyRewards.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="font-size:2.5rem; margin-bottom:10px;">🎁 🎁 🎁</div>
+                <h4 style="color:#fff; margin-bottom:6px;">Day 5 Login Bonus Active!</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted,#9ca3af); margin-bottom:15px;">Claim your daily virtual trading cash bonus</p>
+                <button onclick="ApexDailyRewards.claim()" style="width:100%; padding:12px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#000; font-weight:900; border:none; border-radius:8px; cursor:pointer; font-size:1rem;">
+                    <i class="fas fa-coins"></i> Claim +$500 Virtual Cash!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Engines: Widget Creator, Voice Reader (TTS), Radial Menu, SL/TP Handles, Daily Rewards -->
+    <script>
+        // 1. Widget Creator
+        window.ApexWidgetCreator = {
+            openModal: function() { document.getElementById('apexWidgetModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexWidgetModal').style.display = 'none'; },
+            installWidget: function() {
+                if(typeof showToast === 'function') showToast("📱 Simulated Home Screen Widget Added!", "success");
+                if(window.ApexAudio) window.ApexAudio.playKaching();
+                this.closeModal();
+            }
+        };
+
+        // 2. TTS Voice Reader
+        window.ApexVoiceReader = {
+            readPrice: function() {
+                if('speechSynthesis' in window) {
+                    const msg = new SpeechSynthesisUtterance("Bitcoin price is ninety four thousand one hundred twenty dollars.");
+                    window.speechSynthesis.speak(msg);
+                    if(typeof showToast === 'function') showToast("📢 Audio Price Voice Reader Active!", "info");
+                } else {
+                    alert("Text-to-Speech API not supported on this browser.");
+                }
+            }
+        };
+
+        // 3. Touch Radial Wheel
+        window.ApexRadialMenu = {
+            open: function() { document.getElementById('apexRadialMenu').style.display = 'block'; },
+            close: function() { document.getElementById('apexRadialMenu').style.display = 'none'; },
+            select: function(action) {
+                if(typeof showToast === 'function') showToast(`⚡ Radial Action: ${action} Executed!`, "success");
+                if(window.ApexAudio) window.ApexAudio.playKaching();
+                this.close();
+            }
+        };
+
+        // 4. SL & TP Handles
+        window.ApexChartHandles = {
+            openModal: function() { document.getElementById('apexChartHandlesModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexChartHandlesModal').style.display = 'none'; },
+            updateTP: function(v) { document.getElementById('tpHandleVal').innerText = `$${parseFloat(v).toLocaleString()}`; },
+            updateSL: function(v) { document.getElementById('slHandleVal').innerText = `$${parseFloat(v).toLocaleString()}`; },
+            saveHandles: function() {
+                if(typeof showToast === 'function') showToast("Chart SL & TP targets saved!", "success");
+                this.closeModal();
+            }
+        };
+
+        // 5. Daily Rewards
+        window.ApexDailyRewards = {
+            openModal: function() { document.getElementById('apexRewardsModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexRewardsModal').style.display = 'none'; },
+            claim: function() {
+                let cash = parseFloat(localStorage.getItem('apex_cash') || 10000);
+                cash += 500;
+                localStorage.setItem('apex_cash', cash);
+                if(typeof updateUI === 'function') updateUI();
+                if(typeof showToast === 'function') showToast("🎁 Daily Reward Claimed! +$500 Cash Added!", "success");
+                if(window.ApexAudio) window.ApexAudio.playKaching();
+                this.closeModal();
+            }
         };
     </script>
 
