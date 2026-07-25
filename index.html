@@ -9913,6 +9913,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(typeof updateUI === 'function') updateUI();
             }
         }, { passive: true });
+
+        // 1. Smart Battery Guard (Auto OLED Battery Saver)
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(battery => {
+                function checkBattery() {
+                    if (battery.level <= 0.15 && !battery.charging) {
+                        if (window.ApexThemeEngine) window.ApexThemeEngine.setTheme('oled');
+                        if (typeof showToast === 'function') showToast("🔋 Low Battery (<15%): Switched to OLED Battery Saver Mode", "warning");
+                    }
+                }
+                checkBattery();
+                battery.addEventListener('levelchange', checkBattery);
+            }).catch(() => {});
+        }
+
+        // 2. Mobile Network Quality Sensor
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (conn) {
+            function checkNetwork() {
+                if (conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g' || conn.saveData) {
+                    if (typeof showToast === 'function') showToast("📡 Slow Mobile Signal: Compression Mode Active", "warning");
+                }
+            }
+            checkNetwork();
+            conn.addEventListener('change', checkNetwork);
+        }
+
+        // 3. Hardware Gyroscope 3D Parallax Tilt Effect
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', e => {
+                if (e.beta !== null && e.gamma !== null) {
+                    const tiltX = Math.min(Math.max((e.gamma / 45) * 6, -6), 6);
+                    const tiltY = Math.min(Math.max(((e.beta - 45) / 45) * 6, -6), 6);
+                    const dock = document.querySelector('.apex-floating-dock');
+                    if (dock) {
+                        dock.style.transform = `perspective(500px) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
+                    }
+                }
+            }, { passive: true });
+        }
+
+        // 4. OS System Theme Auto-Sync Engine
+        if (window.matchMedia) {
+            const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            darkModeQuery.addEventListener('change', e => {
+                if (e.matches && window.ApexThemeEngine) {
+                    window.ApexThemeEngine.setTheme('binance');
+                }
+            });
+        }
     </script>
 
     <!-- ========================================================================= -->

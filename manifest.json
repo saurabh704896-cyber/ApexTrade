@@ -30,16 +30,28 @@
   ],
   "shortcuts": [
     {
-      "name": "Live Chart",
-      "short_name": "Chart",
-      "description": "View real-time TradingView charts",
-      "url": "./index.html#chart"
+      "name": "⚡ Quick Trade",
+      "short_name": "Trade",
+      "description": "Execute instant crypto paper trades",
+      "url": "./index.html#trade"
     },
     {
-      "name": "Portfolio",
+      "name": "🤖 Ask AI Copilot",
+      "short_name": "AI",
+      "description": "Get real-time AI trade risk analysis",
+      "url": "./index.html#ai"
+    },
+    {
+      "name": "💼 Portfolio",
       "short_name": "Portfolio",
-      "description": "Check current trading positions and cash",
+      "description": "Check current trading positions and cash balance",
       "url": "./index.html#portfolio"
+    },
+    {
+      "name": "🏆 Trophies & Badges",
+      "short_name": "Trophies",
+      "description": "View unlocked trading achievements",
+      "url": "./index.html#badges"
     }
   ]
 }
