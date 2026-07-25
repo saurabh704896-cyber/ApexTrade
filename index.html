@@ -95,27 +95,27 @@
     
     <style>
         :root {
-            /* Dark Mode (Default) */
-            --bg-color: #0b0f19;
-            --sidebar-bg: rgba(11, 15, 25, 0.85);
-            --panel-bg: rgba(17, 24, 39, 0.65);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(37, 99, 235, 0.3);
+            /* Dark Mode (Default) - Glassmorphism 2.0 & World-Class Cyber Polish */
+            --bg-color: #080c14;
+            --sidebar-bg: rgba(11, 15, 25, 0.92);
+            --panel-bg: rgba(15, 23, 42, 0.75);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --border-glow: rgba(0, 210, 255, 0.35);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --color-up: #10b981;
             --color-down: #ef4444;
-            --accent: #3b82f6;
+            --accent: #00d2ff;
             --gold: #fbbf24;
         }
 
         [data-theme="light"] {
             /* Light Mode */
             --bg-color: #f1f5f9;
-            --sidebar-bg: rgba(255, 255, 255, 0.9);
-            --panel-bg: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(0, 0, 0, 0.1);
-            --border-glow: rgba(37, 99, 235, 0.1);
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --border-glow: rgba(37, 99, 235, 0.2);
             --text-main: #0f172a;
             --text-muted: #475569;
             --color-up: #059669;
@@ -123,23 +123,37 @@
             --accent: #2563eb;
         }
 
-        /* Premium Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Glassmorphism 2.0 & World-Class Micro-Animations */
+        .glass-panel, .apex-modal-content, .card {
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
+        .glass-panel:hover, .apex-modal-content:hover {
+            border-color: rgba(0, 210, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 210, 255, 0.18);
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 210, 255, 0.3);
-            border-radius: 10px;
+        /* Apple iOS & Android Safe Area Inset Protection */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .mobile-bottom-nav {
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            }
+            .apex-floating-dock {
+                bottom: calc(85px + env(safe-area-inset-bottom));
+            }
+            #apexFloatingToolsFab {
+                bottom: calc(75px + env(safe-area-inset-bottom));
+            }
+            .topbar {
+                padding-top: env(safe-area-inset-top);
+            }
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
+        /* 44px Minimum Touch Targets for Mobile Ergonomics */
+        button, a, input[type="button"], .mobile-nav-item {
+            touch-action: manipulation;
         }
 
         /* Smooth Animations & Typography Enhancements */
