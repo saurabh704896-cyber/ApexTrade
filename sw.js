@@ -1,4 +1,4 @@
-const CACHE_NAME = 'apextrade-pro-crossplatform-v2';
+const CACHE_NAME = 'apextrade-pro-v2026-v3';
 const urlsToCache = [
   './index.html',
   './manifest.json'

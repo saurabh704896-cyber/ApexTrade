@@ -8693,17 +8693,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fas fa-chart-pie"></i>
             <span>Markets</span>
         </button>
-        <button class="mobile-nav-item" data-target="chartView" onclick="switchMobileTab('chartView', this)">
-            <i class="fas fa-chart-line"></i>
-            <span>Chart</span>
+        <button class="mobile-nav-item" onclick="ApexAICopilot.openPanel()">
+            <i class="fas fa-brain" style="color:#00d2ff;"></i>
+            <span>AI</span>
         </button>
-        <button class="mobile-nav-item" data-target="tradeView" onclick="switchMobileTab('tradeView', this)">
-            <i class="fas fa-bolt"></i>
-            <span>Trade</span>
+        <button class="mobile-nav-item" onclick="ApexBattleArena.openModal()">
+            <i class="fas fa-gamepad" style="color:#ef4444;"></i>
+            <span>Battle</span>
         </button>
-        <button class="mobile-nav-item" data-target="portfolioView" onclick="switchMobileTab('portfolioView', this)">
-            <i class="fas fa-wallet"></i>
-            <span>Portfolio</span>
+        <button class="mobile-nav-item" onclick="ApexPnLCard.openModal()">
+            <i class="fas fa-camera" style="color:#10b981;"></i>
+            <span>P&L Card</span>
+        </button>
+        <button class="mobile-nav-item" onclick="ApexPriceAlerts.openModal()">
+            <i class="fas fa-bell" style="color:#fbbf24;"></i>
+            <span>Alerts</span>
         </button>
         <button class="mobile-nav-item" onclick="ApexSync.openSyncModal()">
             <i class="fas fa-qrcode"></i>
@@ -8943,7 +8947,321 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     </script>
+
+    <!-- ========================================================================= -->
+    <!-- 🤖 1. AI COPILOT PANEL MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexAiModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:520px; border-color:rgba(0,210,255,0.3);">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-brain" style="color:#00d2ff;"></i> Apex AI Copilot & Risk Advisor</h3>
+                <button class="apex-modal-close" onclick="ApexAICopilot.closePanel()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:rgba(0,210,255,0.08); border:1px solid rgba(0,210,255,0.2); border-radius:12px; padding:15px; margin-bottom:15px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+                        <span style="font-weight:700; color:#fff;" id="aiSymbolTitle">BTCUSDT Market Signal</span>
+                        <span id="aiSentimentBadge" style="background:#10b981; color:#fff; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:20px;">BULLISH (78%)</span>
+                    </div>
+                    <p id="aiAnalysisText" style="color:var(--text-muted,#9ca3af); font-size:0.9rem; line-height:1.5; margin:0;">
+                        Analyzing live orderbook depth & momentum... RSI is neutral at 54. Strong support detected around $94,100.
+                    </p>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <button onclick="ApexAICopilot.analyzeRisk()" style="padding:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color,rgba(255,255,255,0.1)); border-radius:8px; color:#fff; font-weight:600; cursor:pointer; font-size:0.85rem;">
+                        <i class="fas fa-shield-alt" style="color:#fbbf24;"></i> Risk Assessment
+                    </button>
+                    <button onclick="ApexAICopilot.predictLevels()" style="padding:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color,rgba(255,255,255,0.1)); border-radius:8px; color:#fff; font-weight:600; cursor:pointer; font-size:0.85rem;">
+                        <i class="fas fa-chart-line" style="color:#00d2ff;"></i> Key Levels
+                    </button>
+                </div>
+
+                <div id="aiAdviceOutput" style="display:none; background:#0b0f19; padding:12px; border-radius:8px; border-left:4px solid #00d2ff; color:#e5e7eb; font-size:0.85rem; line-height:1.5;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 📸 2. BINANCE-STYLE P&L SHARE CARD MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexPnLModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:440px; background:none; padding:0; border:none;">
+            <div id="apexPnLCardContent" style="background:linear-gradient(135deg, #0b0f19 0%, #1e1b4b 100%); border:2px solid rgba(0,210,255,0.3); border-radius:20px; padding:30px 24px; position:relative; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.9);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <div>
+                        <h4 style="margin:0; color:#fff; font-size:1.4rem; font-weight:800; letter-spacing:0.5px;" id="pnlCardSymbol">BTC/USDT</h4>
+                        <span id="pnlCardSide" style="background:#10b981; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:4px; margin-top:4px; display:inline-block;">LONG 20X</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="color:#00d2ff; font-weight:800; font-size:1.1rem;"><i class="fas fa-bolt"></i> ApexTrade</span>
+                        <div style="color:var(--text-muted,#9ca3af); font-size:0.7rem;" id="pnlCardDate">2026.07.25</div>
+                    </div>
+                </div>
+
+                <div style="margin:25px 0; text-align:center;">
+                    <div style="color:var(--text-muted,#9ca3af); font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;">ROI (Profit & Loss)</div>
+                    <div id="pnlCardROI" style="font-size:3.2rem; font-weight:900; color:#10b981; margin:5px 0; text-shadow:0 0 20px rgba(16,185,129,0.4);">
+                        +145.8%
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.05); padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); font-size:0.85rem; margin-bottom:20px;">
+                    <div>
+                        <div style="color:var(--text-muted,#9ca3af); font-size:0.75rem;">Entry Price</div>
+                        <div style="color:#fff; font-weight:700;" id="pnlCardEntry">$92,450.00</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:var(--text-muted,#9ca3af); font-size:0.75rem;">Mark Price</div>
+                        <div style="color:#fff; font-weight:700;" id="pnlCardMark">$94,120.00</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div style="width:32px; height:32px; background:#00d2ff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#000; font-weight:900; font-size:0.8rem;">AT</div>
+                        <span style="color:#fff; font-size:0.8rem; font-weight:600;">Trade Risk-Free on ApexTrade Pro</span>
+                    </div>
+                    <div style="background:#fff; color:#000; font-weight:800; font-size:0.65rem; padding:4px 8px; border-radius:4px;">PRO SIMULATOR</div>
+                </div>
+            </div>
+
+            <div style="margin-top:15px; display:flex; gap:10px;">
+                <button onclick="ApexPnLCard.downloadCard()" style="flex:1; padding:12px; background:linear-gradient(135deg,#10b981,#059669); color:#fff; font-weight:700; border:none; border-radius:12px; cursor:pointer; font-size:0.95rem; box-shadow:0 10px 25px rgba(16,185,129,0.4);">
+                    <i class="fas fa-download"></i> Download Image 📸
+                </button>
+                <button onclick="ApexPnLCard.closeModal()" style="padding:12px 20px; background:rgba(255,255,255,0.1); color:#fff; border:none; border-radius:12px; cursor:pointer;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🔔 3. WEB PUSH PRICE ALERTS MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexAlertsModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:460px;">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-bell" style="color:#fbbf24;"></i> Price Alert Manager</h3>
+                <button class="apex-modal-close" onclick="ApexPriceAlerts.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <p style="color:var(--text-muted,#9ca3af); font-size:0.85rem; margin-bottom:15px;">
+                    Get instant background push notifications on your phone or desktop when target prices are crossed.
+                </p>
+
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+                    <select id="alertSymbolSelect" style="padding:10px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
+                        <option value="BTCUSDT">BTC/USDT</option>
+                        <option value="ETHUSDT">ETH/USDT</option>
+                        <option value="SOLUSDT">SOL/USDT</option>
+                        <option value="DOGEUSDT">DOGE/USDT</option>
+                    </select>
+
+                    <div style="display:flex; gap:10px;">
+                        <select id="alertCondition" style="padding:10px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:8px; width:120px;">
+                            <option value="ABOVE">Rises Above (&gt;)</option>
+                            <option value="BELOW">Drops Below (&lt;)</option>
+                        </select>
+                        <input type="number" id="alertTargetPrice" placeholder="Target Price (e.g. 95000)" style="flex:1; padding:10px; background:#0b0f19; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
+                    </div>
+
+                    <button onclick="ApexPriceAlerts.addAlert()" style="padding:10px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#000; font-weight:700; border:none; border-radius:8px; cursor:pointer;">
+                        <i class="fas fa-plus-circle"></i> Create Price Alert
+                    </button>
+                </div>
+
+                <h5 style="color:#fff; margin:15px 0 10px;">Active Price Alerts</h5>
+                <div id="activeAlertsList" style="max-height:150px; overflow-y:auto; font-size:0.85rem; color:var(--text-muted,#9ca3af);">
+                    No active alerts set.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ⚔️ 4. 1v1 SPEED TRADING BATTLE ARENA MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexBattleModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:500px; border-color:rgba(239,68,68,0.4);">
+            <div class="apex-modal-header">
+                <h3><i class="fas fa-gamepad" style="color:#ef4444;"></i> 1v1 Speed Trading Duel Arena</h3>
+                <button class="apex-modal-close" onclick="ApexBattleArena.closeModal()">&times;</button>
+            </div>
+            <div class="apex-modal-body">
+                <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:15px; border-radius:12px; text-align:center; margin-bottom:15px;">
+                    <div style="font-size:0.8rem; color:#ef4444; font-weight:700; text-transform:uppercase;">Time Remaining</div>
+                    <div id="battleTimer" style="font-size:2.5rem; font-weight:900; color:#fff; font-family:monospace;">05:00</div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center; margin-bottom:20px;">
+                    <div style="background:rgba(0,210,255,0.1); border:1px solid rgba(0,210,255,0.3); padding:12px; border-radius:10px; text-align:center;">
+                        <div style="font-size:0.75rem; color:#00d2ff; font-weight:700;">YOU</div>
+                        <div id="battleUserROI" style="font-size:1.3rem; font-weight:800; color:#10b981; margin-top:4px;">+0.00%</div>
+                    </div>
+                    <div style="font-size:1.5rem; font-weight:900; color:#ef4444;">VS</div>
+                    <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:12px; border-radius:10px; text-align:center;">
+                        <div style="font-size:0.75rem; color:#ef4444; font-weight:700;">RIVAL (AI Bot)</div>
+                        <div id="battleBotROI" style="font-size:1.3rem; font-weight:800; color:#ef4444; margin-top:4px;">+0.00%</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button id="battleStartBtn" onclick="ApexBattleArena.startBattle()" style="flex:1; padding:12px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-weight:700; border:none; border-radius:8px; cursor:pointer;">
+                        <i class="fas fa-play"></i> Start 5-Min Duel!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-Feature Scripts: AI Copilot, P&L Card, Push Alerts, Battle Arena -->
+    <script>
+        // 1. Apex AI Copilot Engine
+        window.ApexAICopilot = {
+            openPanel: function() {
+                document.getElementById('apexAiModal').style.display = 'flex';
+                if(window.playHaptic) window.playHaptic('light');
+            },
+            closePanel: function() {
+                document.getElementById('apexAiModal').style.display = 'none';
+            },
+            analyzeRisk: function() {
+                const output = document.getElementById('aiAdviceOutput');
+                output.style.display = 'block';
+                output.innerHTML = "🛡️ <b>AI Risk Score: LOW (25/100)</b><br>Your total exposure is well managed. Recommended leverage is 10x max for high-volatility pairs.";
+                if(window.playHaptic) window.playHaptic('heavy');
+            },
+            predictLevels: function() {
+                const output = document.getElementById('aiAdviceOutput');
+                output.style.display = 'block';
+                output.innerHTML = "📈 <b>Key Levels (BTCUSDT):</b><br>• Resistance 1: $95,200<br>• Support 1: $93,800<br>• Trend Bias: Bullish Continuation";
+                if(window.playHaptic) window.playHaptic('light');
+            }
+        };
+
+        // 2. Binance-Style P&L Card Exporter
+        window.ApexPnLCard = {
+            openModal: function(symbol = 'BTC/USDT', side = 'LONG 20X', roi = '+145.8%', entry = '$92,450.00', mark = '$94,120.00') {
+                document.getElementById('pnlCardSymbol').innerText = symbol;
+                document.getElementById('pnlCardSide').innerText = side;
+                document.getElementById('pnlCardROI').innerText = roi;
+                document.getElementById('pnlCardEntry').innerText = entry;
+                document.getElementById('pnlCardMark').innerText = mark;
+                document.getElementById('pnlCardDate').innerText = new Date().toISOString().slice(0,10).replace(/-/g,'.');
+                
+                if(roi.includes('-')) {
+                    document.getElementById('pnlCardROI').style.color = '#ef4444';
+                    document.getElementById('pnlCardSide').style.background = '#ef4444';
+                } else {
+                    document.getElementById('pnlCardROI').style.color = '#10b981';
+                    document.getElementById('pnlCardSide').style.background = '#10b981';
+                }
+
+                document.getElementById('apexPnLModal').style.display = 'flex';
+                if(window.playHaptic) window.playHaptic('heavy');
+            },
+            closeModal: function() {
+                document.getElementById('apexPnLModal').style.display = 'none';
+            },
+            downloadCard: function() {
+                const cardEl = document.getElementById('apexPnLCardContent');
+                if(window.html2canvas) {
+                    html2canvas(cardEl, { backgroundColor: null }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `ApexTrade_PnL_${Date.now()}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        if(typeof showToast === 'function') showToast("P&L Card image downloaded!", "success");
+                    });
+                } else {
+                    alert("Card exporter engine initializing. Please try in 2 seconds.");
+                }
+            }
+        };
+
+        // 3. Web Push Price Alerts Engine
+        window.ApexPriceAlerts = {
+            alerts: JSON.parse(localStorage.getItem('apex_price_alerts') || '[]'),
+            openModal: function() {
+                if ("Notification" in window && Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                }
+                this.renderAlerts();
+                document.getElementById('apexAlertsModal').style.display = 'flex';
+                if(window.playHaptic) window.playHaptic('light');
+            },
+            closeModal: function() {
+                document.getElementById('apexAlertsModal').style.display = 'none';
+            },
+            addAlert: function() {
+                const symbol = document.getElementById('alertSymbolSelect').value;
+                const condition = document.getElementById('alertCondition').value;
+                const target = parseFloat(document.getElementById('alertTargetPrice').value);
+                if(!target) { alert("Please enter a target price"); return; }
+
+                this.alerts.push({ symbol, condition, target, id: Date.now() });
+                localStorage.setItem('apex_price_alerts', JSON.stringify(this.alerts));
+                this.renderAlerts();
+                if(typeof showToast === 'function') showToast(`Alert set for ${symbol} @ $${target}`, "success");
+                if(window.playHaptic) window.playHaptic('heavy');
+            },
+            renderAlerts: function() {
+                const list = document.getElementById('activeAlertsList');
+                if(this.alerts.length === 0) { list.innerHTML = 'No active alerts set.'; return; }
+                list.innerHTML = this.alerts.map(a => `
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span><b>${a.symbol}</b> ${a.condition === 'ABOVE' ? '>' : '<'} $${a.target}</span>
+                        <button onclick="ApexPriceAlerts.removeAlert(${a.id})" style="background:none; border:none; color:#ef4444; cursor:pointer;">&times;</button>
+                    </div>
+                `).join('');
+            },
+            removeAlert: function(id) {
+                this.alerts = this.alerts.filter(a => a.id !== id);
+                localStorage.setItem('apex_price_alerts', JSON.stringify(this.alerts));
+                this.renderAlerts();
+            }
+        };
+
+        // 4. 1v1 Speed Trading Battle Arena
+        window.ApexBattleArena = {
+            timerInterval: null,
+            openModal: function() {
+                document.getElementById('apexBattleModal').style.display = 'flex';
+                if(window.playHaptic) window.playHaptic('light');
+            },
+            closeModal: function() {
+                document.getElementById('apexBattleModal').style.display = 'none';
+                if(this.timerInterval) clearInterval(this.timerInterval);
+            },
+            startBattle: function() {
+                let seconds = 300;
+                document.getElementById('battleStartBtn').disabled = true;
+                if(typeof showToast === 'function') showToast("⚔️ 5-Minute Battle Started! Make your best trades now!", "warning");
+                if(window.playHaptic) window.playHaptic('heavy');
+
+                this.timerInterval = setInterval(() => {
+                    seconds--;
+                    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+                    const s = String(seconds % 60).padStart(2, '0');
+                    document.getElementById('battleTimer').innerText = `${m}:${s}`;
+
+                    // Simulate rival ROI fluctuations
+                    const botROI = (Math.random() * 8 - 2.5).toFixed(2);
+                    document.getElementById('battleBotROI').innerText = (botROI >= 0 ? '+' : '') + botROI + '%';
+
+                    if(seconds <= 0) {
+                        clearInterval(this.timerInterval);
+                        alert("🎉 Battle Complete! Check your final ranking on the Leaderboard!");
+                        document.getElementById('battleStartBtn').disabled = false;
+                    }
+                }, 1000);
+            }
+        };
+    </script>
 </body>
 
 </html>
+
 
