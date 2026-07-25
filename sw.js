@@ -1,4 +1,4 @@
-const CACHE_NAME = 'apextrade-pro-v2026-v5';
+const CACHE_NAME = 'apextrade-pro-v2026-v6';
 const urlsToCache = [
   './index.html',
   './manifest.json'
