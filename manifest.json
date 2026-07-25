@@ -4,6 +4,8 @@
   "description": "Next-Gen Risk-Free Crypto Trading Simulator",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "any",
+  "categories": ["finance", "utilities", "productivity"],
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
   "icons": [
@@ -24,6 +26,20 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Live Chart",
+      "short_name": "Chart",
+      "description": "View real-time TradingView charts",
+      "url": "./index.html#chart"
+    },
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "Check current trading positions and cash",
+      "url": "./index.html#portfolio"
     }
   ]
 }
