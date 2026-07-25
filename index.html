@@ -8752,7 +8752,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <button onclick="ApexThumbZone.toggle()" title="1-Handed Thumb Zone Navigation Mode"><i class="fas fa-hand-pointer" style="color:#00d2ff;"></i></button>
         <button onclick="ApexSoundboard.openModal()" title="Custom Audio Trading Soundboard"><i class="fas fa-music" style="color:#8b5cf6;"></i></button>
         <button onclick="ApexLevelingSystem.openModal()" title="Trader Rank & XP Leveling (Level 1 to 50)"><i class="fas fa-medal" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
+        <button onclick="ApexGlobalRanking.openModal()" title="Global Trader Leaderboard & Ranking Arena"><i class="fas fa-trophy" style="color:#fbbf24;"></i></button>
+        <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-award" style="color:#10b981;"></i></button>
     </div>
 
     <style>
@@ -10687,10 +10688,146 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button onclick="ApexProToolsHub.launch('ApexLevelingSystem')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.3); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
                         <i class="fas fa-medal" style="color:#fbbf24;"></i> Trader Rank XP
                     </button>
+                    <button onclick="ApexProToolsHub.launch('ApexGlobalRanking')" style="padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.4); border-radius:10px; color:#fff; font-weight:700; text-align:left; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <i class="fas fa-trophy" style="color:#fbbf24;"></i> Global Leaderboard
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🏆 GLOBAL TRADER RANKING & LEADERBOARD ARENA MODAL -->
+    <!-- ========================================================================= -->
+    <div id="apexGlobalRankingModal" class="apex-modal-overlay" style="display:none;">
+        <div class="apex-modal-content" style="max-width:680px; width:94%; text-align:center; padding:24px; border:1px solid rgba(251,191,36,0.3); background:radial-gradient(circle at top,#1e1b4b,#0b0f19 75%);">
+            
+            <!-- Modal Header -->
+            <div class="apex-modal-header" style="border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; margin-bottom:18px;">
+                <h3 style="font-size:1.3rem; font-weight:900; color:#fff; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <i class="fas fa-trophy" style="color:#fbbf24; font-size:1.4rem;"></i> Apex Global Trader Leaderboard
+                </h3>
+                <button class="apex-modal-close" onclick="ApexGlobalRanking.closeModal()">&times;</button>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div style="display:flex; justify-content:center; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+                <button class="rank-tab active" onclick="ApexGlobalRanking.setFilter('alltime', this)" style="padding:8px 16px; background:#fbbf24; color:#000; font-weight:800; border:none; border-radius:20px; font-size:0.8rem; cursor:pointer;">
+                    🏆 All-Time P&L
+                </button>
+                <button class="rank-tab" onclick="ApexGlobalRanking.setFilter('weekly', this)" style="padding:8px 16px; background:rgba(255,255,255,0.06); color:#fff; font-weight:700; border:1px solid rgba(255,255,255,0.12); border-radius:20px; font-size:0.8rem; cursor:pointer;">
+                    ⚡ Weekly Sprint
+                </button>
+                <button class="rank-tab" onclick="ApexGlobalRanking.setFilter('battle', this)" style="padding:8px 16px; background:rgba(255,255,255,0.06); color:#fff; font-weight:700; border:1px solid rgba(255,255,255,0.12); border-radius:20px; font-size:0.8rem; cursor:pointer;">
+                    ⚔️ 1v1 Battles
+                </button>
+                <button class="rank-tab" onclick="ApexGlobalRanking.setFilter('leverage', this)" style="padding:8px 16px; background:rgba(255,255,255,0.06); color:#fff; font-weight:700; border:1px solid rgba(255,255,255,0.12); border-radius:20px; font-size:0.8rem; cursor:pointer;">
+                    🔥 100X Kings
+                </button>
+            </div>
+
+            <!-- 3D Top-3 Podium Card Visualizer -->
+            <div style="display:flex; justify-content:center; align-items:flex-end; gap:12px; margin-bottom:24px;">
+                
+                <!-- Rank #2 Podium (Silver) -->
+                <div style="flex:1; background:rgba(30,41,59,0.8); border:2px solid #94a3b8; border-radius:16px; padding:14px 10px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+                    <div style="font-size:1.8rem; margin-bottom:4px;">🥈</div>
+                    <div style="font-size:0.75rem; font-weight:800; color:#94a3b8;">RANK #2</div>
+                    <div style="font-size:0.85rem; font-weight:800; color:#fff; margin:4px 0;">Satoshi_N 🇺🇸</div>
+                    <div style="font-size:0.9rem; font-weight:900; color:#10b981;">+$980,200</div>
+                    <div style="font-size:0.7rem; color:#94a3b8;">Win Rate: 91.0%</div>
+                </div>
+
+                <!-- Rank #1 Podium (Gold Center Taller) -->
+                <div style="flex:1.1; background:linear-gradient(180deg,rgba(251,191,36,0.15),rgba(15,23,42,0.95)); border:2px solid #fbbf24; border-radius:18px; padding:18px 10px; text-align:center; box-shadow:0 0 30px rgba(251,191,36,0.3); transform:translateY(-10px);">
+                    <div style="font-size:2.2rem; margin-bottom:2px;">👑 🥇</div>
+                    <div style="font-size:0.75rem; font-weight:900; color:#fbbf24;">CHAMPION #1</div>
+                    <div style="font-size:0.95rem; font-weight:900; color:#fff; margin:4px 0;">Saurabh Apex 🇮🇳</div>
+                    <div style="font-size:1.1rem; font-weight:900; color:#10b981;">+$1,420,500</div>
+                    <div style="font-size:0.75rem; color:#fbbf24; font-weight:700;">Win Rate: 94.2% 🚀</div>
+                </div>
+
+                <!-- Rank #3 Podium (Bronze) -->
+                <div style="flex:1; background:rgba(30,41,59,0.8); border:2px solid #b45309; border-radius:16px; padding:14px 10px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+                    <div style="font-size:1.8rem; margin-bottom:4px;">🥉</div>
+                    <div style="font-size:0.75rem; font-weight:800; color:#b45309;">RANK #3</div>
+                    <div style="font-size:0.85rem; font-weight:800; color:#fff; margin:4px 0;">WhaleTrader 🇯🇵</div>
+                    <div style="font-size:0.9rem; font-weight:900; color:#10b981;">+$750,400</div>
+                    <div style="font-size:0.7rem; color:#94a3b8;">Win Rate: 88.5%</div>
+                </div>
+
+            </div>
+
+            <!-- Top 4-10 Leaderboard Table -->
+            <div style="max-height:200px; overflow-y:auto; background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:12px; margin-bottom:18px;">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.8rem;">
+                    <thead>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.1); color:#9ca3af; font-size:0.75rem;">
+                            <th style="padding:10px;">Rank</th>
+                            <th style="padding:10px;">Trader</th>
+                            <th style="padding:10px;">Total P&L</th>
+                            <th style="padding:10px;">Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardRows">
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <td style="padding:10px; font-weight:800; color:#9ca3af;">#4</td>
+                            <td style="padding:10px; font-weight:700; color:#fff;">🇬🇧 London_Bull</td>
+                            <td style="padding:10px; font-weight:800; color:#10b981;">+$540,100</td>
+                            <td style="padding:10px; color:#9ca3af;">85.2%</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <td style="padding:10px; font-weight:800; color:#9ca3af;">#5</td>
+                            <td style="padding:10px; font-weight:700; color:#fff;">🇩🇪 Berlin_Algo</td>
+                            <td style="padding:10px; font-weight:800; color:#10b981;">+$490,000</td>
+                            <td style="padding:10px; color:#9ca3af;">84.0%</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <td style="padding:10px; font-weight:800; color:#9ca3af;">#6</td>
+                            <td style="padding:10px; font-weight:700; color:#fff;">🇸🇬 Singa_Whale</td>
+                            <td style="padding:10px; font-weight:800; color:#10b981;">+$410,200</td>
+                            <td style="padding:10px; color:#9ca3af;">82.1%</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <td style="padding:10px; font-weight:800; color:#9ca3af;">#7</td>
+                            <td style="padding:10px; font-weight:700; color:#fff;">🇦🇺 Sydney_Scalp</td>
+                            <td style="padding:10px; font-weight:800; color:#10b981;">+$385,000</td>
+                            <td style="padding:10px; color:#9ca3af;">80.5%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Sticky Your Rank Card -->
+            <div style="background:linear-gradient(135deg,rgba(0,210,255,0.15),rgba(59,130,246,0.15)); border:1px solid #00d2ff; border-radius:14px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="text-align:left;">
+                    <div style="font-size:0.75rem; color:#00d2ff; font-weight:800;">YOUR CURRENT LIVE RANK</div>
+                    <div style="font-size:0.95rem; font-weight:900; color:#fff;">#12 | You (Apex Trader) 🇮🇳</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.95rem; font-weight:900; color:#10b981;">+$10,450.00</div>
+                    <div style="font-size:0.7rem; color:#fbbf24; font-weight:700;">Top 5% Globally 🚀</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Engine: Global Leaderboard -->
+    <script>
+        window.ApexGlobalRanking = {
+            openModal: function() { document.getElementById('apexGlobalRankingModal').style.display = 'flex'; },
+            closeModal: function() { document.getElementById('apexGlobalRankingModal').style.display = 'none'; },
+            setFilter: function(type, btn) {
+                const tabs = document.querySelectorAll('.rank-tab');
+                tabs.forEach(t => { t.style.background = 'rgba(255,255,255,0.06)'; t.style.color = '#fff'; t.style.border = '1px solid rgba(255,255,255,0.12)'; });
+                btn.style.background = '#fbbf24';
+                btn.style.color = '#000';
+                btn.style.border = 'none';
+                if(typeof showToast === 'function') showToast(`Leaderboard filtered to ${type.toUpperCase()}`, "info");
+            }
+        };
+    </script>
 
     <!-- ========================================================================= -->
     <!-- 🟢 GLOBAL TOAST NOTIFICATION CONTAINER & ERROR REPAIR ENGINE -->
