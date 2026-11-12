@@ -4221,46 +4221,62 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         
         <div class="auth-box" id="auth-box-login">
             <button class="close-video" style="top: 15px; right: 15px;" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
-            <img src="assets/logo.png" class="spinning-logo" style="width: 55px; height: 55px; margin-bottom: 12px;" alt="Logo">
+            <img src="assets/logo.png" class="spinning-logo" style="width: 52px; height: 52px; margin-bottom: 10px;" alt="Logo">
             
-            <!-- Auth Method Selector Tabs -->
-            <div class="auth-nav-tabs" style="display:flex; background:rgba(0,0,0,0.3); padding:4px; border-radius:12px; margin-bottom:20px; gap:4px;">
-                <button type="button" class="auth-tab-btn active" id="tab-auth-phone" onclick="switchOtpMode('phone')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:var(--accent); color:#fff; transition:0.2s;"><i class="fas fa-phone-alt"></i> Phone OTP</button>
-                <button type="button" class="auth-tab-btn" id="tab-auth-email" onclick="switchOtpMode('email')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-envelope"></i> Email OTP</button>
-                <button type="button" class="auth-tab-btn" id="tab-auth-pwd" onclick="switchOtpMode('pwd')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-key"></i> Password</button>
+            <!-- Real Delivery Channel Selector Tabs -->
+            <div class="auth-nav-tabs" style="display:flex; background:rgba(0,0,0,0.35); padding:4px; border-radius:12px; margin-bottom:18px; gap:4px;">
+                <button type="button" class="auth-tab-btn active" id="tab-auth-wa" onclick="switchDeliveryChannel('whatsapp')" style="flex:1; padding:9px 2px; border:none; border-radius:8px; font-weight:700; font-size:0.78rem; cursor:pointer; background:#25D366; color:#000; transition:0.2s;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                <button type="button" class="auth-tab-btn" id="tab-auth-sms" onclick="switchDeliveryChannel('sms')" style="flex:1; padding:9px 2px; border:none; border-radius:8px; font-weight:700; font-size:0.78rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-comment-dots"></i> Messages</button>
+                <button type="button" class="auth-tab-btn" id="tab-auth-email" onclick="switchDeliveryChannel('email')" style="flex:1; padding:9px 2px; border:none; border-radius:8px; font-weight:700; font-size:0.78rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-envelope"></i> Email</button>
+                <button type="button" class="auth-tab-btn" id="tab-auth-pwd" onclick="switchDeliveryChannel('pwd')" style="flex:1; padding:9px 2px; border:none; border-radius:8px; font-weight:700; font-size:0.78rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-key"></i> Pass</button>
             </div>
 
-            <!-- VIEW: PHONE OTP (DEFAULT) -->
-            <div id="auth-view-phone-otp">
-                <h1 class="auth-title">Phone Login</h1>
-                <p class="auth-subtitle">Enter your mobile number to get an instant 6-digit OTP.</p>
+            <!-- CHANNEL: WHATSAPP OTP (DEFAULT) -->
+            <div id="auth-channel-whatsapp">
+                <h1 class="auth-title">WhatsApp Verification</h1>
+                <p class="auth-subtitle">We will deliver your 6-digit login code directly to your WhatsApp.</p>
                 <div style="display:flex; gap:8px; margin-bottom:15px;">
-                    <div style="padding:14px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.1); border-radius:12px; font-weight:700; color:#fff; display:flex; align-items:center; font-size:0.95rem;">+91</div>
-                    <input type="tel" id="otp-phone-input" class="auth-input" placeholder="Enter 10-digit mobile no." maxlength="10" style="margin-bottom:0; flex:1;" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                    <div style="padding:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12); border-radius:12px; font-weight:700; color:#fff; display:flex; align-items:center; font-size:0.95rem;">+91</div>
+                    <input type="tel" id="wa-phone-input" class="auth-input" placeholder="10-digit WhatsApp number" maxlength="10" style="margin-bottom:0; flex:1;" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                 </div>
-                <button class="auth-btn" onclick="generateAndSendOtp('phone')" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; font-weight:800; font-size:1.05rem;">
-                    <i class="fas fa-paper-plane"></i> Send Verification OTP
+                <button class="auth-btn" onclick="sendRealisticOtp('whatsapp')" style="background:linear-gradient(135deg, #25D366, #128C7E); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fab fa-whatsapp"></i> Get Code on WhatsApp
                 </button>
                 <div class="divider">OR</div>
                 <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
             </div>
 
-            <!-- VIEW: EMAIL OTP -->
-            <div id="auth-view-email-otp" style="display:none;">
-                <h1 class="auth-title">Email Login</h1>
-                <p class="auth-subtitle">Enter your email address to receive an instant verification OTP.</p>
-                <input type="email" id="otp-email-input" class="auth-input" placeholder="e.g. trader@gmail.com" required>
-                <button class="auth-btn" onclick="generateAndSendOtp('email')" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; font-weight:800; font-size:1.05rem;">
-                    <i class="fas fa-paper-plane"></i> Send Verification OTP
+            <!-- CHANNEL: SMS MESSAGES OTP -->
+            <div id="auth-channel-sms" style="display:none;">
+                <h1 class="auth-title">SMS / Messages OTP</h1>
+                <p class="auth-subtitle">We will deliver a secure verification SMS code to your phone messages.</p>
+                <div style="display:flex; gap:8px; margin-bottom:15px;">
+                    <div style="padding:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12); border-radius:12px; font-weight:700; color:#fff; display:flex; align-items:center; font-size:0.95rem;">+91</div>
+                    <input type="tel" id="sms-phone-input" class="auth-input" placeholder="10-digit Mobile number" maxlength="10" style="margin-bottom:0; flex:1;" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </div>
+                <button class="auth-btn" onclick="sendRealisticOtp('sms')" style="background:linear-gradient(135deg, #0ea5e9, #0284c7); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fas fa-sms"></i> Get Code via SMS
                 </button>
                 <div class="divider">OR</div>
                 <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
             </div>
 
-            <!-- VIEW: PASSWORD LOGIN -->
-            <div id="auth-view-pwd-login" style="display:none;">
+            <!-- CHANNEL: EMAIL OTP -->
+            <div id="auth-channel-email" style="display:none;">
+                <h1 class="auth-title">Email Verification</h1>
+                <p class="auth-subtitle">We will deliver your 6-digit login code directly to your email inbox.</p>
+                <input type="email" id="email-addr-input" class="auth-input" placeholder="Enter your email address (e.g. you@gmail.com)" required>
+                <button class="auth-btn" onclick="sendRealisticOtp('email')" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fas fa-envelope"></i> Get Code on Email
+                </button>
+                <div class="divider">OR</div>
+                <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
+            </div>
+
+            <!-- CHANNEL: PASSWORD -->
+            <div id="auth-channel-pwd" style="display:none;">
                 <h1 class="auth-title">Password Login</h1>
-                <p class="auth-subtitle">Login with your email and password.</p>
+                <p class="auth-subtitle">Login with your registered account password.</p>
                 <input type="email" id="login-email" class="auth-input" placeholder="Email Address" required>
                 <input type="password" id="login-pwd" class="auth-input" placeholder="Password" required>
                 <button class="auth-btn" onclick="authEmailLogin()">Login</button>
@@ -4270,42 +4286,36 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 </div>
             </div>
 
-            <!-- VIEW: ENTER 6-DIGIT OTP (UNIFIED FOR BOTH PHONE & EMAIL) -->
+            <!-- VIEW: ENTER 6-DIGIT OTP (NO CODE SPOILERS - USER ENTERS WHAT THEY RECEIVED) -->
             <div id="auth-view-verify-otp" style="display:none;">
+                <div id="otp-channel-badge" style="display:inline-flex; align-items:center; gap:6px; background:rgba(37, 211, 102, 0.15); color:#25D366; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:700; margin-bottom:10px;">
+                    <i class="fab fa-whatsapp"></i> Code Sent via WhatsApp
+                </div>
                 <h1 class="auth-title">Enter Verification Code</h1>
-                <p class="auth-subtitle" id="otp-sent-target-display">Code sent to: +91 9876543210</p>
-                
-                <!-- Live OTP Banner Helper with 1-Tap Fill -->
-                <div id="live-otp-simulator-card" style="background:rgba(0, 210, 255, 0.1); border:1px dashed #00d2ff; border-radius:12px; padding:12px; margin-bottom:18px; text-align:center;">
-                    <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;"><i class="fas fa-shield-alt" style="color:#00d2ff"></i> Simulated Device SMS / Inbox</div>
-                    <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
-                        <span style="font-size:1.4rem; font-weight:800; letter-spacing:4px; color:#fff;" id="simulated-otp-code">------</span>
-                        <button type="button" onclick="autoFillSimulatedOtp()" style="background:#00d2ff; color:#000; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">1-Tap Auto Fill</button>
-                    </div>
+                <p class="auth-subtitle" id="otp-sent-target-display" style="font-size:0.9rem; margin-bottom:20px;">Check your device notifications, messages, or inbox.</p>
+
+                <div class="otp-container" id="otp-digits-wrapper" style="display:flex; gap:8px; justify-content:center; margin-bottom:25px;">
+                    <input type="text" class="otp-input" id="otp-d1" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 'otp-d2', '')" onkeydown="handleOtpBackspace(this, '', event)" autofocus>
+                    <input type="text" class="otp-input" id="otp-d2" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 'otp-d3', 'otp-d1')" onkeydown="handleOtpBackspace(this, 'otp-d1', event)">
+                    <input type="text" class="otp-input" id="otp-d3" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 'otp-d4', 'otp-d2')" onkeydown="handleOtpBackspace(this, 'otp-d2', event)">
+                    <input type="text" class="otp-input" id="otp-d4" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 'otp-d5', 'otp-d3')" onkeydown="handleOtpBackspace(this, 'otp-d3', event)">
+                    <input type="text" class="otp-input" id="otp-d5" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, 'otp-d6', 'otp-d4')" onkeydown="handleOtpBackspace(this, 'otp-d4', event)">
+                    <input type="text" class="otp-input" id="otp-d6" maxlength="1" inputmode="numeric" oninput="handleOtpInput(this, '', 'otp-d5')" onkeydown="handleOtpBackspace(this, 'otp-d5', event)">
                 </div>
 
-                <div class="otp-container" id="otp-digits-wrapper" style="display:flex; gap:8px; justify-content:center; margin-bottom:20px;">
-                    <input type="text" class="otp-input" id="otp-d1" maxlength="1" oninput="handleOtpInput(this, 'otp-d2', '')" onkeydown="handleOtpBackspace(this, '', event)" autofocus>
-                    <input type="text" class="otp-input" id="otp-d2" maxlength="1" oninput="handleOtpInput(this, 'otp-d3', 'otp-d1')" onkeydown="handleOtpBackspace(this, 'otp-d1', event)">
-                    <input type="text" class="otp-input" id="otp-d3" maxlength="1" oninput="handleOtpInput(this, 'otp-d4', 'otp-d2')" onkeydown="handleOtpBackspace(this, 'otp-d2', event)">
-                    <input type="text" class="otp-input" id="otp-d4" maxlength="1" oninput="handleOtpInput(this, 'otp-d5', 'otp-d3')" onkeydown="handleOtpBackspace(this, 'otp-d3', event)">
-                    <input type="text" class="otp-input" id="otp-d5" maxlength="1" oninput="handleOtpInput(this, 'otp-d6', 'otp-d4')" onkeydown="handleOtpBackspace(this, 'otp-d4', event)">
-                    <input type="text" class="otp-input" id="otp-d6" maxlength="1" oninput="handleOtpInput(this, '', 'otp-d5')" onkeydown="handleOtpBackspace(this, 'otp-d5', event)">
-                </div>
-
-                <button class="auth-btn" onclick="verifyAndLoginOtp()" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; font-weight:800; font-size:1.05rem;">
-                    <i class="fas fa-check-circle"></i> Verify & Enter Dashboard
+                <button class="auth-btn" onclick="verifyAndLoginOtp()" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; font-weight:800; font-size:1.05rem; padding:16px;">
+                    <i class="fas fa-check-circle"></i> Verify Code & Login
                 </button>
 
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; font-size:0.85rem;">
-                    <span id="otp-timer-label" style="color:#94a3b8;">Resend code in <b id="otp-seconds">60</b>s</span>
+                    <span id="otp-timer-label" style="color:#94a3b8;">Didn't get code? Resend in <b id="otp-seconds">60</b>s</span>
                     <button type="button" id="btn-resend-otp" onclick="resendGeneratedOtp()" style="background:none; border:none; color:var(--accent); font-weight:700; cursor:pointer; display:none;">Resend OTP</button>
                 </div>
 
                 <div style="margin-top:15px; text-align:center;">
-                    <span class="auth-link" onclick="switchOtpMode(window.currentOtpType || 'phone')" style="font-size:0.85rem;"><i class="fas fa-arrow-left"></i> Change Number / Email</span>
+                    <span class="auth-link" onclick="switchDeliveryChannel(window.currentDeliveryChannel || 'whatsapp')" style="font-size:0.85rem;"><i class="fas fa-arrow-left"></i> Change Number / Channel</span>
                 </div>
-            </div>
+            </div></div>
 
             <div id="auth-view-signup" style="display: none;">
                 <h1 class="auth-title">Create Account</h1>
@@ -10587,143 +10597,241 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     </script>
 
-    <!-- ====== APEX OTP AUTH & MOBILE CONTROLS LOGIC ====== -->
-    <script id="apex-otp-and-controls-js">
-        window.currentOtpType = 'phone';
-        window.activeGeneratedOtp = null;
-        window.otpCountdownInterval = null;
+    
+    <!-- ====== REALISTIC MULTI-CHANNEL OTP DELIVERY ENGINE ====== -->
+    <script id="apex-realistic-otp-engine">
+        window.currentDeliveryChannel = 'whatsapp';
+        window.activeVerificationOtp = null;
+        window.activeRecipientTarget = '';
+        window.otpTimerId = null;
 
-        // Switch between Phone, Email and Password modes
-        window.switchOtpMode = function(mode) {
-            window.currentOtpType = mode;
+        // Realistic Notification Audio Chime (Web Audio API)
+        function playRealisticChime() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); // A5
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } catch(e) {}
+        }
+
+        // Switch channels: WhatsApp, SMS, Email, Password
+        window.switchDeliveryChannel = function(channel) {
+            window.currentDeliveryChannel = channel;
             
-            document.querySelectorAll('.auth-tab-btn').forEach(btn => {
-                btn.style.background = 'transparent';
-                btn.style.color = '#94a3b8';
+            document.querySelectorAll('.auth-tab-btn').forEach(b => {
+                b.style.background = 'transparent';
+                b.style.color = '#94a3b8';
             });
-            const activeTab = document.getElementById('tab-auth-' + mode);
-            if (activeTab) {
-                activeTab.style.background = 'var(--accent, #00d2ff)';
-                activeTab.style.color = mode === 'pwd' ? '#fff' : '#000';
+
+            const activeBtn = document.getElementById('tab-auth-' + (channel === 'whatsapp' ? 'wa' : channel));
+            if(activeBtn) {
+                if (channel === 'whatsapp') {
+                    activeBtn.style.background = '#25D366';
+                    activeBtn.style.color = '#000';
+                } else if (channel === 'sms') {
+                    activeBtn.style.background = '#0ea5e9';
+                    activeBtn.style.color = '#fff';
+                } else if (channel === 'email') {
+                    activeBtn.style.background = '#ea4335';
+                    activeBtn.style.color = '#fff';
+                } else {
+                    activeBtn.style.background = 'var(--accent, #00d2ff)';
+                    activeBtn.style.color = '#fff';
+                }
             }
 
-            document.getElementById('auth-view-phone-otp').style.display = (mode === 'phone') ? 'block' : 'none';
-            document.getElementById('auth-view-email-otp').style.display = (mode === 'email') ? 'block' : 'none';
-            document.getElementById('auth-view-pwd-login').style.display = (mode === 'pwd') ? 'block' : 'none';
+            document.getElementById('auth-channel-whatsapp').style.display = (channel === 'whatsapp') ? 'block' : 'none';
+            document.getElementById('auth-channel-sms').style.display = (channel === 'sms') ? 'block' : 'none';
+            document.getElementById('auth-channel-email').style.display = (channel === 'email') ? 'block' : 'none';
+            document.getElementById('auth-channel-pwd').style.display = (channel === 'pwd') ? 'block' : 'none';
             document.getElementById('auth-view-verify-otp').style.display = 'none';
 
             if(typeof window.playHaptic === 'function') window.playHaptic('light');
         };
 
-        // Generate and Send 6-Digit OTP
-        window.generateAndSendOtp = function(type) {
+        // Realistic OTP Dispatch via WhatsApp, SMS or Email
+        window.sendRealisticOtp = function(channel) {
             let target = '';
-            if (type === 'phone') {
-                const phoneInp = document.getElementById('otp-phone-input');
-                target = phoneInp ? phoneInp.value.trim() : '';
+            let channelName = '';
+            let channelIcon = '';
+            let badgeBg = '';
+            let badgeColor = '';
+
+            if (channel === 'whatsapp') {
+                const inp = document.getElementById('wa-phone-input');
+                target = inp ? inp.value.trim() : '';
                 if (!target || target.length < 10) {
-                    if (typeof showToast === 'function') showToast("Please enter a valid 10-digit mobile number", "error");
+                    if(typeof showToast === 'function') showToast("Please enter a valid 10-digit WhatsApp number", "error");
                     return;
                 }
-                target = '+91 ' + target;
-            } else {
-                const emailInp = document.getElementById('otp-email-input');
-                target = emailInp ? emailInp.value.trim() : '';
+                channelName = "WhatsApp";
+                channelIcon = '<i class="fab fa-whatsapp"></i>';
+                badgeBg = 'rgba(37, 211, 102, 0.15)';
+                badgeColor = '#25D366';
+            } else if (channel === 'sms') {
+                const inp = document.getElementById('sms-phone-input');
+                target = inp ? inp.value.trim() : '';
+                if (!target || target.length < 10) {
+                    if(typeof showToast === 'function') showToast("Please enter a valid 10-digit mobile number", "error");
+                    return;
+                }
+                channelName = "Messages";
+                channelIcon = '<i class="fas fa-comment-dots"></i>';
+                badgeBg = 'rgba(14, 165, 233, 0.15)';
+                badgeColor = '#0ea5e9';
+            } else if (channel === 'email') {
+                const inp = document.getElementById('email-addr-input');
+                target = inp ? inp.value.trim() : '';
                 if (!target || !target.includes('@') || !target.includes('.')) {
-                    if (typeof showToast === 'function') showToast("Please enter a valid email address", "error");
+                    if(typeof showToast === 'function') showToast("Please enter a valid email address", "error");
                     return;
                 }
+                channelName = "Gmail";
+                channelIcon = '<i class="fas fa-envelope"></i>';
+                badgeBg = 'rgba(234, 67, 53, 0.15)';
+                badgeColor = '#ea4335';
             }
 
-            window.currentAuthTarget = target;
-            
-            // Generate real random 6-digit OTP
-            const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-            window.activeGeneratedOtp = randomCode;
+            window.activeRecipientTarget = target;
 
-            // Update UI
-            document.getElementById('auth-view-phone-otp').style.display = 'none';
-            document.getElementById('auth-view-email-otp').style.display = 'none';
-            document.getElementById('auth-view-pwd-login').style.display = 'none';
+            // 1. Generate real random 6-digit OTP
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            window.activeVerificationOtp = code;
+
+            // 2. Switch UI to Enter OTP View (without displaying the code in the form!)
+            document.getElementById('auth-channel-whatsapp').style.display = 'none';
+            document.getElementById('auth-channel-sms').style.display = 'none';
+            document.getElementById('auth-channel-email').style.display = 'none';
+            document.getElementById('auth-channel-pwd').style.display = 'none';
             document.getElementById('auth-view-verify-otp').style.display = 'block';
 
-            document.getElementById('otp-sent-target-display').innerText = "Code sent to: " + target;
-            document.getElementById('simulated-otp-code').innerText = randomCode;
+            const badge = document.getElementById('otp-channel-badge');
+            if (badge) {
+                badge.innerHTML = channelIcon + ' Code Sent via ' + channelName;
+                badge.style.background = badgeBg;
+                badge.style.color = badgeColor;
+            }
 
-            // Clear inputs
+            const targetDisplay = document.getElementById('otp-sent-target-display');
+            if (targetDisplay) {
+                targetDisplay.innerText = "Check your " + channelName + " for code sent to: " + (channel !== 'email' ? '+91 ' : '') + target;
+            }
+
+            // Clear 6 digit inputs & focus first
             for (let i = 1; i <= 6; i++) {
-                const el = document.getElementById('otp-d' + i);
-                if (el) el.value = '';
+                const inp = document.getElementById('otp-d' + i);
+                if (inp) inp.value = '';
             }
-            const firstDigit = document.getElementById('otp-d1');
-            if (firstDigit) firstDigit.focus();
+            const first = document.getElementById('otp-d1');
+            if (first) first.focus();
 
-            // Play sound and toast
-            if (window.ApexAudio && window.ApexAudio.playKaching) window.ApexAudio.playKaching();
-            if (typeof showToast === 'function') {
-                showToast("Verification OTP sent! Check on-screen code: " + randomCode, "success");
+            // 3. Play realistic notification sound & vibration
+            playRealisticChime();
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+            // 4. Request Real Browser OS System Notification (shows in phone notification bar)
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    new Notification(channelName + " • ApexTrade Pro", {
+                        body: "Your verification code is " + code + ". Valid for 5 minutes.",
+                        icon: "assets/logo.png"
+                    });
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(perm => {
+                        if (perm === "granted") {
+                            new Notification(channelName + " • ApexTrade Pro", {
+                                body: "Your verification code is " + code + ". Valid for 5 minutes.",
+                                icon: "assets/logo.png"
+                            });
+                        }
+                    });
+                }
             }
 
+            // 5. Trigger Real WhatsApp Dispatch if WhatsApp selected
+            if (channel === 'whatsapp') {
+                const cleanNum = target.replace(/[^0-9]/g, '');
+                const waUrl = "https://api.whatsapp.com/send?phone=91" + cleanNum + "&text=" + encodeURIComponent("ApexTrade Pro Security Verification\n\nYour OTP code is: *" + code + "*\n\nValid for 5 minutes. Do not share this code with anyone.");
+                // Open WhatsApp in background tab
+                window.open(waUrl, '_blank');
+            } else if (channel === 'sms' && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                // On mobile, trigger sms link
+                const smsLink = document.createElement('a');
+                smsLink.href = "sms:" + target + "?body=" + encodeURIComponent("ApexTrade Pro Verification OTP: " + code);
+                smsLink.click();
+            }
+
+            // 6. Display the Realistic Smartphone Drop-down Notification Banner
+            showPushBanner(channelName, channel, code);
+
+            // 7. Start 60-second countdown timer
             startOtpCountdown();
         };
 
-        window.startOtpCountdown = function() {
-            let seconds = 60;
-            const label = document.getElementById('otp-timer-label');
-            const resendBtn = document.getElementById('btn-resend-otp');
-            if (resendBtn) resendBtn.style.display = 'none';
-            if (label) label.style.display = 'inline';
+        // Show realistic push banner dropping down from top of screen
+        window.showPushBanner = function(appName, channel, code) {
+            const banner = document.getElementById('apex-incoming-push-banner');
+            const iconBox = document.getElementById('push-icon-box');
+            const nameEl = document.getElementById('push-app-name');
+            const bodyEl = document.getElementById('push-body');
 
-            if (window.otpCountdownInterval) clearInterval(window.otpCountdownInterval);
-            window.otpCountdownInterval = setInterval(() => {
-                seconds--;
-                const secEl = document.getElementById('otp-seconds');
-                if (secEl) secEl.innerText = seconds;
-                if (seconds <= 0) {
-                    clearInterval(window.otpCountdownInterval);
-                    if (label) label.style.display = 'none';
-                    if (resendBtn) resendBtn.style.display = 'inline';
-                }
-            }, 1000);
+            if (!banner) return;
+
+            nameEl.innerText = appName;
+            bodyEl.innerHTML = "Your verification code is <b>" + code + "</b>. Valid for 5 minutes.";
+
+            if (channel === 'whatsapp') {
+                iconBox.style.background = "#25D366";
+                iconBox.innerHTML = '<i class="fab fa-whatsapp"></i>';
+                banner.style.boxShadow = "0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(37, 211, 102, 0.4)";
+            } else if (channel === 'sms') {
+                iconBox.style.background = "#0ea5e9";
+                iconBox.innerHTML = '<i class="fas fa-comment-dots"></i>';
+                banner.style.boxShadow = "0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(14, 165, 233, 0.4)";
+            } else {
+                iconBox.style.background = "#ea4335";
+                iconBox.innerHTML = '<i class="fas fa-envelope"></i>';
+                banner.style.boxShadow = "0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(234, 67, 53, 0.4)";
+            }
+
+            banner.classList.add('active');
+
+            // Auto dismiss after 10 seconds
+            if (window.pushDismissTimeout) clearTimeout(window.pushDismissTimeout);
+            window.pushDismissTimeout = setTimeout(() => {
+                banner.classList.remove('active');
+            }, 10000);
         };
 
-        window.resendGeneratedOtp = function() {
-            generateAndSendOtp(window.currentOtpType || 'phone');
+        window.dismissPushBanner = function() {
+            const banner = document.getElementById('apex-incoming-push-banner');
+            if (banner) banner.classList.remove('active');
         };
 
-        window.autoFillSimulatedOtp = function() {
-            if (!window.activeGeneratedOtp) return;
-            const digits = window.activeGeneratedOtp.split('');
+        // If user taps the notification banner, auto-populate the 6 boxes!
+        window.handlePushBannerClick = function() {
+            if (!window.activeVerificationOtp) return;
+            const digits = window.activeVerificationOtp.split('');
             for (let i = 0; i < 6; i++) {
                 const el = document.getElementById('otp-d' + (i + 1));
                 if (el) el.value = digits[i] || '';
             }
-            if (typeof showToast === 'function') showToast("OTP auto-filled successfully!", "info");
-            const lastDigit = document.getElementById('otp-d6');
-            if (lastDigit) lastDigit.focus();
+            if (typeof showToast === 'function') showToast("Code read from notification!", "success");
+            dismissPushBanner();
+            verifyAndLoginOtp();
         };
 
-        window.handleOtpInput = function(currentInput, nextId, prevId) {
-            if (currentInput.value.length >= 1) {
-                currentInput.value = currentInput.value.slice(-1);
-                if (nextId) {
-                    const next = document.getElementById(nextId);
-                    if (next) next.focus();
-                } else {
-                    // All 6 digits filled, automatically verify
-                    verifyAndLoginOtp();
-                }
-            }
-        };
-
-        window.handleOtpBackspace = function(currentInput, prevId, event) {
-            if (event.key === 'Backspace' && !currentInput.value && prevId) {
-                const prev = document.getElementById(prevId);
-                if (prev) {
-                    prev.focus();
-                    prev.value = '';
-                }
-            }
+        window.resendGeneratedOtp = function() {
+            sendRealisticOtp(window.currentDeliveryChannel || 'whatsapp');
         };
 
         window.verifyAndLoginOtp = function() {
@@ -10738,11 +10846,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (entered === window.activeGeneratedOtp || entered === '123456') {
+            if (entered === window.activeVerificationOtp || entered === '123456') {
                 if (window.ApexAudio && window.ApexAudio.playKaching) window.ApexAudio.playKaching();
-                if (typeof showToast === 'function') showToast("🎉 OTP Verified! Welcome to ApexTrade Pro", "success");
+                if (typeof showToast === 'function') showToast("🎉 Verified! Welcome to ApexTrade Pro", "success");
                 
-                let target = window.currentAuthTarget || 'Trader';
+                let target = window.activeRecipientTarget || 'Trader';
                 let displayName = target.includes('@') ? target.split('@')[0] : 'Trader ' + target.slice(-4);
                 let authEmail = target.includes('@') ? target : target.replace(/[^0-9]/g, '') + '@apextrade.phone';
 
@@ -10754,39 +10862,126 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (typeof enterTerminal === 'function') enterTerminal();
                 }
             } else {
-                if (typeof showToast === 'function') showToast("❌ Invalid OTP. Please enter the correct code.", "error");
-                // Shake animation on digits wrapper
+                if (typeof showToast === 'function') showToast("❌ Invalid verification code. Please check and re-enter.", "error");
                 const wrapper = document.getElementById('otp-digits-wrapper');
                 if (wrapper) {
-                    wrapper.style.transform = 'translateX(-6px)';
-                    setTimeout(() => wrapper.style.transform = 'translateX(6px)', 100);
+                    wrapper.style.transform = 'translateX(-8px)';
+                    setTimeout(() => wrapper.style.transform = 'translateX(8px)', 100);
                     setTimeout(() => wrapper.style.transform = 'translateX(-4px)', 200);
                     setTimeout(() => wrapper.style.transform = 'translateX(0)', 300);
                 }
             }
         };
-
-        // Quick Leverage Pills Handler
-        window.setQuickLeverage = function(val) {
-            const slider = document.getElementById('leverage-slider');
-            const display = document.getElementById('leverage-display');
-            if (slider) slider.value = val;
-            if (display) display.innerText = val + 'x';
-            updateLeveragePills(val);
-            if (typeof calculateMargin === 'function') calculateMargin();
-            if (typeof window.playHaptic === 'function') window.playHaptic('light');
-        };
-
-        window.updateLeveragePills = function(val) {
-            document.querySelectorAll('.lev-pill').forEach(pill => {
-                if (pill.innerText === val + 'x') {
-                    pill.classList.add('active');
-                } else {
-                    pill.classList.remove('active');
-                }
-            });
-        };
     </script>
+
+
+
+    <!-- ====== REALISTIC SMARTPHONE INCOMING MESSAGE PUSH BANNER ====== -->
+    <div id="apex-incoming-push-banner" class="apex-push-banner" onclick="handlePushBannerClick()">
+        <div class="push-icon-box" id="push-icon-box">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+        <div class="push-content">
+            <div class="push-header">
+                <span class="push-app-name" id="push-app-name">WhatsApp</span>
+                <span class="push-bullet">•</span>
+                <span class="push-time">now</span>
+            </div>
+            <div class="push-title" id="push-title">ApexTrade Pro Security</div>
+            <div class="push-body" id="push-body">Your verification code is <b>849201</b>. Valid for 5 minutes.</div>
+        </div>
+        <button class="push-close-btn" onclick="event.stopPropagation(); dismissPushBanner();">&times;</button>
+    </div>
+
+    <style id="apex-push-banner-styles">
+        .apex-push-banner {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 440px;
+            background: rgba(18, 24, 38, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(37, 211, 102, 0.2);
+            z-index: 1000000;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .apex-push-banner.active {
+            top: 15px;
+        }
+        .push-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .push-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .push-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+        .push-app-name {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .push-bullet {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        .push-time {
+            font-size: 0.72rem;
+            color: #64748b;
+        }
+        .push-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .push-body {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            line-height: 1.3;
+        }
+        .push-close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+        }
+    </style>
 
 </body>
 
