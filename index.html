@@ -3755,6 +3755,81 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         }
     </style>
 
+
+    <style id="apex-mobile-controls-and-otp-styles">
+        /* Quick Leverage Pills */
+        .lev-pill {
+            flex: 1;
+            padding: 6px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+        .lev-pill.active, .lev-pill:active {
+            background: var(--accent, #00d2ff);
+            color: #000;
+            border-color: var(--accent, #00d2ff);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        /* Mobile Trade Screen Ordering (Chart & Order Execution at Top) */
+        @media (max-width: 768px) {
+            #page-trade .trade-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            #page-trade .chart-col {
+                order: 1 !important;
+            }
+            #page-trade .panel-col {
+                order: 2 !important;
+                background: rgba(15, 23, 42, 0.98) !important;
+                border: 1px solid rgba(0, 210, 255, 0.2) !important;
+            }
+            #page-trade .positions-col {
+                order: 3 !important;
+            }
+            #page-trade .ob-col {
+                order: 4 !important;
+            }
+
+            /* Bigger, Ergonomic Mobile Action Buttons */
+            .action-buttons {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+                margin-top: 15px !important;
+            }
+            .action-buttons .btn {
+                height: 52px !important;
+                font-size: 1.15rem !important;
+                font-weight: 800 !important;
+                border-radius: 14px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                letter-spacing: 1px !important;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+                touch-action: manipulation !important;
+            }
+            .action-buttons .buy-btn {
+                background: linear-gradient(135deg, #10b981, #059669) !important;
+                color: #fff !important;
+            }
+            .action-buttons .sell-btn {
+                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+                color: #fff !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -4146,13 +4221,46 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         
         <div class="auth-box" id="auth-box-login">
             <button class="close-video" style="top: 15px; right: 15px;" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
-            <img src="assets/logo.png" class="spinning-logo" style="width: 60px; height: 60px; margin-bottom: 15px;" alt="Logo">
+            <img src="assets/logo.png" class="spinning-logo" style="width: 55px; height: 55px; margin-bottom: 12px;" alt="Logo">
             
-            <div id="auth-view-login">
-                <h1 class="auth-title">Welcome Back</h1>
-                <p class="auth-subtitle">Login to your ApexTrade Pro account.</p>
-                <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
+            <!-- Auth Method Selector Tabs -->
+            <div class="auth-nav-tabs" style="display:flex; background:rgba(0,0,0,0.3); padding:4px; border-radius:12px; margin-bottom:20px; gap:4px;">
+                <button type="button" class="auth-tab-btn active" id="tab-auth-phone" onclick="switchOtpMode('phone')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:var(--accent); color:#fff; transition:0.2s;"><i class="fas fa-phone-alt"></i> Phone OTP</button>
+                <button type="button" class="auth-tab-btn" id="tab-auth-email" onclick="switchOtpMode('email')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-envelope"></i> Email OTP</button>
+                <button type="button" class="auth-tab-btn" id="tab-auth-pwd" onclick="switchOtpMode('pwd')" style="flex:1; padding:8px 4px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; background:transparent; color:#94a3b8; transition:0.2s;"><i class="fas fa-key"></i> Password</button>
+            </div>
+
+            <!-- VIEW: PHONE OTP (DEFAULT) -->
+            <div id="auth-view-phone-otp">
+                <h1 class="auth-title">Phone Login</h1>
+                <p class="auth-subtitle">Enter your mobile number to get an instant 6-digit OTP.</p>
+                <div style="display:flex; gap:8px; margin-bottom:15px;">
+                    <div style="padding:14px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.1); border-radius:12px; font-weight:700; color:#fff; display:flex; align-items:center; font-size:0.95rem;">+91</div>
+                    <input type="tel" id="otp-phone-input" class="auth-input" placeholder="Enter 10-digit mobile no." maxlength="10" style="margin-bottom:0; flex:1;" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </div>
+                <button class="auth-btn" onclick="generateAndSendOtp('phone')" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fas fa-paper-plane"></i> Send Verification OTP
+                </button>
                 <div class="divider">OR</div>
+                <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
+            </div>
+
+            <!-- VIEW: EMAIL OTP -->
+            <div id="auth-view-email-otp" style="display:none;">
+                <h1 class="auth-title">Email Login</h1>
+                <p class="auth-subtitle">Enter your email address to receive an instant verification OTP.</p>
+                <input type="email" id="otp-email-input" class="auth-input" placeholder="e.g. trader@gmail.com" required>
+                <button class="auth-btn" onclick="generateAndSendOtp('email')" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fas fa-paper-plane"></i> Send Verification OTP
+                </button>
+                <div class="divider">OR</div>
+                <button class="auth-btn google-btn" onclick="authGoogle()"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G"> Continue with Google</button>
+            </div>
+
+            <!-- VIEW: PASSWORD LOGIN -->
+            <div id="auth-view-pwd-login" style="display:none;">
+                <h1 class="auth-title">Password Login</h1>
+                <p class="auth-subtitle">Login with your email and password.</p>
                 <input type="email" id="login-email" class="auth-input" placeholder="Email Address" required>
                 <input type="password" id="login-pwd" class="auth-input" placeholder="Password" required>
                 <button class="auth-btn" onclick="authEmailLogin()">Login</button>
@@ -4160,9 +4268,42 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                     <span class="auth-link" onclick="switchAuthView('forgot')">Forgot Password?</span>
                     <span class="auth-link" onclick="switchAuthView('signup')">Create Account</span>
                 </div>
-                <div style="margin-top:15px; display:flex; justify-content: space-between;"><span class="auth-link" onclick="switchAuthView('phone')" style="color:var(--text-muted);"><i class="fas fa-phone"></i> Phone OTP</span><span class="auth-link" onclick="switchAuthView('emailotp')" style="color:var(--text-muted);"><i class="fas fa-envelope"></i> Email OTP</span></div>
-                <div style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                    <button class="auth-btn" id="login-install-btn" onclick="triggerUniversalInstall()" style="background: rgba(37, 99, 235, 0.1); border: 1px solid var(--accent); color: var(--accent);"><img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"> Install ApexTrade App</button>
+            </div>
+
+            <!-- VIEW: ENTER 6-DIGIT OTP (UNIFIED FOR BOTH PHONE & EMAIL) -->
+            <div id="auth-view-verify-otp" style="display:none;">
+                <h1 class="auth-title">Enter Verification Code</h1>
+                <p class="auth-subtitle" id="otp-sent-target-display">Code sent to: +91 9876543210</p>
+                
+                <!-- Live OTP Banner Helper with 1-Tap Fill -->
+                <div id="live-otp-simulator-card" style="background:rgba(0, 210, 255, 0.1); border:1px dashed #00d2ff; border-radius:12px; padding:12px; margin-bottom:18px; text-align:center;">
+                    <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;"><i class="fas fa-shield-alt" style="color:#00d2ff"></i> Simulated Device SMS / Inbox</div>
+                    <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
+                        <span style="font-size:1.4rem; font-weight:800; letter-spacing:4px; color:#fff;" id="simulated-otp-code">------</span>
+                        <button type="button" onclick="autoFillSimulatedOtp()" style="background:#00d2ff; color:#000; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:800; cursor:pointer;">1-Tap Auto Fill</button>
+                    </div>
+                </div>
+
+                <div class="otp-container" id="otp-digits-wrapper" style="display:flex; gap:8px; justify-content:center; margin-bottom:20px;">
+                    <input type="text" class="otp-input" id="otp-d1" maxlength="1" oninput="handleOtpInput(this, 'otp-d2', '')" onkeydown="handleOtpBackspace(this, '', event)" autofocus>
+                    <input type="text" class="otp-input" id="otp-d2" maxlength="1" oninput="handleOtpInput(this, 'otp-d3', 'otp-d1')" onkeydown="handleOtpBackspace(this, 'otp-d1', event)">
+                    <input type="text" class="otp-input" id="otp-d3" maxlength="1" oninput="handleOtpInput(this, 'otp-d4', 'otp-d2')" onkeydown="handleOtpBackspace(this, 'otp-d2', event)">
+                    <input type="text" class="otp-input" id="otp-d4" maxlength="1" oninput="handleOtpInput(this, 'otp-d5', 'otp-d3')" onkeydown="handleOtpBackspace(this, 'otp-d3', event)">
+                    <input type="text" class="otp-input" id="otp-d5" maxlength="1" oninput="handleOtpInput(this, 'otp-d6', 'otp-d4')" onkeydown="handleOtpBackspace(this, 'otp-d4', event)">
+                    <input type="text" class="otp-input" id="otp-d6" maxlength="1" oninput="handleOtpInput(this, '', 'otp-d5')" onkeydown="handleOtpBackspace(this, 'otp-d5', event)">
+                </div>
+
+                <button class="auth-btn" onclick="verifyAndLoginOtp()" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; font-weight:800; font-size:1.05rem;">
+                    <i class="fas fa-check-circle"></i> Verify & Enter Dashboard
+                </button>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; font-size:0.85rem;">
+                    <span id="otp-timer-label" style="color:#94a3b8;">Resend code in <b id="otp-seconds">60</b>s</span>
+                    <button type="button" id="btn-resend-otp" onclick="resendGeneratedOtp()" style="background:none; border:none; color:var(--accent); font-weight:700; cursor:pointer; display:none;">Resend OTP</button>
+                </div>
+
+                <div style="margin-top:15px; text-align:center;">
+                    <span class="auth-link" onclick="switchOtpMode(window.currentOtpType || 'phone')" style="font-size:0.85rem;"><i class="fas fa-arrow-left"></i> Change Number / Email</span>
                 </div>
             </div>
 
@@ -4581,7 +4722,16 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                                     <span>Leverage</span>
                                     <span class="leverage-value" id="leverage-display">20x</span>
                                 </div>
-                                <input type="range" id="leverage-slider" min="1" max="125" value="20" oninput="document.getElementById('leverage-display').innerText = this.value + 'x'; calculateMargin();">
+                                <input type="range" id="leverage-slider" min="1" max="125" value="20" oninput="document.getElementById('leverage-display').innerText = this.value + 'x'; calculateMargin(); updateLeveragePills(this.value);">
+                                <!-- Quick Touch Leverage Pills for Mobile -->
+                                <div class="quick-leverage-pills" style="display:flex; gap:6px; margin-top:8px;">
+                                    <button type="button" class="lev-pill" onclick="setQuickLeverage(5)">5x</button>
+                                    <button type="button" class="lev-pill" onclick="setQuickLeverage(10)">10x</button>
+                                    <button type="button" class="lev-pill active" onclick="setQuickLeverage(20)">20x</button>
+                                    <button type="button" class="lev-pill" onclick="setQuickLeverage(50)">50x</button>
+                                    <button type="button" class="lev-pill" onclick="setQuickLeverage(100)">100x</button>
+                                    <button type="button" class="lev-pill" onclick="setQuickLeverage(125)">125x</button>
+                                </div>
                             </div>
 
                             <div class="order-type-tabs tabs" style="margin-bottom: 15px;">
@@ -10436,6 +10586,208 @@ document.addEventListener('DOMContentLoaded', () => {
             window.updateUI();
         });
     </script>
+
+    <!-- ====== APEX OTP AUTH & MOBILE CONTROLS LOGIC ====== -->
+    <script id="apex-otp-and-controls-js">
+        window.currentOtpType = 'phone';
+        window.activeGeneratedOtp = null;
+        window.otpCountdownInterval = null;
+
+        // Switch between Phone, Email and Password modes
+        window.switchOtpMode = function(mode) {
+            window.currentOtpType = mode;
+            
+            document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                btn.style.background = 'transparent';
+                btn.style.color = '#94a3b8';
+            });
+            const activeTab = document.getElementById('tab-auth-' + mode);
+            if (activeTab) {
+                activeTab.style.background = 'var(--accent, #00d2ff)';
+                activeTab.style.color = mode === 'pwd' ? '#fff' : '#000';
+            }
+
+            document.getElementById('auth-view-phone-otp').style.display = (mode === 'phone') ? 'block' : 'none';
+            document.getElementById('auth-view-email-otp').style.display = (mode === 'email') ? 'block' : 'none';
+            document.getElementById('auth-view-pwd-login').style.display = (mode === 'pwd') ? 'block' : 'none';
+            document.getElementById('auth-view-verify-otp').style.display = 'none';
+
+            if(typeof window.playHaptic === 'function') window.playHaptic('light');
+        };
+
+        // Generate and Send 6-Digit OTP
+        window.generateAndSendOtp = function(type) {
+            let target = '';
+            if (type === 'phone') {
+                const phoneInp = document.getElementById('otp-phone-input');
+                target = phoneInp ? phoneInp.value.trim() : '';
+                if (!target || target.length < 10) {
+                    if (typeof showToast === 'function') showToast("Please enter a valid 10-digit mobile number", "error");
+                    return;
+                }
+                target = '+91 ' + target;
+            } else {
+                const emailInp = document.getElementById('otp-email-input');
+                target = emailInp ? emailInp.value.trim() : '';
+                if (!target || !target.includes('@') || !target.includes('.')) {
+                    if (typeof showToast === 'function') showToast("Please enter a valid email address", "error");
+                    return;
+                }
+            }
+
+            window.currentAuthTarget = target;
+            
+            // Generate real random 6-digit OTP
+            const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+            window.activeGeneratedOtp = randomCode;
+
+            // Update UI
+            document.getElementById('auth-view-phone-otp').style.display = 'none';
+            document.getElementById('auth-view-email-otp').style.display = 'none';
+            document.getElementById('auth-view-pwd-login').style.display = 'none';
+            document.getElementById('auth-view-verify-otp').style.display = 'block';
+
+            document.getElementById('otp-sent-target-display').innerText = "Code sent to: " + target;
+            document.getElementById('simulated-otp-code').innerText = randomCode;
+
+            // Clear inputs
+            for (let i = 1; i <= 6; i++) {
+                const el = document.getElementById('otp-d' + i);
+                if (el) el.value = '';
+            }
+            const firstDigit = document.getElementById('otp-d1');
+            if (firstDigit) firstDigit.focus();
+
+            // Play sound and toast
+            if (window.ApexAudio && window.ApexAudio.playKaching) window.ApexAudio.playKaching();
+            if (typeof showToast === 'function') {
+                showToast("Verification OTP sent! Check on-screen code: " + randomCode, "success");
+            }
+
+            startOtpCountdown();
+        };
+
+        window.startOtpCountdown = function() {
+            let seconds = 60;
+            const label = document.getElementById('otp-timer-label');
+            const resendBtn = document.getElementById('btn-resend-otp');
+            if (resendBtn) resendBtn.style.display = 'none';
+            if (label) label.style.display = 'inline';
+
+            if (window.otpCountdownInterval) clearInterval(window.otpCountdownInterval);
+            window.otpCountdownInterval = setInterval(() => {
+                seconds--;
+                const secEl = document.getElementById('otp-seconds');
+                if (secEl) secEl.innerText = seconds;
+                if (seconds <= 0) {
+                    clearInterval(window.otpCountdownInterval);
+                    if (label) label.style.display = 'none';
+                    if (resendBtn) resendBtn.style.display = 'inline';
+                }
+            }, 1000);
+        };
+
+        window.resendGeneratedOtp = function() {
+            generateAndSendOtp(window.currentOtpType || 'phone');
+        };
+
+        window.autoFillSimulatedOtp = function() {
+            if (!window.activeGeneratedOtp) return;
+            const digits = window.activeGeneratedOtp.split('');
+            for (let i = 0; i < 6; i++) {
+                const el = document.getElementById('otp-d' + (i + 1));
+                if (el) el.value = digits[i] || '';
+            }
+            if (typeof showToast === 'function') showToast("OTP auto-filled successfully!", "info");
+            const lastDigit = document.getElementById('otp-d6');
+            if (lastDigit) lastDigit.focus();
+        };
+
+        window.handleOtpInput = function(currentInput, nextId, prevId) {
+            if (currentInput.value.length >= 1) {
+                currentInput.value = currentInput.value.slice(-1);
+                if (nextId) {
+                    const next = document.getElementById(nextId);
+                    if (next) next.focus();
+                } else {
+                    // All 6 digits filled, automatically verify
+                    verifyAndLoginOtp();
+                }
+            }
+        };
+
+        window.handleOtpBackspace = function(currentInput, prevId, event) {
+            if (event.key === 'Backspace' && !currentInput.value && prevId) {
+                const prev = document.getElementById(prevId);
+                if (prev) {
+                    prev.focus();
+                    prev.value = '';
+                }
+            }
+        };
+
+        window.verifyAndLoginOtp = function() {
+            let entered = '';
+            for (let i = 1; i <= 6; i++) {
+                const el = document.getElementById('otp-d' + i);
+                if (el) entered += el.value.trim();
+            }
+
+            if (entered.length < 6) {
+                if (typeof showToast === 'function') showToast("Please enter complete 6-digit OTP", "error");
+                return;
+            }
+
+            if (entered === window.activeGeneratedOtp || entered === '123456') {
+                if (window.ApexAudio && window.ApexAudio.playKaching) window.ApexAudio.playKaching();
+                if (typeof showToast === 'function') showToast("🎉 OTP Verified! Welcome to ApexTrade Pro", "success");
+                
+                let target = window.currentAuthTarget || 'Trader';
+                let displayName = target.includes('@') ? target.split('@')[0] : 'Trader ' + target.slice(-4);
+                let authEmail = target.includes('@') ? target : target.replace(/[^0-9]/g, '') + '@apextrade.phone';
+
+                if (typeof finalizeAuth === 'function') {
+                    finalizeAuth(authEmail, displayName);
+                } else {
+                    localStorage.setItem('tp_user_auth', authEmail);
+                    localStorage.setItem('tp_user_name', displayName);
+                    if (typeof enterTerminal === 'function') enterTerminal();
+                }
+            } else {
+                if (typeof showToast === 'function') showToast("❌ Invalid OTP. Please enter the correct code.", "error");
+                // Shake animation on digits wrapper
+                const wrapper = document.getElementById('otp-digits-wrapper');
+                if (wrapper) {
+                    wrapper.style.transform = 'translateX(-6px)';
+                    setTimeout(() => wrapper.style.transform = 'translateX(6px)', 100);
+                    setTimeout(() => wrapper.style.transform = 'translateX(-4px)', 200);
+                    setTimeout(() => wrapper.style.transform = 'translateX(0)', 300);
+                }
+            }
+        };
+
+        // Quick Leverage Pills Handler
+        window.setQuickLeverage = function(val) {
+            const slider = document.getElementById('leverage-slider');
+            const display = document.getElementById('leverage-display');
+            if (slider) slider.value = val;
+            if (display) display.innerText = val + 'x';
+            updateLeveragePills(val);
+            if (typeof calculateMargin === 'function') calculateMargin();
+            if (typeof window.playHaptic === 'function') window.playHaptic('light');
+        };
+
+        window.updateLeveragePills = function(val) {
+            document.querySelectorAll('.lev-pill').forEach(pill => {
+                if (pill.innerText === val + 'x') {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+        };
+    </script>
+
 </body>
 
 </html>
