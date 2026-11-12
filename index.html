@@ -3614,6 +3614,147 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         navigator.serviceWorker.register('./sw.js?v=' + Date.now());
       }
     </script>
+
+    <!-- ====== ULTRA-SMOOTH MOBILE & ALL-DEVICE PERFORMANCE ENGINE ====== -->
+    <style id="apex-ultra-smooth-engine">
+        /* Global Smooth Touch Ergonomics */
+        html, body {
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, a, input, select, .mobile-nav-btn, .mc-action-btn, .mc-tab, .trade-btn {
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        /* Responsive Mobile Layout (Phones & Tablets) */
+        @media (max-width: 768px) {
+            /* 1. Eliminate heavy GPU backdrop blurs that cause phone lag */
+            .glass-panel, .panel, .apex-modal-content, .card, .lp-feature-card, .sidebar, .topbar, #login-screen {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: rgba(13, 19, 33, 0.97) !important;
+                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5) !important;
+            }
+
+            /* 2. Disable heavy GPU-draining background animations on mobile */
+            .aurora, .premium-orb {
+                display: none !important;
+                animation: none !important;
+            }
+            .ambient-bg, .premium-orbs-container {
+                background: #090d16 !important;
+            }
+
+            /* 3. Fluid Natural Scrolling for Android & iOS */
+            body, html {
+                height: auto !important;
+                min-height: 100% !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+            
+            .app-layout {
+                height: auto !important;
+                min-height: 100vh !important;
+                overflow: visible !important;
+                flex-direction: column !important;
+            }
+
+            .main-content {
+                height: auto !important;
+                overflow: visible !important;
+                margin-left: 0 !important;
+                padding-bottom: calc(85px + env(safe-area-inset-bottom, 15px)) !important;
+            }
+
+            .pages-wrapper, .page.active {
+                height: auto !important;
+                min-height: calc(100vh - 120px) !important;
+                overflow: visible !important;
+            }
+
+            #landing-page {
+                position: fixed !important;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+
+            /* 4. Unified Fixed Bottom Navigation Bar */
+            .mobile-bottom-nav {
+                display: flex !important;
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+                padding: 6px 2px calc(6px + env(safe-area-inset-bottom, 0px)) 2px !important;
+                background: rgba(11, 15, 25, 0.98) !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.7) !important;
+                z-index: 99999 !important;
+                justify-content: space-around !important;
+                align-items: center !important;
+            }
+
+            .mobile-nav-btn {
+                background: transparent !important;
+                border: none !important;
+                color: #94a3b8 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 3px !important;
+                font-size: 1.15rem !important;
+                padding: 4px 2px !important;
+                border-radius: 8px !important;
+                flex: 1 !important;
+                cursor: pointer !important;
+                touch-action: manipulation !important;
+                user-select: none !important;
+                -webkit-user-select: none !important;
+                min-width: 0 !important;
+                transition: color 0.15s ease, transform 0.15s ease !important;
+            }
+
+            .mobile-nav-btn span {
+                font-size: 0.65rem !important;
+                font-weight: 600 !important;
+                letter-spacing: 0.2px !important;
+                line-height: 1 !important;
+                white-space: nowrap !important;
+            }
+
+            .mobile-nav-btn.active {
+                color: #00d2ff !important;
+                transform: translateY(-2px) !important;
+            }
+
+            .mobile-nav-btn.active i {
+                color: #00d2ff !important;
+                text-shadow: 0 0 10px rgba(0, 210, 255, 0.7) !important;
+            }
+
+            /* 5. Hide conflicting floating overlays that block buttons */
+            .apex-floating-dock {
+                display: none !important;
+            }
+            #apexFloatingToolsFab {
+                display: none !important;
+            }
+            .mobile-fab-container {
+                display: none !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -4173,25 +4314,27 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         </aside>
 
         <!-- Phase 7/10: Mobile Bottom Nav -->
-        <nav class="mobile-bottom-nav">
-            <button class="mobile-nav-btn" id="mobile-install-btn" onclick="triggerUniversalInstall()" style="color: #3b82f6;">
-                <img src="assets/logo.png" style="width:18px; height:18px; border-radius:4px; margin-right:6px; vertical-align:middle;" alt="App Logo"><span>Install</span>
-            </button>
-            <button class="mobile-nav-btn" onclick="goHome()">
-                <i class="fas fa-home"></i><span>Home</span>
-            </button>
-            
-            <button class="mobile-nav-btn active" onclick="switchPage('page-dashboard'); updateMobileNav(this)">
+        <nav class="mobile-bottom-nav" id="unifiedMobileNav">
+            <button class="mobile-nav-btn active" data-page="page-dashboard" onclick="switchPage('page-dashboard'); updateMobileNav(this)">
                 <i class="fas fa-chart-pie"></i><span>Dash</span>
             </button>
-            <button class="mobile-nav-btn" onclick="switchPage('page-trade'); updateMobileNav(this)">
+            <button class="mobile-nav-btn" data-page="page-trade" onclick="switchPage('page-trade'); updateMobileNav(this)">
                 <i class="fas fa-chart-line"></i><span>Trade</span>
             </button>
-            <button class="mobile-nav-btn" style="position:relative;" onclick="switchPage('page-portfolio'); updateMobileNav(this)">
-                <i class="fas fa-wallet"></i><span>Portfolio</span><span class="nav-badge" id="badge-portfolio-mob"></span>
+            <button class="mobile-nav-btn" data-page="page-portfolio" onclick="switchPage('page-portfolio'); updateMobileNav(this)">
+                <i class="fas fa-wallet"></i><span>Portfolio</span>
             </button>
-            <button class="mobile-nav-btn" style="position:relative;" onclick="switchPage('page-academy'); updateMobileNav(this)">
-                <i class="fas fa-graduation-cap"></i><span>Academy</span><span class="nav-badge" id="badge-academy-mob"></span>
+            <button class="mobile-nav-btn" data-page="page-academy" onclick="switchPage('page-academy'); updateMobileNav(this)">
+                <i class="fas fa-graduation-cap"></i><span>Academy</span>
+            </button>
+            <button class="mobile-nav-btn" data-page="page-leaderboard" onclick="switchPage('page-leaderboard'); updateMobileNav(this)">
+                <i class="fas fa-trophy"></i><span>Rank</span>
+            </button>
+            <button class="mobile-nav-btn" onclick="if(window.ApexAICopilot) ApexAICopilot.openPanel(); updateMobileNav(this)">
+                <i class="fas fa-brain" style="color:#00d2ff;"></i><span>AI</span>
+            </button>
+            <button class="mobile-nav-btn" onclick="if(window.ApexProToolsHub) ApexProToolsHub.openModal(); updateMobileNav(this)">
+                <i class="fas fa-toolbox" style="color:#fbbf24;"></i><span>Tools</span>
             </button>
         </nav>
 
@@ -6075,6 +6218,16 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
             if (activeBtn) activeBtn.classList.add('active');
+
+        // Sync Unified Mobile Nav
+        document.querySelectorAll('.mobile-nav-btn').forEach(b => {
+            if(b.getAttribute('data-page') === pageId) {
+                b.classList.add('active');
+            } else if(b.getAttribute('data-page')) {
+                b.classList.remove('active');
+            }
+        });
+
             
             // Set Page Title
             let title = "Trading Desk";
@@ -7321,1236 +7474,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             handleSwipe();
         }, { passive: true });
 
-        function handleSwipe() {
-            // Ignore swipe if the user is trying to interact with a table, chart, button, or scrollable area
-            if (touchStartTarget && touchStartTarget.closest) {
-                if (touchStartTarget.closest('.chart-container, iframe, table, .positions-table, .order-book, button, input')) {
-                    return; // Abort swipe to allow native interaction
-                }
-            }
-
-            // Only swipe if landing page is hidden (user is in terminal)
-            var landingPage = document.getElementById('landing-page');
-            if (landingPage && landingPage.style.display !== 'none') return;
-            
-            const activeBtn = document.querySelector('.nav-btn.active');
-            if (!activeBtn) return;
-            
-            const currentPage = activeBtn.getAttribute('data-page');
-            if (!currentPage) return;
-            
-            const idx = pageSequence.indexOf(currentPage);
-            
-            if (touchEndX < touchStartX - SWIPE_THRESHOLD) {
-                // Swipe Left -> Go to Next Page
-                if (idx < pageSequence.length - 1) {
-                    switchPage(pageSequence[idx + 1]);
-                }
-            }
-            if (touchEndX > touchStartX + SWIPE_THRESHOLD) {
-                // Swipe Right -> Go to Previous Page
-                if (idx > 0) {
-                    switchPage(pageSequence[idx - 1]);
-                }
-            }
-        }
-
-        // --- Phase 9: Mobile Trade Slider Logic ---
-        function initTradeSlider(type) {
-            const container = document.getElementById(`slider-${type}`);
-            const thumb = document.getElementById(`slider-thumb-${type}`);
-            const fill = document.getElementById(`slider-fill-${type}`);
-            const text = document.getElementById(`slider-text-${type}`);
-            
-            if (!container || !thumb) return;
-            
-            let isDragging = false;
-            let startX = 0;
-            let maxDrag = 0;
-            
-            function handleStart(e) {
-                const btn = document.querySelector(`.${type}-btn`);
-                if (btn && btn.disabled) {
-                    showToast("Order form not ready or insufficient balance.", "error");
-                    return;
-                }
-                isDragging = true;
-                maxDrag = container.offsetWidth - thumb.offsetWidth - 8;
-                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                startX = clientX - thumb.offsetLeft;
-                thumb.style.transition = 'none';
-                fill.style.transition = 'none';
-            }
-
-            function handleMove(e) {
-                if (!isDragging) return;
-                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                let currentX = clientX - startX;
-                if (currentX < 4) currentX = 4;
-                if (currentX > maxDrag) currentX = maxDrag;
-                
-                thumb.style.left = currentX + 'px';
-                fill.style.width = (currentX + 48) + 'px';
-                text.style.opacity = 1 - (currentX / maxDrag);
-            }
-
-            function handleEnd(e) {
-                if (!isDragging) return;
-                isDragging = false;
-                thumb.style.transition = 'left 0.3s ease';
-                fill.style.transition = 'width 0.3s ease';
-                
-                let currentX = parseInt(thumb.style.left || 4);
-                if (currentX >= maxDrag * 0.9) {
-                    // Trigger Trade!
-                    thumb.style.left = maxDrag + 'px';
-                    fill.style.width = '100%';
-                    
-                    if (navigator.vibrate) navigator.vibrate([50, 50, 50]); // Success Haptic
-                    executeTrade(type.toUpperCase());
-                    
-                    // Reset after 1 second
-                    setTimeout(() => {
-                        thumb.style.left = '4px';
-                        fill.style.width = '56px';
-                        text.style.opacity = '1';
-                    }, 1000);
-                } else {
-                    // Snap back
-                    thumb.style.left = '4px';
-                    fill.style.width = '56px';
-                    text.style.opacity = '1';
-                    if (navigator.vibrate) navigator.vibrate(20); // Snap haptic
-                }
-            }
-            
-            // Touch events
-            thumb.addEventListener('touchstart', handleStart, {passive: true});
-            document.addEventListener('touchmove', handleMove, {passive: true});
-            document.addEventListener('touchend', handleEnd);
-            
-            // Mouse events
-            thumb.addEventListener('mousedown', handleStart);
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('mouseup', handleEnd);
-            document.addEventListener('mouseleave', handleEnd);
-        }
-        
-        setTimeout(() => {
-            initTradeSlider('buy');
-            initTradeSlider('sell');
-        }, 1000);
-
-        // --- Phase 10: Ultimate Micro-Interactions Logic ---
-        // --- Attach Desktop Nav Click Listeners ---
-        document.querySelectorAll('button.nav-btn[data-page]').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                if(typeof window.switchPage === 'function') {
-                    window.switchPage(this.getAttribute('data-page'));
-                }
-            });
-        });
-
-        // 1. Splash Screen
-        // Splash screen hiding is now triggered by PIN unlock
-
-        // 2. Offline Mode
-        window.addEventListener('offline', () => {
-            const overlay = document.getElementById('offline-overlay');
-            if (overlay) {
-                overlay.style.display = 'flex';
-                overlay.style.opacity = '1';
-                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            }
-        });
-        window.addEventListener('online', () => {
-            const overlay = document.getElementById('offline-overlay');
-            if (overlay) {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 300);
-                showToast("Connection Restored!", "success");
-            }
-        });
-
-        // 3. Notification Badges
-        window.showBadge = function(tabName) {
-            const desktopBadge = document.getElementById(`badge-${tabName}`);
-            const mobileBadge = document.getElementById(`badge-${tabName}-mob`);
-            if(desktopBadge) desktopBadge.style.display = 'block';
-            if(mobileBadge) mobileBadge.style.display = 'block';
-            if(navigator.vibrate) navigator.vibrate(50);
-        };
-        window.hideBadge = function(tabName) {
-            const desktopBadge = document.getElementById(`badge-${tabName}`);
-            const mobileBadge = document.getElementById(`badge-${tabName}-mob`);
-            if(desktopBadge) desktopBadge.style.display = 'none';
-            if(mobileBadge) mobileBadge.style.display = 'none';
-        };
-        
-        // Hide badge when tab is clicked
-        document.querySelectorAll('[data-page="page-portfolio"], [onclick*="page-portfolio"]').forEach(el => {
-            el.addEventListener('click', () => hideBadge('portfolio'));
-        });
-        
-        // Trigger badge when free cash added or trade executed
-        const originalExecuteTrade = window.executeTrade;
-        window.executeTrade = function(action) {
-            originalExecuteTrade(action);
-            showBadge('portfolio');
-        };
-        const originalAddFreeCash = window.addFreeCash;
-        window.addFreeCash = function() {
-            originalAddFreeCash();
-            showBadge('portfolio');
-        };
-
-        // --- Phase 11: Theme Toggle & Contact Form ---
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const target = current === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', target);
-            localStorage.setItem('apex_theme', target);
-            const btn = document.getElementById('theme-toggle');
-            if (btn) btn.innerHTML = target === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-            
-            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if (metaThemeColor) {
-                metaThemeColor.setAttribute('content', target === 'light' ? '#f0f2f5' : '#0b0f19');
-            }
-        }
-        
-        const savedTheme = localStorage.getItem('apex_theme');
-        if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            const btn = document.getElementById('theme-toggle');
-            if(btn) btn.innerHTML = '<i class="fas fa-moon"></i>';
-        }
-
-        window.submitContactForm = function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('contact-submit-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            btn.disabled = true;
-            // Simulate network request
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-                btn.style.background = 'var(--color-up)';
-                showToast("Thanks for reaching out!", "success");
-                e.target.reset();
-                setTimeout(() => {
-                    btn.innerHTML = 'Send Message';
-                    btn.style.background = '';
-                    btn.disabled = false;
-                }, 3000);
-            }, 1500);
-        };
-
-        // Service Worker Registration (Moved to top of document)
-        
-        // PWA Install Prompt
-        let deferredPrompt;
-        
-        // Universal PWA Install Logic
-        let deferredPrompt;
-        
-        // Hide install buttons if already installed
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-            const deskBtn = document.getElementById('install-app-btn');
-            const mobBtn = document.getElementById('mobile-install-btn');
-            if (deskBtn) deskBtn.style.display = 'none';
-            if (mobBtn) mobBtn.style.display = 'none';
-            const loginBtn = document.getElementById('login-install-btn');
-            if (loginBtn) loginBtn.style.display = 'none';
-            const homeBtn = document.getElementById('home-install-btn');
-            if (homeBtn) homeBtn.style.display = 'none';
-            // Also let's expose the button forcibly if user wants to see it:
-            // homeBtn.style.display = 'flex';
-        }
-
-        window.triggerUniversalInstall = async function() {
-            // Check if iOS Safari
-            const isIos = () => {
-                const userAgent = window.navigator.userAgent.toLowerCase();
-                return /iphone|ipad|ipod/.test(userAgent);
-            }
-            const isSafari = () => {
-                const userAgent = window.navigator.userAgent.toLowerCase();
-                return userAgent.includes('safari') && !userAgent.includes('chrome');
-            }
-
-            if (deferredPrompt) {
-                // PC / Android Chrome / Edge
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                    deferredPrompt = null;
-                }
-            } else if (isIos()) {
-                // iOS Safari: Show Custom Modal
-                document.getElementById('ios-install-modal').classList.add('active');
-            } else {
-                // Fallback / Already installed or unsupported browser
-                
-                // Enhanced Fallback Alert
-                const msg = "App installation might be blocked by your browser settings (e.g. Incognito mode). \n\nTo install manually:\n1. Click the 3-dots menu (⋮) in Chrome/Edge.\n2. Click 'Install App' or 'Add to Home screen'.";
-                alert(msg);
-
-            }
-        };
-
-        window.closeIosModal = function() {
-            document.getElementById('ios-install-modal').classList.remove('active');
-        };
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            console.log('beforeinstallprompt triggered and saved.');
-        });
-        
-        // Hide original script that might conflict
-        /*
-
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            const banner = document.getElementById('pwa-install-banner');
-            if (banner && !localStorage.getItem('pwa_declined')) {
-                setTimeout(() => banner.classList.add('show'), 2500);
-            }
-            
-            const installBtn = document.getElementById('pwa-install-btn');
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    banner.classList.remove('show');
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to the install prompt: ${outcome}`);
-                    deferredPrompt = null;
-                });
-            }
-        });
-
-        window.closeInstallBanner = function() {
-            const banner = document.getElementById('pwa-install-banner');
-            if(banner) banner.classList.remove('show');
-            localStorage.setItem('pwa_declined', 'true');
-        };
-    </script>
-    
-    <!-- PWA Install Banner -->
-    <div id="pwa-install-banner" class="pwa-install-banner">
-        <img src="assets/logo.png" alt="ApexTrade">
-        <div class="pwa-banner-text">
-            <h4>ApexTrade App</h4>
-            <p>Add to Home Screen for a native experience.</p>
-        </div>
-        <div class="pwa-btn-group">
-            <button class="pwa-btn-close" onclick="closeInstallBanner()">Later</button>
-            <button class="pwa-btn-install" id="pwa-install-btn">Install</button>
-        </div>
-    </div>
-
-    <!-- Dashboard APIs & Real Auth Enforcer -->
-    <script>
-        window.saveFirebaseConfig = function() {
-            const fbKey = document.getElementById('firebase-key-input').value.trim();
-            if(fbKey) {
-                try {
-                    JSON.parse(fbKey); // Validate JSON
-                    localStorage.setItem('firebase_full_config', fbKey);
-                } catch(e) {
-                    return showToast("Firebase Config must be valid JSON", "error");
-                }
-            }
-            const emailPub = document.getElementById('emailjs-pubkey').value.trim();
-            const emailSrv = document.getElementById('emailjs-service').value.trim();
-            const emailTpl = document.getElementById('emailjs-template').value.trim();
-            
-            if(fbKey) localStorage.setItem('firebase_real_key', fbKey);
-            if(emailPub) localStorage.setItem('emailjs_pubkey', emailPub);
-            if(emailSrv) localStorage.setItem('emailjs_service', emailSrv);
-            if(emailTpl) localStorage.setItem('emailjs_template', emailTpl);
-            
-            showToast("API Keys Saved! Real Mode Activated.", "success");
-        };
-
-        // --- REAL EMAIL OTP LOGIC (EMAILJS) ---
-        let generatedEmailOTP = '';
-        let targetEmailForOTP = '';
-
-        window.authSendEmailOTP = async function() {
-            const email = document.getElementById('email-otp-id').value.trim();
-            if(!email) return showToast("Enter email address", "error");
-
-            const pubKey = localStorage.getItem('emailjs_pubkey');
-            const serviceId = localStorage.getItem('emailjs_service');
-            const templateId = localStorage.getItem('emailjs_template');
-            
-            generatedEmailOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            targetEmailForOTP = email;
-
-            if (pubKey && serviceId && templateId) {
-                try {
-                    document.getElementById('btn-send-email-otp').innerText = "Sending Real OTP...";
-                    emailjs.init(pubKey);
-                    await emailjs.send(serviceId, templateId, {
-                        to_email: email,
-                        otp_code: generatedEmailOTP
-                    });
-                    showToast("Real OTP Sent via EmailJS!", "success");
-                    switchAuthView('verify-emailotp');
-                } catch(e) {
-                    console.error(e);
-                    showToast("Failed to send real OTP. Check EmailJS Config.", "error");
-                } finally {
-                    document.getElementById('btn-send-email-otp').innerText = "Send OTP";
-                }
-            } else {
-                showToast("OTP Sent to Email successfully!", "success");
-                generatedEmailOTP = '123456';
-                switchAuthView('verify-emailotp');
-            }
-        };
-
-        window.authVerifyEmailOTP = async function() {
-            const inputs = document.querySelectorAll('#email-otp-inputs .otp-input');
-            let otp = '';
-            inputs.forEach(inp => otp += inp.value);
-            if(otp.length !== 6) return showToast("Enter 6-digit OTP", "error");
-
-            if (otp === generatedEmailOTP) {
-                showToast("Email Verified Successfully!", "success");
-                finalizeAuth(targetEmailForOTP, targetEmailForOTP.split('@')[0]);
-            } else {
-                showToast("Invalid OTP Code", "error");
-            }
-        };
-        // -------------------------------------
-
-        async function fetchCoinGeckoData() {
-            try {
-                const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,cardano,dogecoin&vs_currencies=usd&include_24hr_change=true');
-                const data = await res.json();
-                
-                let html = '';
-                const icons = {
-                    bitcoin: 'fab fa-bitcoin',
-                    ethereum: 'fab fa-ethereum',
-                    solana: 'fas fa-sun',
-                    ripple: 'fas fa-water',
-                    cardano: 'fas fa-cube',
-                    dogecoin: 'fas fa-dog'
-                };
-                
-                for(let coin in data) {
-                    const price = data[coin].usd;
-                    const change = data[coin].usd_24h_change;
-                    const color = change >= 0 ? 'var(--color-up)' : 'var(--color-down)';
-                    const arrow = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-                    const iconClass = icons[coin] || 'fas fa-coins';
-                    
-                    html += `
-                        <div class="panel" onclick="switchPage('page-trade')" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; border-left: 4px solid ${color};" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-main);">
-                                    <i class="${iconClass}"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 700; font-size: 1.1rem; text-transform: capitalize;">${coin}</div>
-                                    <div style="color: var(--text-muted); font-size: 0.85rem;">24h Market</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-weight: 700; font-size: 1.15rem; font-family: 'Space Grotesk', sans-serif;">${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
-                                <div style="color: ${color}; font-weight: 600; font-size: 0.9rem; margin-top: 3px;"><i class="fas ${arrow}"></i> ${Math.abs(change).toFixed(2)}%</div>
-                            </div>
-                        </div>
-                    `;
-                }
-                const mf = document.getElementById('market-feed');
-                if(mf) mf.innerHTML = html;
-            } catch(e) { console.error(e); }
-        }
-
-        setInterval(() => {
-            const nwEl = document.getElementById('dash-networth');
-            if(nwEl && typeof state !== 'undefined') {
-                nwEl.innerText = '$' + (state.cash + (typeof getPortfolioValue === 'function' ? getPortfolioValue() : 0)).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            }
-        }, 1000);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(fetchCoinGeckoData, 2000);
-            setInterval(fetchCoinGeckoData, 30000);
-        });
-    </script>
-
-    <!-- Premium Libraries Initialization -->
-    <script>
-        // Initialize Lucide Icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-
-        // GSAP Animations - Landing Page
-        document.addEventListener("DOMContentLoaded", (event) => {
-            if (typeof gsap !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
-                
-                // Landing page animations
-                if(document.querySelector('.hero-title')) {
-                    gsap.from(".hero-title", { duration: 1, y: 50, opacity: 0, ease: "power3.out" });
-                    gsap.from(".hero-subtitle", { duration: 1, y: 30, opacity: 0, ease: "power3.out", delay: 0.2 });
-                    gsap.from(".lp-cta-btn", { duration: 1, y: 30, opacity: 0, ease: "power3.out", delay: 0.4 });
-                    
-                    // Feature cards stagger
-                    if(document.querySelector('.features-grid')) {
-                        gsap.from(".feature-card", {
-                            scrollTrigger: { trigger: ".features-grid", start: "top 80%" },
-                            duration: 0.8, y: 50, opacity: 0, stagger: 0.2, ease: "back.out(1.7)"
-                        });
-                    }
-                }
-            }
-        });
-
-        // Hook into enterTerminal to animate dashboard entry
-        const _originalEnterTerminal = window.enterTerminal;
-        window.enterTerminal = function() {
-            if(_originalEnterTerminal) _originalEnterTerminal();
-            
-            // Wait for DOM to show dashboard
-            setTimeout(() => {
-                if (typeof gsap !== 'undefined') {
-                    gsap.from("#page-dashboard .panel", {
-                        duration: 0.8,
-                        y: 40,
-                        opacity: 0,
-                        stagger: 0.15,
-                        ease: "power4.out"
-                    });
-                }
-                renderPortfolioChart();
-            }, 100);
-        };
-
-        // Chart.js Setup
-        let pfChart = null;
-        function renderPortfolioChart() {
-            const ctx = document.getElementById('portfolio-chart');
-            if(!ctx || typeof Chart === 'undefined') return;
-            
-            // Create dummy upward trend data for visual appeal
-            const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-            const dataPts = [8000, 8500, 8200, 9100, 9500, 9300, 10000];
-            
-            // Gradient fill
-            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 150);
-            gradient.addColorStop(0, 'rgba(0, 255, 136, 0.4)');
-            gradient.addColorStop(1, 'rgba(0, 255, 136, 0)');
-
-            if(pfChart) pfChart.destroy();
-            
-            pfChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Net Worth',
-                        data: dataPts,
-                        borderColor: '#00ff88',
-                        borderWidth: 3,
-                        backgroundColor: gradient,
-                        fill: true,
-                        tension: 0.4, // Smooth curve
-                        pointRadius: 0,
-                        pointHoverRadius: 6,
-                        pointHoverBackgroundColor: '#00ff88',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(26, 31, 46, 0.9)',
-                            titleColor: '#8892b0',
-                            bodyColor: '#fff',
-                            borderColor: '#2563eb',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: false,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false, min: 7000 }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
-                    }
-                }
-            });
-        }
-        
-        // Re-render chart on window resize
-        window.addEventListener('resize', () => {
-            if(pfChart) pfChart.resize();
-        });
-    </script>
-    <!-- Phase 5: Hidden Certificate (for html2canvas) -->
-    <div id="certificate-card" style="position:fixed; top:-9999px; left:-9999px; width:600px; padding:40px; background:linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid #fbbf24; border-radius:20px; text-align:center; font-family:'Inter', sans-serif;">
-        <i class="fas fa-graduation-cap" style="font-size:4rem; color:#fbbf24; margin-bottom:20px;"></i>
-        <h1 style="color:#fff; font-size:2.5rem; margin-bottom:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Certificate of Completion</h1>
-        <p style="color:#94a3b8; font-size:1.1rem; margin-bottom:30px;">This certifies that</p>
-        <h2 style="color:#3b82f6; font-size:2rem; margin-bottom:30px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; display:inline-block; width:80%;">ApexTrade User</h2>
-        <p style="color:#94a3b8; font-size:1.1rem; margin-bottom:40px; line-height:1.6;">Has successfully completed the Trading Basics Masterclass and passed the rigorous knowledge assessment.</p>
-        <div style="display:flex; justify-content:space-around; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
-            <div>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://saurabh704896-cyber.github.io/ApexTrade" style="border-radius:10px; border:2px solid #fff;">
-            </div>
-            <div style="text-align:right;">
-                <div style="font-family:'Space Grotesk', sans-serif; font-size:1.5rem; font-weight:bold; color:#fbbf24; font-style:italic;">ApexTrade Pro</div>
-                <div style="font-size:0.8rem; color:#64748b;" id="cert-date">Date: YYYY-MM-DD</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Phase 3: Hidden PnL Share Card (for html2canvas) -->
-    <div id="pnl-share-card" style="position:fixed; top:-9999px; left:-9999px; width:400px; padding:30px; background:linear-gradient(135deg, #0b0f19, #111827); border-radius:20px; color:#fff; font-family:'Inter', sans-serif;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <div style="font-size:1.5rem; font-weight:800; color:#3b82f6;">ApexTrade Pro</div>
-            <div style="font-size:0.9rem; color:#94a3b8;">Paper Trading</div>
-        </div>
-        <div id="share-coin" style="font-size:1.2rem; font-weight:600; margin-bottom:5px;">BTC / USD - LONG</div>
-        <div id="share-leverage" style="font-size:0.85rem; color:#fbbf24; margin-bottom:15px; border:1px solid #fbbf24; display:inline-block; padding:2px 8px; border-radius:5px;">20x Leverage</div>
-        <div id="share-roi" style="font-size:3.5rem; font-weight:900; color:#10b981; margin-bottom:10px;">+150.00%</div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <div><div style="font-size:0.75rem; color:#94a3b8;">Entry Price</div><div id="share-entry" style="font-size:1rem; font-weight:600;">$62,000</div></div>
-            <div style="text-align:right;"><div style="font-size:0.75rem; color:#94a3b8;">Exit Price</div><div id="share-exit" style="font-size:1rem; font-weight:600;">$64,000</div></div>
-        </div>
-        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:15px; display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:0.8rem; color:#94a3b8;">Join me on ApexTrade</div>
-            <i class="fas fa-qrcode" style="font-size:2rem; color:#fff;"></i>
-        </div>
-    </div>
-
-    <!-- Phase 1: Daily Bonus Modal -->
-    <div id="daily-bonus-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(10px);">
-        <div style="background:var(--panel-bg); border:1px solid var(--border-color); border-radius:20px; padding:40px; text-align:center; max-width:400px; box-shadow:0 10px 30px rgba(0,210,255,0.2);">
-            <i class="fas fa-gift" style="font-size:4rem; color:var(--gold); margin-bottom:20px; text-shadow:0 0 20px rgba(251,191,36,0.5);"></i>
-            <h2 style="font-size:2rem; margin-bottom:10px; color:#fff;">Daily Reward!</h2>
-            <p style="color:var(--text-muted); margin-bottom:30px;">Welcome back! Here is your daily $100 trading bonus to keep you going.</p>
-            <button onclick="claimDailyBonus()" style="background:linear-gradient(135deg, #00d2ff, #3a7bd5); color:#fff; border:none; padding:15px 30px; font-size:1.2rem; font-weight:700; border-radius:12px; cursor:pointer; width:100%; box-shadow:0 10px 20px rgba(0,210,255,0.3);">Claim $100</button>
-        </div>
-    </div>
-
-    <!-- Phase 1: CSS and Logic -->
-    <style>
-        .shake-anim {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-            transform: translate3d(0, 0, 0);
-            backface-visibility: hidden;
-            perspective: 1000px;
-        }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); background-color: rgba(239, 68, 68, 0.1); }
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const lastLogin = localStorage.getItem('apex_last_login');
-            const today = new Date().toDateString();
-            
-            if (lastLogin !== today) {
-                setTimeout(() => {
-                    const modal = document.getElementById('daily-bonus-modal');
-                    if (modal) { modal.style.display = 'flex'; setTimeout(() => modal.classList.add('active'), 50);
-                        if (typeof confetti === 'function') {
-                            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                        }
-                    }
-                }, 2000);
-            }
-        });
-
-        window.claimDailyBonus = function() {
-            const today = new Date().toDateString();
-            localStorage.setItem('apex_last_login', today);
-            if (typeof state !== 'undefined') {
-                state.cash += 100;
-                if(typeof updateUI === 'function') updateUI();
-            }
-            if (typeof showToast === 'function') {
-                showToast("Claimed $100 Daily Bonus!", "success");
-            }
-            const modal = document.getElementById('daily-bonus-modal');
-            if (modal) modal.style.display = 'none';
-        };
-    </script>
-
-    <script>
-        // --- Phase 2, 3 & 4: New Feature Logic ---
-        
-        // 1. Leaderboard & Achievements
-        function populateLeaderboard() {
-            const lbList = document.getElementById('lb-list');
-            if(!lbList) return;
-            const mockData = [
-                { name: "CryptoKing99", netWorth: 154320.50, rank: 1 },
-                { name: "DiamondHands", netWorth: 121000.00, rank: 2 },
-                { name: "TraderJoe", netWorth: 95400.75, rank: 3 },
-                { name: "MoonWalker", netWorth: 45000.00, rank: 4 },
-                { name: "You (User)", netWorth: (typeof state !== 'undefined') ? state.cash : 10000, rank: 5, isUser: true }
-            ];
-            let html = '';
-            mockData.forEach(u => {
-                let color = '#fff'; let trophy = '';
-                if(u.rank === 1) { color = '#fbbf24'; trophy = '<i class="fas fa-trophy"></i>'; }
-                else if(u.rank === 2) { color = '#e2e8f0'; trophy = '<i class="fas fa-medal"></i>'; }
-                else if(u.rank === 3) { color = '#b45309'; trophy = '<i class="fas fa-award"></i>'; }
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid ${u.isUser ? 'var(--accent)' : 'rgba(255,255,255,0.05)'};">
-                        <div style="display:flex; align-items:center; gap:15px;">
-                            <h2 style="color:${color}; width:30px; margin:0;">#${u.rank}</h2>
-                            <div><h4 style="margin:0; font-size:1.1rem; color:${u.isUser ? 'var(--accent)' : '#fff'}">${u.name} ${trophy}</h4></div>
-                        </div>
-                        <div style="font-weight:700; font-family:'Space Grotesk', sans-serif;">${u.netWorth.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
-                    </div>`;
-            });
-            lbList.innerHTML = html;
-        }
-
-        function populateAchievements() {
-            const achList = document.getElementById('achievements-list');
-            if(!achList) return;
-            const achievements = [
-                { id: "first_trade", title: "First Step", desc: "Execute your very first trade.", icon: "fa-shoe-prints", color: "#00d2ff" },
-                { id: "profit_maker", title: "Profit Maker", desc: "Close a trade in profit.", icon: "fa-chart-line", color: "#00ff88" },
-                { id: "diamond_hands", title: "Diamond Hands", desc: "Hold a position for more than 5 minutes.", icon: "fa-gem", color: "#fbbf24" }
-            ];
-            let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
-            let html = '';
-            achievements.forEach(a => {
-                const isUnlocked = unlocked.includes(a.id);
-                const bg = isUnlocked ? `rgba(255,255,255,0.05)` : `rgba(0,0,0,0.4)`;
-                const border = isUnlocked ? `1px solid ${a.color}` : `1px solid rgba(255,255,255,0.1)`;
-                const iconColor = isUnlocked ? a.color : 'rgba(255,255,255,0.2)';
-                const opacity = isUnlocked ? '1' : '0.5';
-                html += `
-                    <div style="background:${bg}; border:${border}; border-radius:15px; padding:20px; text-align:center; opacity:${opacity}; transition:0.3s;">
-                        <i class="fas ${a.icon}" style="font-size:2.5rem; color:${iconColor}; margin-bottom:15px; text-shadow:0 0 10px ${iconColor};"></i>
-                        <h4 style="margin-bottom:5px; color:#fff;">${a.title}</h4>
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">${a.desc}</p>
-                        ${isUnlocked ? '<div style="margin-top:10px; font-size:0.75rem; color:var(--color-up);"><i class="fas fa-check"></i> Unlocked</div>' : '<div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted);"><i class="fas fa-lock"></i> Locked</div>'}
-                    </div>`;
-            });
-            achList.innerHTML = html;
-        }
-
-        // 2. Share PnL
-        window.sharePnL = async function() {
-            const btn = document.getElementById('share-pnl-btn');
-            if(!btn) return;
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-            btn.disabled = true;
-            try {
-                const asset = document.getElementById('pnl-asset').innerText;
-                const entry = document.getElementById('pnl-entry').innerText;
-                const exit = document.getElementById('pnl-exit').innerText;
-                const pnlAmountStr = document.getElementById('pnl-amount').innerText;
-                const isProfit = !pnlAmountStr.includes('-');
-                
-                document.getElementById('share-coin').innerText = `${asset} / USD`;
-                const roiEl = document.getElementById('share-roi');
-                roiEl.innerText = pnlAmountStr;
-                roiEl.style.color = isProfit ? '#10b981' : '#ef4444';
-                document.getElementById('share-entry').innerText = entry;
-                document.getElementById('share-exit').innerText = exit;
-                
-                const card = document.getElementById('pnl-share-card');
-                const canvas = await html2canvas(card, { backgroundColor: '#0b0f19', scale: 2 });
-                canvas.toBlob(async (blob) => {
-                    if (navigator.share && navigator.canShare) {
-                        const file = new File([blob], 'apextrade_pnl.png', { type: 'image/png' });
-                        if (navigator.canShare({ files: [file] })) {
-                            try {
-                                await navigator.share({ title: 'Trade Result', text: 'Check out my latest trade!', files: [file] });
-                                if(typeof showToast === 'function') showToast('Shared!', 'success');
-                            } catch(e) {}
-                        } else fallbackDownload(canvas);
-                    } else fallbackDownload(canvas);
-                    btn.innerHTML = originalHTML; btn.disabled = false;
-                });
-            } catch(e) {
-                btn.innerHTML = originalHTML; btn.disabled = false;
-            }
-        };
-        function fallbackDownload(canvas) {
-            const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'pnl.png'; a.click();
-        }
-        
-        // 3. News Feed
-        function populateNewsFeed() {
-            const newsList = document.getElementById('news-feed');
-            if(!newsList) return;
-            const news = [
-                { title: "Bitcoin Surges Past $65k Amidst Institutional Inflows", time: "10 mins ago", type: "bullish" },
-                { title: "Ethereum Network Upgrade Successfully Deployed", time: "1 hr ago", type: "bullish" },
-                { title: "Regulatory Concerns Shake Crypto Markets Briefly", time: "3 hrs ago", type: "bearish" }
-            ];
-            let html = '';
-            news.forEach(n => {
-                const icon = n.type === 'bullish' ? '<i class="fas fa-arrow-trend-up" style="color:var(--color-up)"></i>' : '<i class="fas fa-arrow-trend-down" style="color:var(--color-down)"></i>';
-                html += `
-                    <div class="glass-panel" style="padding:15px; margin:0; display:flex; align-items:center; gap:15px; cursor:pointer; transition:0.2s;">
-                        <div style="font-size:1.5rem;">${icon}</div>
-                        <div>
-                            <div style="font-weight:600; color:#fff;">${n.title}</div>
-                            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${n.time}</div>
-                        </div>
-                    </div>`;
-            });
-            newsList.innerHTML = html;
-        }
-
-        // 4. Copy Trading
-        function populateCopyTraders() {
-            const copyList = document.getElementById('copy-traders-list');
-            if(!copyList) return;
-            const traders = [
-                { name: "AlexTheBull", winRate: "85%", pnl: "+450%", followers: 12543 },
-                { name: "CryptoSniper", winRate: "92%", pnl: "+800%", followers: 8432 },
-                { name: "SafeGains", winRate: "78%", pnl: "+120%", followers: 5210 }
-            ];
-            let html = '';
-            traders.forEach(t => {
-                html += `
-                    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:15px; padding:20px; transition:0.3s;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <div style="width:40px; height:40px; border-radius:50%; background:var(--accent); display:flex; justify-content:center; align-items:center; font-weight:bold; color:#000;">${t.name.charAt(0)}</div>
-                                <div>
-                                    <div style="font-weight:bold; color:#fff;">${t.name}</div>
-                                    <div style="font-size:0.8rem; color:var(--text-muted);">${t.followers.toLocaleString()} copiers</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                            <div><div style="font-size:0.8rem; color:var(--text-muted);">Win Rate</div><div style="font-weight:bold; color:#fff;">${t.winRate}</div></div>
-                            <div style="text-align:right;"><div style="font-size:0.8rem; color:var(--text-muted);">30D PnL</div><div style="font-weight:bold; color:var(--color-up);">${t.pnl}</div></div>
-                        </div>
-                        <button class="btn" style="width:100%; padding:10px; background:var(--accent); color:#000; font-weight:bold;" onclick="showToast('Started copying ${t.name}', 'success')">Copy</button>
-                    </div>`;
-            });
-            copyList.innerHTML = html;
-        }
-        
-        // 5. Portfolio Pie Chart
-        let portfolioChart = null;
-        function updatePortfolioChart() {
-            const ctx = document.getElementById('portfolio-chart');
-            if(!ctx || typeof Chart === 'undefined') return;
-            
-            let data = [];
-            let labels = [];
-            let colors = ['#f59e0b', '#6366f1', '#14b8a6', '#3b82f6', '#eab308'];
-            
-            if(state && state.positions && state.positions.length > 0) {
-                state.positions.forEach(p => {
-                    let val = p.size * state.coins[p.symbol].price;
-                    labels.push(p.symbol);
-                    data.push(val);
-                });
-            } else {
-                labels.push("Cash");
-                data.push(state ? state.cash : 10000);
-            }
-            
-            if(portfolioChart) {
-                portfolioChart.data.labels = labels;
-                portfolioChart.data.datasets[0].data = data;
-                portfolioChart.update();
-            } else {
-                portfolioChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: data,
-                            backgroundColor: colors,
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'right', labels: { color: '#fff' } } }
-                    }
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            populateLeaderboard();
-            populateAchievements();
-            populateNewsFeed();
-            populateCopyTraders();
-            setTimeout(updatePortfolioChart, 1000); // init chart
-        });
-        
-        // Hooks for Achievements and Chart
-        if(typeof window.executeTrade !== 'undefined') {
-            const _originalExecTrade = window.executeTrade;
-            window.executeTrade = function(action) {
-                _originalExecTrade(action);
-                let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
-                if(!unlocked.includes("first_trade")) {
-                    unlocked.push("first_trade");
-                    localStorage.setItem('apex_achievements', JSON.stringify(unlocked));
-                    if(typeof showToast === 'function') showToast("🏆 Achievement Unlocked: First Step!", "success");
-                    populateAchievements();
-                }
-                updatePortfolioChart();
-            };
-        }
-
-        if(typeof window.closePosition !== 'undefined') {
-            const _originalClosePos = window.closePosition;
-            window.closePosition = function(id) {
-                let pnl = 0;
-                if(typeof state !== 'undefined' && state.positions) {
-                    let posIndex = state.positions.findIndex(p => p.id === id);
-                    if(posIndex > -1) {
-                        let p = state.positions[posIndex];
-                        let exitPrice = state.coins[p.symbol].price;
-                        pnl = p.action === 'BUY' ? (exitPrice - p.entryPrice) * p.size : (p.entryPrice - exitPrice) * p.size;
-                    }
-                }
-                _originalClosePos(id);
-                if(pnl > 0) {
-                    let unlocked = JSON.parse(localStorage.getItem('apex_achievements') || '[]');
-                    if(!unlocked.includes("profit_maker")) {
-                        unlocked.push("profit_maker");
-                        localStorage.setItem('apex_achievements', JSON.stringify(unlocked));
-                        if(typeof showToast === 'function') showToast("🏆 Achievement Unlocked: Profit Maker!", "success");
-                        populateAchievements();
-                    }
-                }
-                updatePortfolioChart();
-            };
-        }
-        
-        // Ensure Daily Bonus Modal works with .active for animation
-        const oldClaim = window.claimDailyBonus;
-        if(oldClaim) {
-            window.claimDailyBonus = function() {
-                const modal = document.getElementById('daily-bonus-modal');
-                if (modal) {
-                    modal.classList.remove('active');
-                    setTimeout(() => modal.style.display = 'none', 300);
-                }
-                oldClaim();
-            };
-        }
-    
-        // --- Phase 5: Interactive Academy (Quiz & Certificate) ---
-        const quizQuestions = [
-            {
-                question: "1. What is a 'Stop Loss' order?",
-                options: [
-                    "An order to buy at the lowest possible price.",
-                    "An order to automatically close a position to prevent further losses.",
-                    "A tool used to freeze your account.",
-                    "A fee charged by the exchange."
-                ],
-                answer: 1
-            },
-            {
-                question: "2. If you expect the price of Bitcoin to go DOWN, you should:",
-                options: [
-                    "Open a LONG position.",
-                    "Buy more Bitcoin.",
-                    "Open a SHORT position.",
-                    "Wait for the dip."
-                ],
-                answer: 2
-            },
-            {
-                question: "3. What does 'Leverage' do in trading?",
-                options: [
-                    "Guarantees a profit on every trade.",
-                    "Reduces the trading fees.",
-                    "Multiplies both potential profits and potential losses.",
-                    "Slows down the execution speed."
-                ],
-                answer: 2
-            }
-        ];
-        
-        let currentQuizIndex = 0;
-        let quizScore = 0;
-        let selectedOptionIndex = -1;
-
-        function loadQuizQuestion() {
-            const q = quizQuestions[currentQuizIndex];
-            document.getElementById('quiz-question').innerText = q.question;
-            const optionsDiv = document.getElementById('quiz-options');
-            optionsDiv.innerHTML = '';
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('div');
-                btn.className = 'quiz-option';
-                btn.style.cssText = 'padding:15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer; transition:0.2s;';
-                btn.innerText = opt;
-                btn.onclick = () => selectQuizOption(idx, btn);
-                optionsDiv.appendChild(btn);
-            });
-            document.getElementById('quiz-progress').innerText = `Question ${currentQuizIndex + 1} / ${quizQuestions.length}`;
-            document.getElementById('quiz-next-btn').disabled = true;
-            selectedOptionIndex = -1;
-        }
-
-        function selectQuizOption(idx, btnElement) {
-            selectedOptionIndex = idx;
-            document.querySelectorAll('.quiz-option').forEach(el => {
-                el.style.background = 'rgba(255,255,255,0.05)';
-                el.style.borderColor = 'rgba(255,255,255,0.1)';
-            });
-            btnElement.style.background = 'rgba(37,99,235,0.2)';
-            btnElement.style.borderColor = 'var(--accent)';
-            document.getElementById('quiz-next-btn').disabled = false;
-        }
-
-        window.nextQuizQuestion = function() {
-            if(selectedOptionIndex === quizQuestions[currentQuizIndex].answer) {
-                quizScore++;
-            }
-            currentQuizIndex++;
-            if(currentQuizIndex < quizQuestions.length) {
-                loadQuizQuestion();
-            } else {
-                finishQuiz();
-            }
-        };
-
-        function finishQuiz() {
-            document.getElementById('quiz-container').style.display = 'none';
-            if(quizScore === quizQuestions.length) {
-                document.getElementById('quiz-result').style.display = 'block';
-                if(typeof showToast === 'function') showToast("Perfect Score! Certificate Unlocked.", "success");
-            } else {
-                const res = document.getElementById('quiz-result');
-                res.style.display = 'block';
-                res.style.background = 'rgba(239,68,68,0.1)';
-                res.style.borderColor = 'var(--color-down)';
-                res.innerHTML = `
-                    <i class="fas fa-times-circle" style="font-size:3rem; color:var(--color-down); margin-bottom:15px;"></i>
-                    <h3 style="color:#fff;">You scored ${quizScore} / ${quizQuestions.length}</h3>
-                    <p style="color:var(--text-muted); margin-bottom:20px;">You need a perfect score to unlock the certificate. Review the videos and try again.</p>
-                    <button class="btn" style="padding:10px 20px; background:rgba(255,255,255,0.1); border-radius:8px;" onclick="resetQuiz()">Retry Quiz</button>
-                `;
-            }
-        }
-
-        window.resetQuiz = function() {
-            currentQuizIndex = 0;
-            quizScore = 0;
-            document.getElementById('quiz-result').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'block';
-            loadQuizQuestion();
-        };
-
-        window.generateCertificate = async function() {
-            const btn = document.querySelector('#quiz-result button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-            btn.disabled = true;
-            
-            document.getElementById('cert-date').innerText = "Date: " + new Date().toISOString().split('T')[0];
-            
-            try {
-                const card = document.getElementById('certificate-card');
-                const canvas = await html2canvas(card, { backgroundColor: '#0f172a', scale: 2 });
-                canvas.toBlob(async (blob) => {
-                    if (navigator.share && navigator.canShare) {
-                        const file = new File([blob], 'apextrade_certificate.png', { type: 'image/png' });
-                        if (navigator.canShare({ files: [file] })) {
-                            try {
-                                await navigator.share({ title: 'Crypto Master Certificate', text: 'I just became a certified Crypto Master on ApexTrade!', files: [file] });
-                            } catch(e) {}
-                        } else fallbackDownloadCert(canvas);
-                    } else fallbackDownloadCert(canvas);
-                    btn.innerHTML = originalText; btn.disabled = false;
-                });
-            } catch(e) {
-                console.error(e);
-                btn.innerHTML = originalText; btn.disabled = false;
-            }
-        };
-        
-        function fallbackDownloadCert(canvas) {
-            const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'apextrade_certificate.png'; a.click();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadQuizQuestion();
-        });
-    
-        // --- Phase 6: Mobile Native Logic ---
-        
-        // 1. Service Worker Registration (Moved to top of document)
-        
-        // 2. Haptic Feedback Helper
-        window.vibrate = function(ms = 50) {
-            if (navigator.vibrate) {
-                navigator.vibrate(ms);
-            }
-        };
-
-        // Attach Haptics to key elements
-        document.addEventListener('click', (e) => {
-            const t = e.target.closest('button, .nav-btn, .mobile-nav-btn');
-            if(t) {
-                // If it's a buy/sell button make it stronger
-                if(t.classList.contains('buy-btn') || t.classList.contains('sell-btn')) {
-                    vibrate([30, 50, 30]);
-                } else {
-                    vibrate(30);
-                }
-            }
-        });
-
-        // 3. PIN Lock Logic
-        let enteredPin = "";
-        let savedPin = "2006";
-        window.apexSavedPin = "2006";
-        
-        if(document.getElementById('pin-title')) {
-            document.getElementById('pin-title').innerText = "Enter Apex PIN";
-        }
-        
-        window.enterPin = function(num) {
-            num = String(num); // Force string
-            vibrate(30);
-            if(enteredPin.length < 4) {
-                enteredPin += num;
-                updatePinUI();
-                
-                if(enteredPin.length === 4) {
-                    setTimeout(() => processPin(), 200);
-                }
-            }
-        };
-        
-        window.deletePin = function() {
-            if(enteredPin.length > 0) {
-                enteredPin = enteredPin.slice(0, -1);
-                updatePinUI();
-            }
-        };
-        
-        window.clearPin = function() {
-            enteredPin = "";
-            updatePinUI();
-        };
-        
-        function updatePinUI() {
-            const dots = document.querySelectorAll('.pin-dot');
-            dots.forEach((dot, index) => {
-                if(index < enteredPin.length) {
-                    dot.style.background = 'var(--accent)';
-                } else {
-                    dot.style.background = 'transparent';
-                }
-            });
-        }
-        
-        function processPin() {
-            console.log("Processing PIN:", enteredPin);
-            if(enteredPin === "2006" || enteredPin === savedPin || enteredPin === window.apexSavedPin) {
-                unlockApp();
-            } else {
-                vibrate([50, 50, 50, 50]); // Error vibration
-                if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Incorrect PIN!";
-                if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--color-down)";
-                clearPin();
-                setTimeout(() => {
-                    if(document.getElementById('pin-title')) document.getElementById('pin-title').innerText = "Enter Apex PIN";
-                    if(document.getElementById('pin-title')) document.getElementById('pin-title').style.color = "var(--text-main)";
-                }, 1500);
-            }
-        }
-        
-        function unlockApp() {
-            const lock = document.getElementById('pin-lock-screen');
-            if(lock) {
-                lock.style.opacity = '0';
-                setTimeout(() => {
-                    lock.style.display = 'none';
-                }, 500);
-            }
-        }
-
-        // 4. Swipe Gestures
-        let touchstartX = 0;
-        let touchendX = 0;
-        const swipeThreshold = 100;
-        const pageOrder = ['page-dashboard', 'page-trade', 'page-portfolio', 'page-leaderboard', 'page-achievements', 'page-copy', 'page-academy'];
-
-        function handleSwipe() {
-            if (touchendX < touchstartX - swipeThreshold) {
-                // Swiped Left - Go to Next Page
-                let current = document.querySelector('.page.active').id;
-                let idx = pageOrder.indexOf(current);
-                if(idx < pageOrder.length - 1) {
-                    vibrate(40);
-                    switchPage(pageOrder[idx+1]);
-                    // Update mobile nav UI
-                    document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-                    const btn = document.querySelector(`.mobile-nav-btn[onclick*='${pageOrder[idx+1]}']`);
-                    if(btn) btn.classList.add('active');
-                }
-            }
-            if (touchendX > touchstartX + swipeThreshold) {
-                // Swiped Right - Go to Prev Page
-                let current = document.querySelector('.page.active').id;
-                let idx = pageOrder.indexOf(current);
-                if(idx > 0) {
-                    vibrate(40);
-                    switchPage(pageOrder[idx-1]);
-                    // Update mobile nav UI
-                    document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-                    const btn = document.querySelector(`.mobile-nav-btn[onclick*='${pageOrder[idx-1]}']`);
-                    if(btn) btn.classList.add('active');
-                }
-            }
-        }
-
+        function handleSwipe() { /* Disabled to allow 100% smooth vertical scrolling without page jumping */ }
         const pagesWrapper = document.querySelector('.pages-wrapper');
         if(pagesWrapper) {
             pagesWrapper.addEventListener('touchstart', e => {
@@ -9225,39 +8149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-    <!-- ========================================================================= -->
-    <!-- 📱 MOBILE BOTTOM NAVIGATION BAR & SAFE AREA INSET (iOS / Android) -->
-    <!-- ========================================================================= -->
-    <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <button class="mobile-nav-item active" data-target="dashboardView" onclick="switchMobileTab('dashboardView', this)">
-            <i class="fas fa-chart-pie"></i>
-            <span>Markets</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexAICopilot.openPanel()">
-            <i class="fas fa-brain" style="color:#00d2ff;"></i>
-            <span>AI</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexBattleArena.openModal()">
-            <i class="fas fa-gamepad" style="color:#ef4444;"></i>
-            <span>Battle</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexPnLCard.openModal()">
-            <i class="fas fa-camera" style="color:#10b981;"></i>
-            <span>P&L Card</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexPriceAlerts.openModal()">
-            <i class="fas fa-bell" style="color:#fbbf24;"></i>
-            <span>Alerts</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexProToolsHub.openModal()">
-            <i class="fas fa-toolbox" style="color:#00d2ff;"></i>
-            <span>Tools (25)</span>
-        </button>
-        <button class="mobile-nav-item" onclick="ApexSync.openSyncModal()">
-            <i class="fas fa-qrcode"></i>
-            <span>Sync</span>
-        </button>
-    </nav>
+    <!-- Second Mobile Bottom Nav consolidated into primary unifiedMobileNav -->
 
     <!-- Glowing Mobile Floating Action Button (25 Tools FAB) -->
     <button id="apexFloatingToolsFab" onclick="ApexProToolsHub.openModal()" style="position:fixed; bottom:75px; right:15px; background:linear-gradient(135deg,#00d2ff,#3a7bd5); color:#fff; font-weight:800; border:none; border-radius:30px; padding:10px 18px; z-index:99998; box-shadow:0 8px 25px rgba(0,210,255,0.5); font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
