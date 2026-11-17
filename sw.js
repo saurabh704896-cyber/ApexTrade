@@ -1,7 +1,11 @@
-const CACHE_NAME = 'apextrade-pro-v2026-v16';
+const CACHE_NAME = 'apextrade-pro-v2026-v17';
 const urlsToCache = [
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/pwa-icon.svg',
+  './assets/logo.png'
 ];
 
 self.addEventListener('install', event => {
