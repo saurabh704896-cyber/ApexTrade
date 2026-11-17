@@ -4,8 +4,12 @@
   "description": "Next-Gen Risk-Free Crypto Trading Simulator",
   "start_url": "./index.html",
   "scope": "./",
+  "id": "./index.html",
   "display": "standalone",
   "orientation": "any",
+  "prefer_related_applications": false,
+  "lang": "en-US",
+  "dir": "ltr",
   "categories": ["finance", "utilities", "productivity"],
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
@@ -45,6 +49,22 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshot-mobile.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "ApexTrade Mobile Trading Desk"
+    },
+    {
+      "src": "assets/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "ApexTrade Desktop Trading Terminal"
     }
   ],
   "shortcuts": [

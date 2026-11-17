@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, interactive-widget=resizes-content">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="msapplication-navbutton-color" content="#0b0f19">
 
     <!-- ====== SEO: Primary Meta Tags ====== -->
     <title>ApexTrade Pro | Next-Gen Risk-Free Crypto Trading Simulator</title>
@@ -6444,6 +6448,163 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
     </div>
     <!-- ====== END UNIVERSAL PWA INSTALLATION MODALS ====== -->
 
+    <!-- ====== ANDROID PERFORMANCE & TOUCH ERGONOMICS ENGINE ====== -->
+    <style>
+        /* Android Chrome Accidental Pull-to-Refresh Protection */
+        .chart-container, 
+        .tradingview-widget-container, 
+        #tradingview_widget, 
+        .order-book, 
+        .trade-history, 
+        .history-cards-list,
+        .mc-theory-article,
+        .apex-install-modal,
+        .modal {
+            overscroll-behavior-y: contain !important;
+            touch-action: pan-y !important;
+        }
+
+        /* Prevent text selection during fast taps on mobile controls */
+        button, .mobile-nav-btn, .nav-btn, .coin-item, .bento-card, .crypto-story, .quick-amt-btn {
+            -webkit-user-select: none !important;
+            user-select: none !important;
+        }
+
+        /* Android Native Floating Install Sheet */
+        .apex-android-sheet {
+            position: fixed;
+            bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+            left: 12px;
+            right: 12px;
+            margin: 0 auto;
+            max-width: 460px;
+            z-index: 99998;
+            background: linear-gradient(135deg, rgba(19, 27, 46, 0.98), rgba(11, 15, 25, 0.98));
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 210, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            animation: androidSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+        }
+        @keyframes androidSlideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .android-sheet-inner {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            gap: 12px;
+        }
+        .android-sheet-logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            display: block;
+            background: #080c14;
+            flex-shrink: 0;
+        }
+        .android-sheet-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .android-sheet-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .android-badge {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+        .android-sheet-meta {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin: 2px 0;
+        }
+        .android-stars {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .android-sheet-desc {
+            font-size: 0.74rem;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .android-sheet-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .android-sheet-install-btn {
+            background: linear-gradient(135deg, #00d2ff, #3b82f6);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            transition: 0.2s;
+        }
+        .android-sheet-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #94a3b8;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+    </style>
+
+    <div id="apex-android-install-banner" class="apex-android-sheet" style="display:none;">
+        <div class="android-sheet-inner">
+            <div class="android-sheet-logo">
+                <img src="assets/icon-192.png" alt="ApexTrade Bull">
+            </div>
+            <div class="android-sheet-info">
+                <div class="android-sheet-title">ApexTrade Pro <span class="android-badge">FREE</span></div>
+                <div class="android-sheet-meta">
+                    <span class="android-stars">★★★★★ 4.9</span> • <span>Android PWA</span>
+                </div>
+                <div class="android-sheet-desc">Zero-lag crypto paper trading app</div>
+            </div>
+            <div class="android-sheet-actions">
+                <button type="button" class="android-sheet-install-btn" onclick="triggerUniversalInstall()">
+                    <i class="fas fa-download"></i> Install
+                </button>
+                <button type="button" class="android-sheet-close-btn" onclick="dismissAndroidBanner()" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- ====== END ANDROID SMART INSTALL SHEET ====== -->
+
     <!-- Global App Modals Container (To avoid nested overlaps) -->
 
     <!-- Trade Result Modal (PnL) -->
@@ -6632,11 +6793,13 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         window.closeIosModal = function() {
             const iosModal = document.getElementById('ios-install-modal');
             if (iosModal) iosModal.style.display = 'none';
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
         };
 
         window.closeAndroidModal = function() {
             const androidModal = document.getElementById('android-install-modal');
             if (androidModal) androidModal.style.display = 'none';
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
         };
 
         // Close install modals on Escape key
@@ -6646,6 +6809,125 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 closeAndroidModal();
             }
         });
+
+        // ====== ANDROID NATIVE SMART INSTALL SHEET & ERGONOMICS ======
+        window.dismissAndroidBanner = function() {
+            const banner = document.getElementById('apex-android-install-banner');
+            if (banner) banner.style.display = 'none';
+            try {
+                localStorage.setItem('apex_android_install_dismissed', Date.now().toString());
+            } catch(e) {}
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
+        };
+
+        function checkAndShowAndroidBanner() {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                                 window.navigator.standalone === true ||
+                                 document.referrer.includes('android-app://');
+            if (!isAndroid || isStandalone) return;
+
+            let dismissedTime = 0;
+            try {
+                dismissedTime = parseInt(localStorage.getItem('apex_android_install_dismissed') || '0', 10);
+            } catch(e) {}
+
+            // Show after 2.2s if not dismissed in the last 48 hours
+            if (Date.now() - dismissedTime > 48 * 60 * 60 * 1000) {
+                setTimeout(() => {
+                    const banner = document.getElementById('apex-android-install-banner');
+                    if (banner && !isStandalone) {
+                        banner.style.display = 'block';
+                    }
+                }, 2200);
+            }
+        }
+        window.addEventListener('load', checkAndShowAndroidBanner);
+
+        // Safe Universal Haptic Feedback for Android
+        window.triggerHaptic = function(type = 'light') {
+            if (!('vibrate' in navigator)) return;
+            try {
+                if (type === 'light') navigator.vibrate(12);
+                else if (type === 'medium') navigator.vibrate(25);
+                else if (type === 'heavy') navigator.vibrate(50);
+                else if (type === 'success') navigator.vibrate([15, 30, 20]);
+                else if (type === 'error') navigator.vibrate([30, 60, 30]);
+            } catch(e) {}
+        };
+
+        // Android Virtual Keyboard Handling: Prevent bottom nav from floating over inputs
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                const bottomNav = document.getElementById('unifiedMobileNav');
+                const androidBanner = document.getElementById('apex-android-install-banner');
+                const isKeyboardOpen = window.visualViewport.height < window.innerHeight * 0.78;
+                if (bottomNav) {
+                    bottomNav.style.display = isKeyboardOpen ? 'none' : '';
+                }
+                if (androidBanner && isKeyboardOpen) {
+                    androidBanner.style.display = 'none';
+                }
+            });
+        }
+
+        // Close any active modal helper for Android Back Button & Gestures
+        window.closeAnyActiveModal = function() {
+            // 1. Install modals
+            const androidModal = document.getElementById('android-install-modal');
+            if (androidModal && (androidModal.style.display === 'flex' || androidModal.classList.contains('active'))) {
+                closeAndroidModal();
+                return true;
+            }
+            const iosModal = document.getElementById('ios-install-modal');
+            if (iosModal && (iosModal.style.display === 'flex' || iosModal.classList.contains('active'))) {
+                closeIosModal();
+                return true;
+            }
+            // 2. Android sheet banner
+            const androidBanner = document.getElementById('apex-android-install-banner');
+            if (androidBanner && androidBanner.style.display === 'block') {
+                dismissAndroidBanner();
+                return true;
+            }
+            // 3. Login modal
+            const loginModal = document.getElementById('login-screen');
+            if (loginModal && loginModal.classList.contains('active')) {
+                closeLoginModal();
+                return true;
+            }
+            // 4. Trade result modal
+            const tradeModal = document.getElementById('trade-result-modal');
+            if (tradeModal && tradeModal.classList.contains('active')) {
+                tradeModal.classList.remove('active');
+                return true;
+            }
+            // 5. Video modal
+            const videoOverlay = document.querySelector('.video-modal-overlay.active');
+            if (videoOverlay) {
+                videoOverlay.classList.remove('active');
+                return true;
+            }
+            // 6. AI Copilot
+            const copilot = document.getElementById('apex-aicopilot-container');
+            if (copilot && (copilot.classList.contains('active') || copilot.style.display === 'flex' || copilot.style.display === 'block')) {
+                if (window.ApexAICopilot && typeof ApexAICopilot.closePanel === 'function') {
+                    ApexAICopilot.closePanel();
+                } else {
+                    copilot.style.display = 'none';
+                    copilot.classList.remove('active');
+                }
+                return true;
+            }
+            // 7. Generic active modal / context menu
+            const activeModal = document.querySelector('.modal.active, .apex-modal.active, #daily-bonus-modal.active, #custom-context-menu[style*="display: flex"], #custom-context-menu[style*="display: block"]');
+            if (activeModal) {
+                activeModal.classList.remove('active');
+                if (activeModal.style) activeModal.style.display = 'none';
+                return true;
+            }
+            return false;
+        };
 
         // --- Login & LocalStorage Logic ---
         var loginScreen = document.getElementById('login-screen');
@@ -6663,19 +6945,21 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         
         window.openLoginModal = function() {
             if (userName && userAuth) {
-            const mainLaunchBtn = document.getElementById('main-launch-btn');
-            if (mainLaunchBtn) {
-                mainLaunchBtn.innerHTML = 'Launch Trading <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>';
-            }
-
+                const mainLaunchBtn = document.getElementById('main-launch-btn');
+                if (mainLaunchBtn) {
+                    mainLaunchBtn.innerHTML = 'Launch Trading <i class="fas fa-arrow-right" style="font-size:0.8rem"></i>';
+                }
                 enterTerminal();
             } else {
                 loginScreen.classList.add('active');
+                try { history.pushState({ modalOpen: true, modalId: 'login-screen' }, ''); } catch(e){}
+                if (typeof triggerHaptic === 'function') triggerHaptic('light');
             }
         };
 
         window.closeLoginModal = function() {
             loginScreen.classList.remove('active');
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
         };
 
         window.enterTerminal = function() {
@@ -6980,13 +7264,26 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         };
 
         window.addEventListener('popstate', function(event) {
-            // When user presses browser's Back or Forward button
+            // Priority 1: Dismiss any open modal/sheet/drawer on Android Back gesture
+            if (typeof closeAnyActiveModal === 'function' && closeAnyActiveModal()) {
+                if (typeof triggerHaptic === 'function') triggerHaptic('light');
+                return;
+            }
+
+            // Priority 2: Page Navigation
             if (event.state && event.state.pageId) {
                 switchPage(event.state.pageId, false);
+                if (typeof triggerHaptic === 'function') triggerHaptic('light');
             } else {
                 // If they go back to the landing page or initial state
                 if (document.querySelector('.app-layout').style.display === 'flex') {
-                    switchPage('page-trade', false); // default to trade if in app
+                    const activePage = document.querySelector('.page.active');
+                    if (activePage && activePage.id !== 'page-dashboard' && activePage.id !== 'page-trade') {
+                        switchPage('page-dashboard', false);
+                    } else {
+                        goHome();
+                    }
+                    if (typeof triggerHaptic === 'function') triggerHaptic('light');
                 }
             }
         });
@@ -6994,6 +7291,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         window.updateMobileNav = function(btnEl) {
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
             btnEl.classList.add('active');
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
         };
 
         // --- Core State ---

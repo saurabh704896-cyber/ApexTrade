@@ -1,10 +1,12 @@
-const CACHE_NAME = 'apextrade-pro-v2026-v18';
+const CACHE_NAME = 'apextrade-pro-v2026-v19';
 const urlsToCache = [
   './index.html',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
   './assets/icon-1024.png',
+  './assets/screenshot-mobile.png',
+  './assets/screenshot-wide.png',
   './assets/pwa-icon.svg',
   './assets/logo.png'
 ];
