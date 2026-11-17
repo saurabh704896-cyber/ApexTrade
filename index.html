@@ -3660,6 +3660,14 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             -webkit-tap-highlight-color: transparent !important;
         }
 
+        /* Permanently Hide Floating Toolbar Dock & FAB */
+        .apex-floating-dock, #apexFloatingToolsFab {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+        }
+
         /* Desktop In-App Layout (> 900px) */
         @media (min-width: 901px) {
             body.in-app {
@@ -8582,13 +8590,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <!-- Second Mobile Bottom Nav consolidated into primary unifiedMobileNav -->
 
-    <!-- Glowing Mobile Floating Action Button (25 Tools FAB) -->
-    <button id="apexFloatingToolsFab" onclick="ApexProToolsHub.openModal()" style="position:fixed; bottom:75px; right:15px; background:linear-gradient(135deg,#00d2ff,#3a7bd5); color:#fff; font-weight:800; border:none; border-radius:30px; padding:10px 18px; z-index:99998; box-shadow:0 8px 25px rgba(0,210,255,0.5); font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:8px;">
+    <!-- Glowing Mobile Floating Action Button (25 Tools FAB) - Hidden -->
+    <button id="apexFloatingToolsFab" onclick="ApexProToolsHub.openModal()" style="display: none !important;">
         <i class="fas fa-toolbox"></i> <span>25 Pro Tools</span>
     </button>
 
-    <!-- Floating Pro Toolbar Dock (PC & Mobile Access) -->
-    <div class="apex-floating-dock">
+    <!-- Floating Pro Toolbar Dock (PC & Mobile Access) - Hidden -->
+    <div class="apex-floating-dock" style="display: none !important;">
         <button onclick="ApexVoiceControl.openModal()" title="Voice Trading Commands"><i class="fas fa-microphone" style="color:#10b981;"></i></button>
         <button onclick="ApexSentiment.openModal()" title="Fear & Greed Radar"><i class="fas fa-compass" style="color:#fbbf24;"></i></button>
         <button onclick="ApexHeatmap.openModal()" title="Liquidation Heatmap"><i class="fas fa-fire" style="color:#ef4444;"></i></button>
@@ -8619,19 +8627,10 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 
     <style>
-        .apex-floating-dock {
-            position: fixed;
-            bottom: 85px;
-            right: 20px;
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 30px;
-            padding: 8px 14px;
-            display: flex;
-            gap: 12px;
-            z-index: 99998;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        .apex-floating-dock, #apexFloatingToolsFab {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
         @media (max-width: 768px) {
             .apex-floating-dock {
