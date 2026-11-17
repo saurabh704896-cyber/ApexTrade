@@ -4756,13 +4756,19 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 <div class="page-title-display" id="page-title-display">Trading Desk</div>
 
                 <!-- Install App Button (Visible across Mobile & Desktop) -->
-                <button class="nav-btn topbar-install-btn pwa-install-trigger" id="topbar-install-btn" onclick="triggerUniversalInstall()" aria-label="Install App" title="Install ApexTrade App" style="margin-left:auto; height: 36px; padding: 0 14px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: 0.2s; white-space: nowrap; flex-shrink: 0;">
+                <button class="nav-btn topbar-install-btn pwa-install-trigger" id="topbar-install-btn" onclick="triggerUniversalInstall()" aria-label="Install App" title="Install ApexTrade App (I)" style="margin-left:auto; height: 36px; padding: 0 14px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: 0.2s; white-space: nowrap; flex-shrink: 0;">
                     <i class="fas fa-download"></i>
                     <span>Install App</span>
                 </button>
+
+                <!-- Fullscreen Toggle Button (Laptop & Desktop & Android Full View) -->
+                <button class="nav-btn" id="fullscreen-btn" onclick="toggleFullscreen()" aria-label="Toggle Fullscreen" title="Toggle Fullscreen (F)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-expand"></i></button>
+
+                <!-- Keyboard Shortcuts Button (Desktop & Laptop) -->
+                <button class="nav-btn desktop-only-btn" id="shortcuts-btn" onclick="openShortcutsModal()" aria-label="Keyboard Shortcuts" title="Keyboard Shortcuts (?)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-keyboard"></i></button>
                 
                 <!-- Phase 11: Theme Toggle -->
-                <button class="nav-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-sun"></i></button>
+                <button class="nav-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme" title="Toggle Theme (T)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-sun"></i></button>
 
                 <div class="news-ticker-container">
                     <div class="news-ticker-text" id="news-ticker">Welcome to ApexTrade Pro! Real-time market
@@ -6605,6 +6611,87 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
     </div>
     <!-- ====== END ANDROID SMART INSTALL SHEET ====== -->
 
+    <!-- ====== KEYBOARD SHORTCUTS CHEAT SHEET (DESKTOP & LAPTOP) ====== -->
+    <style>
+        .hotkey-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .hotkey-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+        .hotkey-kbd {
+            background: rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            color: #00d2ff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 0.82rem;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+        }
+        @media (max-width: 768px) {
+            .desktop-only-btn {
+                display: none !important;
+            }
+            .hotkey-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Apple & Modern Device Momentum Scrolling & Visual Standards */
+        @supports (min-height: 100dvh) {
+            body, .app-layout, #landing-page {
+                min-height: 100dvh !important;
+            }
+        }
+        button, a, img, .mobile-nav-btn, .nav-btn, .coin-item, .bento-card {
+            -webkit-touch-callout: none !important;
+        }
+    </style>
+
+    <div id="apex-shortcuts-modal" class="apex-install-modal" onclick="if(event.target===this) closeShortcutsModal()">
+        <div class="apex-install-modal-content" style="max-width: 480px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-keyboard" style="color: #00d2ff; font-size: 1.3rem;"></i>
+                    <h3 style="margin:0; font-size:1.2rem; color:#fff;">Laptop & Desktop Hotkeys</h3>
+                </div>
+                <button type="button" onclick="closeShortcutsModal()" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+            </div>
+            
+            <div class="hotkey-grid">
+                <div class="hotkey-item"><span>Quick Buy</span> <kbd class="hotkey-kbd">B</kbd></div>
+                <div class="hotkey-item"><span>Quick Sell</span> <kbd class="hotkey-kbd">S</kbd></div>
+                <div class="hotkey-item"><span>Dashboard</span> <kbd class="hotkey-kbd">1</kbd></div>
+                <div class="hotkey-item"><span>Trade Desk</span> <kbd class="hotkey-kbd">2</kbd></div>
+                <div class="hotkey-item"><span>Portfolio</span> <kbd class="hotkey-kbd">3</kbd></div>
+                <div class="hotkey-item"><span>Academy</span> <kbd class="hotkey-kbd">4</kbd></div>
+                <div class="hotkey-item"><span>Rankings</span> <kbd class="hotkey-kbd">5</kbd></div>
+                <div class="hotkey-item"><span>Fullscreen</span> <kbd class="hotkey-kbd">F</kbd></div>
+                <div class="hotkey-item"><span>Theme Dark/Light</span> <kbd class="hotkey-kbd">T</kbd></div>
+                <div class="hotkey-item"><span>Install App</span> <kbd class="hotkey-kbd">I</kbd></div>
+                <div class="hotkey-item"><span>AI Copilot</span> <kbd class="hotkey-kbd">A</kbd></div>
+                <div class="hotkey-item"><span>+ Free Cash</span> <kbd class="hotkey-kbd">C</kbd></div>
+                <div class="hotkey-item"><span>Close Modals</span> <kbd class="hotkey-kbd">Esc</kbd></div>
+                <div class="hotkey-item"><span>Help / Shortcuts</span> <kbd class="hotkey-kbd">?</kbd></div>
+            </div>
+
+            <button type="button" onclick="closeShortcutsModal()" class="apex-modal-btn-pri" style="width:100%;">Got It</button>
+        </div>
+    </div>
+    <!-- ====== END KEYBOARD SHORTCUTS CHEAT SHEET ====== -->
+
     <!-- Global App Modals Container (To avoid nested overlaps) -->
 
     <!-- Trade Result Modal (PnL) -->
@@ -6908,6 +6995,12 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 videoOverlay.classList.remove('active');
                 return true;
             }
+            // Check Shortcuts modal
+            const shortcutsModal = document.getElementById('apex-shortcuts-modal');
+            if (shortcutsModal && shortcutsModal.style.display === 'flex') {
+                closeShortcutsModal();
+                return true;
+            }
             // 6. AI Copilot
             const copilot = document.getElementById('apex-aicopilot-container');
             if (copilot && (copilot.classList.contains('active') || copilot.style.display === 'flex' || copilot.style.display === 'block')) {
@@ -6928,6 +7021,50 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             }
             return false;
         };
+
+        window.openShortcutsModal = function() {
+            const modal = document.getElementById('apex-shortcuts-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                try { history.pushState({ modalOpen: true, modalId: 'shortcuts' }, ''); } catch(e){}
+            }
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
+        };
+
+        window.closeShortcutsModal = function() {
+            const modal = document.getElementById('apex-shortcuts-modal');
+            if (modal) modal.style.display = 'none';
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
+        };
+
+        window.toggleFullscreen = function() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const el = document.documentElement;
+                if (el.requestFullscreen) {
+                    el.requestFullscreen().catch(err => console.warn(err));
+                } else if (el.webkitRequestFullscreen) {
+                    el.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => console.warn(err));
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
+        };
+
+        function updateFullscreenIcon() {
+            const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
+            const btn = document.getElementById('fullscreen-btn');
+            if (btn) {
+                btn.innerHTML = isFull ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
+                btn.setAttribute('title', isFull ? 'Exit Fullscreen (F)' : 'Enter Fullscreen (F)');
+            }
+        }
+        document.addEventListener('fullscreenchange', updateFullscreenIcon);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
 
         // --- Login & LocalStorage Logic ---
         var loginScreen = document.getElementById('login-screen');
@@ -8273,20 +8410,61 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         });
         document.addEventListener('scroll', () => { if(ctxMenu) ctxMenu.style.display = 'none'; });
 
-        // --- Keyboard Shortcuts ---
+        // --- Keyboard Shortcuts (Pro Terminal Hotkeys) ---
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('landing-page').style.display !== 'none') return;
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
             
-            if (e.key.toLowerCase() === 'b') {
+            const key = e.key.toLowerCase();
+
+            if (key === 'b') {
                 e.preventDefault();
-                document.querySelector('.buy-btn').click();
-            } else if (e.key.toLowerCase() === 's') {
+                const buyBtn = document.querySelector('.buy-btn');
+                if (buyBtn) buyBtn.click();
+            } else if (key === 's') {
                 e.preventDefault();
-                document.querySelector('.sell-btn').click();
+                const sellBtn = document.querySelector('.sell-btn');
+                if (sellBtn) sellBtn.click();
+            } else if (key === '1') {
+                e.preventDefault();
+                if (window.switchPage) switchPage('page-dashboard');
+            } else if (key === '2') {
+                e.preventDefault();
+                if (window.switchPage) switchPage('page-trade');
+            } else if (key === '3') {
+                e.preventDefault();
+                if (window.switchPage) switchPage('page-portfolio');
+            } else if (key === '4') {
+                e.preventDefault();
+                if (window.switchPage) switchPage('page-academy');
+            } else if (key === '5') {
+                e.preventDefault();
+                if (window.switchPage) switchPage('page-leaderboard');
+            } else if (key === 'f') {
+                e.preventDefault();
+                if (window.toggleFullscreen) toggleFullscreen();
+            } else if (key === 't') {
+                e.preventDefault();
+                if (window.toggleTheme) toggleTheme();
+            } else if (key === 'i') {
+                e.preventDefault();
+                if (window.triggerUniversalInstall) triggerUniversalInstall();
+            } else if (key === 'c') {
+                e.preventDefault();
+                if (window.addFreeCash) addFreeCash();
+            } else if (key === 'a') {
+                e.preventDefault();
+                if (window.ApexAICopilot && typeof ApexAICopilot.openPanel === 'function') {
+                    ApexAICopilot.openPanel();
+                }
+            } else if (key === '?' || (e.shiftKey && key === '/')) {
+                e.preventDefault();
+                if (window.openShortcutsModal) openShortcutsModal();
             } else if (e.key === 'Escape') {
-                if(ctxMenu) ctxMenu.style.display = 'none';
-                document.getElementById('trade-result-modal').classList.remove('active');
+                if (typeof closeAnyActiveModal === 'function') closeAnyActiveModal();
+                if (typeof ctxMenu !== 'undefined' && ctxMenu) ctxMenu.style.display = 'none';
+                const tradeModal = document.getElementById('trade-result-modal');
+                if (tradeModal) tradeModal.classList.remove('active');
             }
         });
 
