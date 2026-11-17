@@ -3683,6 +3683,16 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             -webkit-tap-highlight-color: transparent !important;
         }
 
+        /* Android AMOLED 120Hz & Smooth Touch Ergonomics */
+        .pages-wrapper, .page, .lesson-reader-container, .theory-container {
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        .crypto-card, .market-row, .order-item, .stat-card {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
         /* Permanently Hide Floating Toolbar Dock & FAB */
         .apex-floating-dock, #apexFloatingToolsFab {
             display: none !important;
@@ -4763,6 +4773,12 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
                 <!-- Fullscreen Toggle Button (Laptop & Desktop & Android Full View) -->
                 <button class="nav-btn" id="fullscreen-btn" onclick="toggleFullscreen()" aria-label="Toggle Fullscreen" title="Toggle Fullscreen (F)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-expand"></i></button>
+
+                <!-- Screen Wake Lock Toggle (Keep Screen Awake for Trading & Theory) -->
+                <button class="nav-btn" id="wakelock-btn" onclick="ApexWakeLock.toggle()" aria-label="Keep Screen Awake" title="Keep Screen Awake (Always-On)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-eye"></i></button>
+
+                <!-- Native Share Button (Android Share Sheet & Quick Copy) -->
+                <button class="nav-btn" id="share-btn" onclick="shareApexApp()" aria-label="Share App" title="Share ApexTrade Pro" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-share-alt"></i></button>
 
                 <!-- Keyboard Shortcuts Button (Desktop & Laptop) -->
                 <button class="nav-btn desktop-only-btn" id="shortcuts-btn" onclick="openShortcutsModal()" aria-label="Keyboard Shortcuts" title="Keyboard Shortcuts (?)" style="margin-left:8px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: 0.3s; flex-shrink: 0;"><i class="fas fa-keyboard"></i></button>
@@ -7431,6 +7447,61 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             if (typeof triggerHaptic === 'function') triggerHaptic('light');
         };
 
+        // --- Android Web Badging API Engine ---
+        window.updateAppBadge = function() {
+            if ('setAppBadge' in navigator) {
+                const count = (window.state && Array.isArray(window.state.openOrders)) ? window.state.openOrders.length : 0;
+                if (count > 0) {
+                    navigator.setAppBadge(count).catch(() => {});
+                } else {
+                    navigator.clearAppBadge().catch(() => {});
+                }
+            }
+        };
+
+        // --- Android App Launcher & Hash Router Engine ---
+        window.handleUrlHashRouting = function() {
+            const rawHash = (window.location.hash || '').replace(/^#/, '').toLowerCase().trim();
+            if (!rawHash) return;
+
+            // Ensure appLayout is active if user launches from PWA shortcut
+            const appLayout = document.querySelector('.app-layout');
+            const landingPage = document.getElementById('landing-page');
+            if (appLayout && appLayout.style.display !== 'flex') {
+                if (landingPage) landingPage.style.display = 'none';
+                appLayout.style.display = 'flex';
+                document.body.classList.add('in-app');
+            }
+
+            if (rawHash === 'trade' || rawHash === 'page-trade') {
+                if (typeof switchPage === 'function') switchPage('page-trade', false);
+            } else if (rawHash === 'portfolio' || rawHash === 'page-portfolio') {
+                if (typeof switchPage === 'function') switchPage('page-portfolio', false);
+            } else if (rawHash === 'dashboard' || rawHash === 'page-dashboard') {
+                if (typeof switchPage === 'function') switchPage('page-dashboard', false);
+            } else if (rawHash === 'academy' || rawHash === 'page-academy') {
+                if (typeof switchPage === 'function') switchPage('page-academy', false);
+            } else if (rawHash === 'history' || rawHash === 'page-history') {
+                if (typeof switchPage === 'function') switchPage('page-history', false);
+            } else if (rawHash === 'leaderboard' || rawHash === 'page-leaderboard') {
+                if (typeof switchPage === 'function') switchPage('page-leaderboard', false);
+            } else if (rawHash === 'badges' || rawHash === 'trophies') {
+                if (window.ApexAchievements && typeof ApexAchievements.openModal === 'function') {
+                    ApexAchievements.openModal();
+                }
+            } else if (rawHash === 'ai') {
+                if (typeof openAiModal === 'function') {
+                    openAiModal();
+                } else if (typeof switchPage === 'function') {
+                    switchPage('page-dashboard', false);
+                }
+            }
+        };
+        window.addEventListener('hashchange', window.handleUrlHashRouting);
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(window.handleUrlHashRouting, 350);
+        });
+
         // --- Core State ---
         const INITIAL_CASH = 1000000000; // 1 Billion Starting Cash
         let state = {
@@ -7653,6 +7724,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             }
 
             renderLeaderboard();
+            if (typeof updateAppBadge === 'function') updateAppBadge();
             if (typeof saveState === 'function') saveState();
         }
 
@@ -9404,81 +9476,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <!-- Second Mobile Bottom Nav consolidated into primary unifiedMobileNav -->
 
-    <!-- Glowing Mobile Floating Action Button (25 Tools FAB) - Hidden -->
-    <button id="apexFloatingToolsFab" onclick="ApexProToolsHub.openModal()" style="display: none !important;">
-        <i class="fas fa-toolbox"></i> <span>25 Pro Tools</span>
-    </button>
-
-    <!-- Floating Pro Toolbar Dock (PC & Mobile Access) - Hidden -->
-    <div class="apex-floating-dock" style="display: none !important;">
-        <button onclick="ApexVoiceControl.openModal()" title="Voice Trading Commands"><i class="fas fa-microphone" style="color:#10b981;"></i></button>
-        <button onclick="ApexSentiment.openModal()" title="Fear & Greed Radar"><i class="fas fa-compass" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexHeatmap.openModal()" title="Liquidation Heatmap"><i class="fas fa-fire" style="color:#ef4444;"></i></button>
-        <button onclick="ApexStrategyBuilder.openModal()" title="No-Code Bot Builder"><i class="fas fa-cogs" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexRiskCalculator.openModal()" title="Risk & Position Size Calculator"><i class="fas fa-calculator" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexJournal.openModal()" title="Trading Journal & Equity Analytics"><i class="fas fa-book" style="color:#10b981;"></i></button>
-        <button onclick="ApexTapeReader.openModal()" title="Orderbook Tape Speed Reader"><i class="fas fa-tachometer-alt" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexPatternQuiz.openModal()" title="Chart Pattern Quiz Arena"><i class="fas fa-graduation-cap" style="color:#8b5cf6;"></i></button>
-        <button onclick="ApexThemeEngine.openModal()" title="Exchange Theme Switcher"><i class="fas fa-palette" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexQRScanner.openModal()" title="Scan PC QR Code Camera"><i class="fas fa-qrcode" style="color:#10b981;"></i></button>
-        <button onclick="ApexHapticCustomizer.openModal()" title="Haptic Vibration Selector"><i class="fas fa-vibrate" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexMiniChart.toggle()" title="Toggle Floating Mini Chart"><i class="fas fa-window-restore" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexAppLock.openModal()" title="Security App Lock"><i class="fas fa-lock" style="color:#ef4444;"></i></button>
-        <button onclick="ApexWidgetCreator.openModal()" title="Mobile Home Screen Widget Creator"><i class="fas fa-mobile-alt" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexVoiceReader.readPrice()" title="Hands-Free Price Voice Reader"><i class="fas fa-volume-up" style="color:#10b981;"></i></button>
-        <button onclick="ApexRadialMenu.open()" title="1-Tap Touch Radial Action Wheel"><i class="fas fa-crosshairs" style="color:#ef4444;"></i></button>
-        <button onclick="ApexChartHandles.openModal()" title="Touch SL & TP Handles"><i class="fas fa-sliders-h" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexDailyRewards.openModal()" title="Daily Login Rewards & Streaks"><i class="fas fa-gift" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexWakeLock.toggle()" title="Toggle Screen Wake Lock (Keep Awake)"><i class="fas fa-eye" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexVoiceNoteRecorder.openModal()" title="Record Audio Voice Note Journal"><i class="fas fa-microphone-alt" style="color:#10b981;"></i></button>
-        <button onclick="ApexLiqCalc.openModal()" title="Liquidation Distance Gauge"><i class="fas fa-calculator" style="color:#ef4444;"></i></button>
-        <button onclick="ApexThumbZone.toggle()" title="1-Handed Thumb Zone Navigation Mode"><i class="fas fa-hand-pointer" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexSoundboard.openModal()" title="Custom Audio Trading Soundboard"><i class="fas fa-music" style="color:#8b5cf6;"></i></button>
-        <button onclick="ApexLevelingSystem.openModal()" title="Trader Rank & XP Leveling (Level 1 to 50)"><i class="fas fa-medal" style="color:#fbbf24;"></i></button>
-        <button onclick="ApexVolumeProfile.openModal()" title="Institutional Volume Profile POC"><i class="fas fa-chart-bar" style="color:#00d2ff;"></i></button>
-        <button onclick="ApexCircuitBreaker.openModal()" title="Risk Circuit Breaker Guard"><i class="fas fa-shield-alt" style="color:#ef4444;"></i></button>
-        <button onclick="ApexAchievements.openModal()" title="Trophies & Badges"><i class="fas fa-award" style="color:#10b981;"></i></button>
-    </div>
-
+    <!-- Floating Pro Toolbar Dock permanently removed per user request -->
     <style>
         .apex-floating-dock, #apexFloatingToolsFab {
             display: none !important;
             visibility: hidden !important;
             pointer-events: none !important;
-        }
-        @media (max-width: 768px) {
-            .apex-floating-dock {
-                bottom: 125px;
-                right: 10px;
-                left: 10px;
-                max-width: calc(100vw - 20px);
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .apex-floating-dock::-webkit-scrollbar { display: none; }
-        }
-        .apex-floating-dock button {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            padding: 6px;
-            border-radius: 50%;
-        }
-        .apex-floating-dock button:hover {
-            transform: scale(1.25);
-        }
-        @media (max-width: 768px) {
-            .apex-floating-dock {
-                bottom: 75px;
-                right: 50%;
-                transform: translateX(50%);
-                padding: 6px 12px;
-                gap: 10px;
-            }
+            opacity: 0 !important;
         }
     </style>
 
@@ -10653,19 +10657,6 @@ document.addEventListener('DOMContentLoaded', () => {
             conn.addEventListener('change', checkNetwork);
         }
 
-        // 3. Hardware Gyroscope 3D Parallax Tilt Effect
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', e => {
-                if (e.beta !== null && e.gamma !== null) {
-                    const tiltX = Math.min(Math.max((e.gamma / 45) * 6, -6), 6);
-                    const tiltY = Math.min(Math.max(((e.beta - 45) / 45) * 6, -6), 6);
-                    const dock = document.querySelector('.apex-floating-dock');
-                    if (dock) {
-                        dock.style.transform = `perspective(500px) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
-                    }
-                }
-            }, { passive: true });
-        }
 
         // 4. OS System Theme Auto-Sync Engine
         if (window.matchMedia) {
@@ -11031,22 +11022,53 @@ document.addEventListener('DOMContentLoaded', () => {
         window.ApexWakeLock = {
             wakeLock: null,
             toggle: async function() {
+                if (typeof triggerHaptic === 'function') triggerHaptic('medium');
+                const btn = document.getElementById('wakelock-btn');
                 if ('wakeLock' in navigator) {
                     try {
                         if (this.wakeLock) {
                             await this.wakeLock.release();
                             this.wakeLock = null;
-                            if(typeof showToast === 'function') showToast("🔒 Screen Wake Lock OFF (Normal Auto-Sleep)", "info");
+                            if (btn) {
+                                btn.style.color = 'var(--text-main)';
+                                btn.style.borderColor = 'var(--border-color)';
+                                btn.style.boxShadow = 'none';
+                            }
+                            if(typeof showToast === 'function') showToast("🔒 Screen Wake Lock OFF (Auto-Sleep Enabled)", "info");
                         } else {
                             this.wakeLock = await navigator.wakeLock.request('screen');
+                            if (btn) {
+                                btn.style.color = '#00d2ff';
+                                btn.style.borderColor = '#00d2ff';
+                                btn.style.boxShadow = '0 0 12px rgba(0,210,255,0.4)';
+                            }
                             if(typeof showToast === 'function') showToast("🔓 Screen Wake Lock ON (Screen stays awake)", "success");
                         }
                     } catch(e) {
-                        if(typeof showToast === 'function') showToast("Wake Lock Error", "error");
+                        if(typeof showToast === 'function') showToast("Wake Lock Error: " + (e.message || e), "error");
                     }
                 } else {
-                    alert("Screen Wake Lock API not supported on this browser.");
+                    if(typeof showToast === 'function') showToast("Screen Wake Lock API not supported on this browser.", "warning");
                 }
+            }
+        };
+
+        // 1b. Native Android / Web Share Engine
+        window.shareApexApp = function() {
+            if (typeof triggerHaptic === 'function') triggerHaptic('light');
+            const shareData = {
+                title: 'ApexTrade Pro - Next-Gen Trading Simulator',
+                text: 'Practice crypto & stock trading risk-free with real-time live charts, 25+ professional tools, and AI copilot on ApexTrade Pro!',
+                url: 'https://saurabh704896-cyber.github.io/ApexTrade/'
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    if (typeof showToast === 'function') showToast("🔗 ApexTrade link copied to clipboard!", "success");
+                }).catch(() => {
+                    if (typeof showToast === 'function') showToast("ApexTrade: " + shareData.url, "info");
+                });
             }
         };
 

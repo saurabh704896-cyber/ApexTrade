@@ -72,25 +72,29 @@
       "name": "⚡ Quick Trade",
       "short_name": "Trade",
       "description": "Execute instant crypto paper trades",
-      "url": "./index.html#trade"
+      "url": "./index.html#trade",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "🤖 Ask AI Copilot",
       "short_name": "AI",
       "description": "Get real-time AI trade risk analysis",
-      "url": "./index.html#ai"
+      "url": "./index.html#ai",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "💼 Portfolio",
       "short_name": "Portfolio",
       "description": "Check current trading positions and cash balance",
-      "url": "./index.html#portfolio"
+      "url": "./index.html#portfolio",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "🏆 Trophies & Badges",
       "short_name": "Trophies",
       "description": "View unlocked trading achievements",
-      "url": "./index.html#badges"
+      "url": "./index.html#badges",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }
