@@ -177,12 +177,23 @@
             scroll-behavior: smooth;
         }
 
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: auto;
         }
 
         /* --- Aurora Animated Background --- */
@@ -266,8 +277,16 @@
         
         /* --- Landing Page --- */
         #landing-page {
-            position: absolute; top:0; left:0; width: 100vw; height: 100vh; z-index: 5000;
-            overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; display: block;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            height: auto;
+            z-index: 50;
+            overflow: visible;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
         }
         .lp-navbar {
             display: flex; justify-content: space-between; align-items: center; padding: 20px 5%;
@@ -2273,24 +2292,30 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         
         #landing-page {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            height: auto;
             background: #0b0e11; /* Professional Trading Background */
-            z-index: 1500;
-            display: flex; flex-direction: column;
-            overflow-y: auto; overflow-x: hidden;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
             font-family: 'Inter', sans-serif;
             color: #eaecef;
+            scroll-behavior: smooth;
         }
         
         /* Grid Background Pattern */
         #landing-page::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.15) 0%, transparent 60%),
                         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
                         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 100% 100%, 40px 40px, 40px 40px;
             z-index: -1;
+            pointer-events: none;
         }
 
         /* Navbar */
@@ -2451,11 +2476,11 @@
                 height: auto !important;
                 overflow-y: auto !important;
                 overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
             }
             .main-content, .app-layout {
                 height: auto !important;
-                overflow-y: auto !important;
-                overflow-x: hidden !important;
+                overflow: visible !important;
             }
             .glass-panel, .chart-container, .order-book, .trade-history, .portfolio-grid, .trade-grid {
                 width: 100% !important;
@@ -3392,12 +3417,12 @@
         /* --- Apple / Safari / iOS Specific Fixes --- */
         @supports (-webkit-touch-callout: none) {
             /* The 100vh bug fix for iOS Safari */
-            body, html, .app-layout, .ambient-bg, #login-screen, #landing-page {
-                height: -webkit-fill-available !important;
+            html, body {
+                min-height: -webkit-fill-available;
             }
             /* Smooth scrolling for iOS */
             * {
-                -webkit-overflow-scrolling: touch !important;
+                -webkit-overflow-scrolling: touch;
             }
         }
         
@@ -3617,12 +3642,17 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
     <!-- ====== ULTRA-SMOOTH MOBILE & ALL-DEVICE PERFORMANCE ENGINE ====== -->
     <style id="apex-ultra-smooth-engine">
-        /* Global Smooth Touch Ergonomics */
-        html, body {
+        /* Global Smooth Touch & Scrolling Ergonomics */
+        html {
+            scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: contain;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            overscroll-behavior-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         button, a, input, select, .mobile-nav-btn, .mc-action-btn, .mc-tab, .trade-btn {
@@ -3630,8 +3660,68 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             -webkit-tap-highlight-color: transparent !important;
         }
 
-        /* Responsive Mobile Layout (Phones & Tablets) */
-        @media (max-width: 768px) {
+        /* Desktop In-App Layout (> 900px) */
+        @media (min-width: 901px) {
+            body.in-app {
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+            body.in-app .app-layout {
+                display: flex !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+            body.in-app .sidebar {
+                height: 100vh !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                flex-shrink: 0 !important;
+            }
+            body.in-app .main-content {
+                flex: 1 !important;
+                height: 100vh !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+            }
+            body.in-app .topbar {
+                height: 60px !important;
+                flex-shrink: 0 !important;
+            }
+            body.in-app .pages-wrapper {
+                flex: 1 !important;
+                height: calc(100vh - 60px) !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                scroll-behavior: smooth !important;
+                -webkit-overflow-scrolling: touch !important;
+                padding: 20px !important;
+            }
+            body.in-app .pages-wrapper::-webkit-scrollbar {
+                width: 7px;
+            }
+            body.in-app .pages-wrapper::-webkit-scrollbar-track {
+                background: rgba(11, 15, 25, 0.5);
+            }
+            body.in-app .pages-wrapper::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+            }
+            body.in-app .pages-wrapper::-webkit-scrollbar-thumb:hover {
+                background: var(--accent, #00d2ff);
+            }
+            body.in-app .page {
+                min-height: 100% !important;
+                overflow: visible !important;
+            }
+            body.in-app .trade-grid {
+                min-height: min-content !important;
+                height: auto !important;
+            }
+        }
+
+        /* Responsive Mobile Layout (Phones & Tablets <= 900px) */
+        @media (max-width: 900px) {
             /* 1. Eliminate heavy GPU backdrop blurs that cause phone lag */
             .glass-panel, .panel, .apex-modal-content, .card, .lp-feature-card, .sidebar, .topbar, #login-screen {
                 backdrop-filter: none !important;
@@ -3650,7 +3740,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             }
 
             /* 3. Fluid Natural Scrolling for Android & iOS */
-            body, html {
+            html, body, body.in-app {
                 height: auto !important;
                 min-height: 100% !important;
                 overflow-y: auto !important;
@@ -3665,23 +3755,43 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 flex-direction: column !important;
             }
 
+            .sidebar {
+                display: none !important;
+            }
+
+            .topbar {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1000 !important;
+                height: 60px !important;
+            }
+
             .main-content {
                 height: auto !important;
                 overflow: visible !important;
                 margin-left: 0 !important;
-                padding-bottom: calc(85px + env(safe-area-inset-bottom, 15px)) !important;
+                padding: 0 !important;
+                padding-bottom: calc(90px + env(safe-area-inset-bottom, 15px)) !important;
             }
 
-            .pages-wrapper, .page.active {
+            .pages-wrapper {
                 height: auto !important;
-                min-height: calc(100vh - 120px) !important;
+                overflow: visible !important;
+                padding: 12px 10px !important;
+            }
+
+            .page, .page.active {
+                height: auto !important;
+                min-height: calc(100vh - 170px) !important;
                 overflow: visible !important;
             }
 
             #landing-page {
-                position: fixed !important;
-                top: 0; left: 0; width: 100vw; height: 100vh;
-                overflow-y: auto !important;
+                position: relative !important;
+                width: 100% !important;
+                min-height: 100vh !important;
+                height: auto !important;
+                overflow: visible !important;
                 -webkit-overflow-scrolling: touch !important;
             }
 
@@ -3742,7 +3852,113 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                 text-shadow: 0 0 10px rgba(0, 210, 255, 0.7) !important;
             }
 
-            /* 5. Hide conflicting floating overlays that block buttons */
+            /* 5. Ultra-Smooth Academy Theory Scrolling & Reading for Android & iOS (Apple) */
+            #page-academy, #mc-content-theory, .mc-tab-content, .mc-level-content {
+                height: auto !important;
+                min-height: min-content !important;
+                overflow: visible !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+
+            .mc-theory-article {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: #0d1527 !important; /* GPU-friendly solid dark background */
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                border-radius: 14px !important;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+                padding: 18px 16px !important;
+                margin-bottom: 16px !important;
+                margin-top: 10px !important;
+                box-sizing: border-box !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+                touch-action: pan-y !important; /* Enables instantaneous vertical touch scroll */
+                animation: none !important; /* Disables transform animations that cause WebKit GPU scroll stutter */
+                transform: none !important;
+                will-change: auto !important;
+            }
+
+            .mc-theory-article h4 {
+                font-size: 1.15rem !important;
+                line-height: 1.4 !important;
+                margin-bottom: 12px !important;
+                padding-bottom: 8px !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+                color: #fff !important;
+                display: flex !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+                word-break: break-word !important;
+            }
+
+            .mc-theory-article p {
+                font-size: 0.98rem !important;
+                line-height: 1.75 !important;
+                color: #cbd5e1 !important;
+                margin-bottom: 14px !important;
+                word-break: break-word !important;
+            }
+
+            .mc-theory-article ul {
+                padding-left: 20px !important;
+                margin-left: 0 !important;
+                margin-bottom: 14px !important;
+            }
+
+            .mc-theory-article li {
+                font-size: 0.95rem !important;
+                line-height: 1.7 !important;
+                color: #cbd5e1 !important;
+                margin-bottom: 8px !important;
+                word-break: break-word !important;
+            }
+
+            .mc-level-header {
+                padding: 14px 16px !important;
+                border-radius: 12px !important;
+                background: rgba(15, 23, 42, 0.95) !important;
+                border: 1px solid rgba(255, 255, 255, 0.12) !important;
+                margin: 25px 0 12px 0 !important;
+                touch-action: manipulation !important;
+                cursor: pointer !important;
+                user-select: none !important;
+                -webkit-user-select: none !important;
+            }
+
+            .mc-level-title {
+                font-size: 1.15rem !important;
+                line-height: 1.3 !important;
+            }
+
+            .mc-tabs {
+                display: flex !important;
+                gap: 10px !important;
+                margin-bottom: 20px !important;
+                padding-bottom: 10px !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+            }
+            .mc-tabs::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            .mc-tab {
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+                padding: 10px 16px !important;
+                font-size: 0.9rem !important;
+            }
+
+            #page-academy {
+                padding-bottom: calc(115px + env(safe-area-inset-bottom, 20px)) !important;
+            }
+
+            /* 6. Hide conflicting floating overlays that block buttons */
             .apex-floating-dock {
                 display: none !important;
             }
@@ -5493,7 +5709,12 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
                         </div>
                         <!-- TAB CONTENT: THEORY -->
                         <div class="mc-tab-content" id="mc-content-theory">
-                            <h3 class="section-title">Trading Theory & Concepts</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                                <h3 class="section-title" style="margin-bottom:0;">Trading Theory & Concepts</h3>
+                                <button type="button" id="theory-toggle-all-btn" onclick="toggleAllTheoryLevels()" style="background:rgba(0,210,255,0.15); border:1px solid rgba(0,210,255,0.3); color:#00d2ff; padding:8px 16px; border-radius:20px; font-size:0.85rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; touch-action:manipulation;">
+                                    <i class="fas fa-book-open"></i> <span>Expand All</span>
+                                </button>
+                            </div>
                             
                             <!-- Beginner Tier Theory -->
                             <div class="mc-level-header">
@@ -6115,6 +6336,8 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             landingPage.style.display = 'none';
             loginScreen.classList.remove('active');
             appLayout.style.display = 'flex';
+            document.body.classList.add('in-app');
+            window.scrollTo({ top: 0, behavior: 'instant' });
             
             // Add skeleton loaders to UI for simulated API fetching
             const elementsToSkeleton = [document.querySelector('.market-list'), document.getElementById('portfolio-page-list'), document.querySelector('.main-chart')];
@@ -6130,7 +6353,9 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
         window.goHome = function() {
             appLayout.style.display = 'none';
-            landingPage.style.display = 'block';
+            landingPage.style.display = 'flex';
+            document.body.classList.remove('in-app');
+            window.scrollTo({ top: 0, behavior: 'instant' });
         };
 
         if (userName && userAuth) {
@@ -6360,6 +6585,9 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
 
         // --- Page Navigation ---
         window.switchPage = function(pageId, pushState = true) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            const _pw = document.querySelector('.pages-wrapper');
+            if (_pw) _pw.scrollTop = 0;
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const targetPage = document.getElementById(pageId);
             if(targetPage) {
@@ -7074,9 +7302,45 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             document.querySelectorAll('.mc-tab').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.mc-tab-content').forEach(content => content.classList.remove('active'));
 
-            document.getElementById('tab-' + tabId).classList.add('active');
-            document.getElementById('mc-content-' + tabId).classList.add('active');
+            const targetBtn = document.getElementById('tab-' + tabId);
+            const targetContent = document.getElementById('mc-content-' + tabId);
+            if (targetBtn) targetBtn.classList.add('active');
+            if (targetContent) targetContent.classList.add('active');
+
+            if (targetBtn && typeof targetBtn.scrollIntoView === 'function') {
+                targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
         };
+
+        // Toggle All Theory Levels for continuous reading
+        window.toggleAllTheoryLevels = function() {
+            const btn = document.getElementById('theory-toggle-all-btn');
+            const theoryContent = document.getElementById('mc-content-theory');
+            if (!theoryContent) return;
+            const contents = theoryContent.querySelectorAll('.mc-level-content');
+            const headers = theoryContent.querySelectorAll('.mc-level-header');
+            
+            let anyClosed = false;
+            contents.forEach(c => {
+                if (c.style.display === 'none') anyClosed = true;
+            });
+
+            contents.forEach(c => {
+                c.style.display = anyClosed ? 'block' : 'none';
+            });
+
+            headers.forEach(h => {
+                const icon = h.querySelector('.fa-chevron-down');
+                if (icon) icon.style.transform = anyClosed ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+
+            if (btn) {
+                btn.innerHTML = anyClosed 
+                    ? '<i class="fas fa-compress-alt"></i> <span>Collapse All</span>'
+                    : '<i class="fas fa-book-open"></i> <span>Expand All</span>';
+            }
+        };
+
 
         // --- Academy Accordion Logic ---
         document.querySelectorAll('.mc-level-header').forEach(header => {
@@ -7101,7 +7365,7 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
             header.appendChild(icon);
 
             const contentWrapper = document.createElement('div');
-            const isFirstLevel = titleWrapper.textContent.includes('LEVEL 1');
+            const isFirstLevel = /\bLEVEL\s*1\b/i.test(titleWrapper.textContent);
             contentWrapper.style.display = isFirstLevel ? 'block' : 'none'; 
             contentWrapper.className = 'mc-level-content';
             contentWrapper.style.marginTop = '15px';
@@ -7139,13 +7403,19 @@ h1, h2, h3, h4, .trade-btn, .nav-btn, .mobile-nav-btn {
         });
 
         const lpNavbar = document.getElementById('lp-navbar');
-        document.getElementById('landing-page').addEventListener('scroll', (e) => {
-            if (e.target.scrollTop > 50) {
-                lpNavbar.classList.add('scrolled');
-            } else {
-                lpNavbar.classList.remove('scrolled');
+        const handleLpScroll = () => {
+            const scY = window.scrollY || document.documentElement.scrollTop || (document.getElementById('landing-page') ? document.getElementById('landing-page').scrollTop : 0);
+            if (lpNavbar) {
+                if (scY > 50) {
+                    lpNavbar.classList.add('scrolled');
+                } else {
+                    lpNavbar.classList.remove('scrolled');
+                }
             }
-        });
+        };
+        window.addEventListener('scroll', handleLpScroll, { passive: true });
+        const _lpEl = document.getElementById('landing-page');
+        if (_lpEl) _lpEl.addEventListener('scroll', handleLpScroll, { passive: true });
 
         // --- Premium Hover Glow Tracker ---
         if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -8308,6 +8578,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 600);
     });
 });
+</script>
 
     <!-- Second Mobile Bottom Nav consolidated into primary unifiedMobileNav -->
 
